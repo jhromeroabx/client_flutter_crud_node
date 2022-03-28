@@ -1,5 +1,6 @@
 import 'package:client_flutter_crud_node/src/pages/edit_or_create_page.dart';
 import 'package:client_flutter_crud_node/src/pages/home_page.dart';
+import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/pages/test/incrementador.dart';
 import 'package:client_flutter_crud_node/src/service/employee_provider.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           'incrementador': (_) =>
               const IncrementadorPage(title: 'Flutter Demo Home Page'),
           'home': (_) => const HomePage(title: 'Gestion de Usuarios'),
+          'barcode': (_) => const BarCodePage(),
           'edit/create': (_) => const EditOrCreatePage(),
           'refreshFutBuild': (_) => const RefreshFutBuild(),
           'refreshBasic': (_) => const RefreshBasic(),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../dto/employee.dart';
@@ -13,25 +14,66 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-// var items = [
-//   'Item 1',
-//   'Item 2',
-//   'Item 3',
-//   'Item 4',
-//   'Item 5',
-// ];
+var items = [
+  'Item 1',
+  'Item 2',
+  'Item 3',
+  'Item 4',
+  'Item 5',
+];
+
+final typesEmployee = [
+  "jhosep",
+  "Diego",
+  "Ximena",
+  "Virginia",
+  "Abel",
+];
+
+final typesEmployee_map = {
+  1: "jhosep",
+  2: "Diego",
+  3: "Ximena",
+  4: "Virginia",
+  5: "Abel"
+};
 
 class _HomePageState extends State<HomePage> {
-  // String dropdownvalue = items[0].toString();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  String dropdownvalue = items[0].toString();
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  // List<DropdownMenuItem> _dropDownMenuItems = [];
+  String currentData = typesEmployee_map[4].toString();
+
+  // List<DropdownMenuItem> getDropDownMenuItems() {
+  //   List<DropdownMenuItem> items = [];
+  //   for (var value in typesEmployee) {
+  //     items.add(DropdownMenuItem(
+  //       value: value,
+  //       child: Text(value),
+  //       onTap: () {
+  //         Fluttertoast.showToast(msg: value);
+  //       },
+  //     ));
+  //   }
+  //   return items;
+  // }
+
+  void changedDropDownItem(dynamic value) {
+    setState(() {
+      currentData = value;
+    });
+  }
+
+  @override
+  void initState() {
+    // _dropDownMenuItems = getDropDownMenuItems();
+    // _currentData = typesEmployee[0];
+    super.initState();
   }
 
   @override
@@ -60,7 +102,7 @@ class _HomePageState extends State<HomePage> {
             employeeProviderMain.employeeTypeListService!;
 
         return ListView(
-          children: const [Text("NO DATA")],
+          children: const [Center(child: Text("NO DATA"))],
         );
       } else {
         EmployeeList? employeeList = employeeProviderMain.employeeListService;
@@ -150,7 +192,7 @@ class _HomePageState extends State<HomePage> {
             child: SizedBox(
               width: double.infinity,
               child: Material(
-                // color: Colors.black,
+                color: Colors.white,
                 elevation: 8,
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -158,31 +200,55 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // DropdownButton(
-                      //   // Initial Value
-                      //   value: dropdownvalue,
+                      DropdownButton(
+                          value: currentData,
+                          items: typesEmployee
+                              .map((e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(
+                                      e,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: changedDropDownItem),
+                      DropdownButton(
+                        // Initial Value
+                        value: dropdownvalue,
 
-                      //   // Down Arrow Icon
-                      //   icon: const Icon(Icons.keyboard_arrow_down),
+                        // Down Arrow Icon
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.black,
+                        ),
 
-                      //   // Array list of items
-                      //   items: items.map((String items) {
-                      //     return DropdownMenuItem(
-                      //       value: items,
-                      //       child: Text(
-                      //         items,
-                      //         style: TextStyle(color: Colors.black),
-                      //       ),
-                      //     );
-                      //   }).toList(),
-                      //   // After selecting the desired option,it will
-                      //   // change button value to selected value
-                      //   onChanged: (String? newValue) {
-                      //     setState(() {
-                      //       dropdownvalue = newValue!;
-                      //     });
-                      //   },
-                      // ),
+                        // Array list of items
+                        items: items.map((String e) {
+                          return DropdownMenuItem(
+                            value: e,
+                            child: Row(
+                              children: [
+                                Text(
+                                  e,
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                                const Icon(
+                                  Icons.numbers,
+                                  color: Colors.black,
+                                )
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownvalue = newValue!;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),
