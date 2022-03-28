@@ -14,66 +14,22 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-var items = [
-  'Item 1',
-  'Item 2',
-  'Item 3',
-  'Item 4',
-  'Item 5',
-];
-
-final typesEmployee = [
-  "jhosep",
-  "Diego",
-  "Ximena",
-  "Virginia",
-  "Abel",
-];
-
-final typesEmployee_map = {
-  1: "jhosep",
-  2: "Diego",
-  3: "Ximena",
-  4: "Virginia",
-  5: "Abel"
-};
-
 class _HomePageState extends State<HomePage> {
-  String dropdownvalue = items[0].toString();
+  late List<DropdownMenuItem> dropDownMenuItems = [];
+  late int currentData = 0;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  // List<DropdownMenuItem> _dropDownMenuItems = [];
-  String currentData = typesEmployee_map[4].toString();
-
-  // List<DropdownMenuItem> getDropDownMenuItems() {
-  //   List<DropdownMenuItem> items = [];
-  //   for (var value in typesEmployee) {
-  //     items.add(DropdownMenuItem(
-  //       value: value,
-  //       child: Text(value),
-  //       onTap: () {
-  //         Fluttertoast.showToast(msg: value);
-  //       },
-  //     ));
-  //   }
-  //   return items;
-  // }
-
-  void changedDropDownItem(dynamic value) {
-    setState(() {
-      currentData = value;
-    });
-  }
-
-  @override
-  void initState() {
-    // _dropDownMenuItems = getDropDownMenuItems();
-    // _currentData = typesEmployee[0];
-    super.initState();
+  List<DropdownMenuItem> getDropDownMenuItems(List<dynamic> typesEmployee) {
+    List<DropdownMenuItem> items = [];
+    for (EmployeeType employeeType in typesEmployee) {
+      items.add(DropdownMenuItem(
+        value: employeeType.id,
+        child: Text(employeeType.nom_type!),
+        onTap: () {
+          Fluttertoast.showToast(msg: employeeType.nom_type!);
+        },
+      ));
+    }
+    return items;
   }
 
   @override
@@ -98,17 +54,11 @@ class _HomePageState extends State<HomePage> {
         );
       } else if (employeeProviderMain.employeeListService!.listaEmployee ==
           null) {
-        EmployeeTypeList listaTiposEmpleados =
-            employeeProviderMain.employeeTypeListService!;
-
         return ListView(
           children: const [Center(child: Text("NO DATA"))],
         );
       } else {
         EmployeeList? employeeList = employeeProviderMain.employeeListService;
-
-        EmployeeTypeList listaTiposEmpleados =
-            employeeProviderMain.employeeTypeListService!;
 
         return ListView.builder(
           itemCount: employeeList!.listaEmployee!.length,
@@ -200,55 +150,17 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DropdownButton(
-                          value: currentData,
-                          items: typesEmployee
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(
-                                      e,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                    ),
-                                  ))
-                              .toList(),
-                          onChanged: changedDropDownItem),
-                      DropdownButton(
-                        // Initial Value
-                        value: dropdownvalue,
-
-                        // Down Arrow Icon
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down,
-                          color: Colors.black,
-                        ),
-
-                        // Array list of items
-                        items: items.map((String e) {
-                          return DropdownMenuItem(
-                            value: e,
-                            child: Row(
-                              children: [
-                                Text(
-                                  e,
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                                const Icon(
-                                  Icons.numbers,
-                                  color: Colors.black,
-                                )
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                        // After selecting the desired option,it will
-                        // change button value to selected value
-                        onChanged: (String? newValue) {
+                      if (employeeProviderMain.employeeTypeListService != null)
+                        comboBox(dropDownMenuItems, (newValue) {
                           setState(() {
-                            dropdownvalue = newValue!;
+                            currentData = newValue!;
                           });
-                        },
-                      ),
+                        }, employeeProviderMain)
+                      //      EmployeeTypeList listaTiposEmpleados =
+                      //     employeeProviderMain
+                      //         .employeeTypeListService!;
+                      // currentData = listaTiposEmpleados
+                      //     .listaEmployeeType![0].nom_type!;
                     ],
                   ),
                 ),
@@ -278,5 +190,32 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Container comboBox(List<DropdownMenuItem> items, Function(dynamic) onchanged,
+      EmployeeProvider employeeProviderMain) {
+    items = getDropDownMenuItems(
+        employeeProviderMain.employeeTypeListService!.listaEmployeeType!);
+    setState(() {
+      currentData = employeeProviderMain
+          .employeeTypeListService!.listaEmployeeType![0].id!;
+    });
+
+    return items.isNotEmpty
+        ? Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.blueAccent, width: 4)),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                  iconSize: 50,
+                  isExpanded: true,
+                  value: currentData,
+                  items: items,
+                  onChanged: onchanged),
+            ),
+          )
+        : Container(color: Colors.blue, child: const Text("NO TYPE"));
   }
 }
