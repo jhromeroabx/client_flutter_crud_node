@@ -16,7 +16,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late List<DropdownMenuItem> dropDownMenuItems = [];
-  late int currentData = 0;
+  int currentData = 0;
+  dynamic employeeProviderInit;
 
   List<DropdownMenuItem> getDropDownMenuItems(List<dynamic> typesEmployee) {
     List<DropdownMenuItem> items = [];
@@ -30,6 +31,12 @@ class _HomePageState extends State<HomePage> {
       ));
     }
     return items;
+  }
+
+  void changedDropDownItem(dynamic value) {
+    setState(() {
+      currentData = value;
+    });
   }
 
   @override
@@ -150,17 +157,32 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (employeeProviderMain.employeeTypeListService != null)
-                        comboBox(dropDownMenuItems, (newValue) {
-                          setState(() {
-                            currentData = newValue!;
-                          });
-                        }, employeeProviderMain)
-                      //      EmployeeTypeList listaTiposEmpleados =
-                      //     employeeProviderMain
-                      //         .employeeTypeListService!;
-                      // currentData = listaTiposEmpleados
-                      //     .listaEmployeeType![0].nom_type!;
+                      // if (employeeProviderMain.employeeTypeListService != null)
+                      //   comboBox(dropDownMenuItems, employeeProviderMain)
+                      Consumer<EmployeeProvider>(
+                          builder: (context, employeeProviderInit, child) {
+                        if (employeeProviderInit.employeeTypeListService ==
+                            null) {
+                          return Container(
+                            color: Colors.amber[200],
+                            child: const Text("COMBO VACIO"),
+                          );
+                        } else {
+                          dropDownMenuItems = getDropDownMenuItems(
+                              employeeProviderInit
+                                  .employeeTypeListService!.listaEmployeeType!);
+
+                          currentData = currentData == 0
+                              ? employeeProviderInit.employeeTypeListService!
+                                  .listaEmployeeType![0].id!
+                              : currentData;
+
+                          print("VALUE CURRENT: $currentData");
+
+                          return comboBox(
+                              dropDownMenuItems, employeeProviderMain);
+                        }
+                      })
                     ],
                   ),
                 ),
@@ -192,15 +214,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container comboBox(List<DropdownMenuItem> items, Function(dynamic) onchanged,
-      EmployeeProvider employeeProviderMain) {
-    items = getDropDownMenuItems(
-        employeeProviderMain.employeeTypeListService!.listaEmployeeType!);
-    setState(() {
-      currentData = employeeProviderMain
-          .employeeTypeListService!.listaEmployeeType![0].id!;
-    });
-
+  Container comboBox(
+      List<DropdownMenuItem> items, EmployeeProvider employeeProviderMain) {
     return items.isNotEmpty
         ? Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -213,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                   isExpanded: true,
                   value: currentData,
                   items: items,
-                  onChanged: onchanged),
+                  onChanged: changedDropDownItem),
             ),
           )
         : Container(color: Colors.blue, child: const Text("NO TYPE"));

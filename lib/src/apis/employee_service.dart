@@ -4,7 +4,7 @@ import 'package:client_flutter_crud_node/src/dto/employee.dart';
 import 'package:http/http.dart' as http;
 
 class EmployeeService {
-  static const String _apiHost = "192.168.0.13:5000";
+  static const String _apiHost = "192.168.0.21:5000";
   static const String _routePath_getAllUser = "/getAllEmployee";
   static const String _routePath_getAllEmplopyeeType = "/getAllEmployeeType";
   static const String _routePath_getUserByID = "/findEmployee/";
