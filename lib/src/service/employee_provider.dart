@@ -17,10 +17,7 @@ class EmployeeProvider extends ChangeNotifier {
   EmployeeTypeList? employeeTypeListService;
   Employee? employeeService;
 
-  EmployeeProvider() {
-    getAllEmployee();
-    getAllEmployeeTypes();
-  }
+  EmployeeProvider();
 
   Future getAllEmployeeTypes() async {
     _isLoading = true;
