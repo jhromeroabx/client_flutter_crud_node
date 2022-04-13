@@ -1,8 +1,7 @@
 import 'package:client_flutter_crud_node/src/dto/employee.dart';
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../service/employee_provider.dart';
 
 class EditOrCreatePage extends StatefulWidget {
   const EditOrCreatePage({Key? key}) : super(key: key);

@@ -29,15 +29,15 @@ class EmployeeProvider extends ChangeNotifier {
 
     if (employeeTypeListService != null) {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'ALL EMPLOYEES WERE DOWNLOAD SUCCESFULLY',
-          textColor: Colors.black,
-          backgroundColor: Colors.greenAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'ALL EMPLOYEES WERE DOWNLOAD SUCCESFULLY',
+      //     textColor: Colors.black,
+      //     backgroundColor: Colors.greenAccent);
     } else {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'ALL EMPLOYEES WERE NOT DOWNLOAD SUCCESFULLY',
-          backgroundColor: Colors.redAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'ALL EMPLOYEES WERE NOT DOWNLOAD SUCCESFULLY',
+      //     backgroundColor: Colors.redAccent);
       return;
     }
   }
@@ -52,14 +52,14 @@ class EmployeeProvider extends ChangeNotifier {
 
     if (employeeListService != null) {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'ALL EMPLOYEES WERE DOWNLOAD SUCCESFULLY',
-          backgroundColor: Colors.greenAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'ALL EMPLOYEES WERE DOWNLOAD SUCCESFULLY',
+      //     backgroundColor: Colors.greenAccent);
     } else {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'ALL EMPLOYEES WERE NOT DOWNLOAD SUCCESFULLY',
-          backgroundColor: Colors.redAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'ALL EMPLOYEES WERE NOT DOWNLOAD SUCCESFULLY',
+      //     backgroundColor: Colors.redAccent);
       return;
     }
   }

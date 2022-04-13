@@ -1,11 +1,10 @@
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../dto/employee.dart';
-import '../service/employee_provider.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -146,6 +145,8 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: _backAppBar(context),
         title: Text(widget.title),
       ),
       body: Column(
@@ -216,6 +217,46 @@ class _HomePageState extends State<HomePage> {
         },
         tooltip: "Agregar Empleado",
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  CircleAvatar _backAppBar(BuildContext context) {
+    return CircleAvatar(
+      minRadius: 10,
+      backgroundColor: Colors.white,
+      child: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_new,
+            color: Colors.blueAccent, size: 32),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) => CupertinoAlertDialog(
+                    insetAnimationCurve: Curves.bounceIn,
+                    title: const Text("Cerrar Sesion"),
+                    content: const Text("¿Estas seguro de Cerrar Sesion? "),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "login");
+                        },
+                        child: const Text(
+                          "Cerrar Sesion",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          "Cancelar",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ));
+        },
       ),
     );
   }

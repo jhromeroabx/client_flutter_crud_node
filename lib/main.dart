@@ -1,10 +1,11 @@
 import 'package:client_flutter_crud_node/src/pages/edit_or_create_page.dart';
 import 'package:client_flutter_crud_node/src/pages/home_page.dart';
 import 'package:client_flutter_crud_node/src/pages/login_page.dart';
+import 'package:client_flutter_crud_node/src/pages/register_page.dart';
 import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/pages/test/incrementador.dart';
-import 'package:client_flutter_crud_node/src/service/employee_provider.dart';
-import 'package:client_flutter_crud_node/src/service/user_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
           'edit/create': (_) => const EditOrCreatePage(),
           'refreshFutBuild': (_) => const RefreshFutBuild(),
           'refreshBasic': (_) => const RefreshBasic(),
+          'register': (_) => const RegisterPage(),
         },
       ),
     );

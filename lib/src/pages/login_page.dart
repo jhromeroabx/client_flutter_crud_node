@@ -1,13 +1,14 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:client_flutter_crud_node/src/service/user_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../service/employee_provider.dart';
+import '../provider/employee_provider.dart';
 import '../utils/my_colors.dart';
+import '../widgets/flush_bar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,14 +29,10 @@ class _LoginPageState extends State<LoginPage> {
     SchedulerBinding.instance?.addPersistentFrameCallback((timeStamp) {
       // _con.init(context);
     });
-    initialization();
+    initializationANDRemoveSplashScreen();
   }
 
-  void initialization() async {
-    // This is where you can initialize the resources needed by your app while
-    // the splash screen is displayed.  Remove the following example because
-    // delaying the user experience is a bad design practice!
-    // ignore_for_file: avoid_print
+  void initializationANDRemoveSplashScreen() async {
     await Future.delayed(const Duration(seconds: 3));
     FlutterNativeSplash.remove();
   }
@@ -101,37 +98,37 @@ class _LoginPageState extends State<LoginPage> {
             var rpta =
                 userLogin.accessLogin(controlUserText, controlContraseniaText);
 
+            final FocusScopeNode focus = FocusScope.of(context);
+            if (!focus.hasPrimaryFocus && focus.hasFocus) {
+              //SI EL TECLADO ESTA ACTIVO LO QUITAMOS
+              FocusManager.instance.primaryFocus!.unfocus();
+            }
+
             ///
             rpta.then((value) async {
               switch (value[0]) {
                 case 1:
-                  snackBarV2(value[1].toString(), Colors.green);
+                  FlushBar()
+                      .snackBarV2(value[1].toString(), Colors.green, context);
                   employeeProviderMain.getAllEmployee();
                   employeeProviderMain.getAllEmployeeTypes();
                   await Future.delayed(const Duration(seconds: 2));
                   Navigator.pushNamed(context, "home");
                   break;
                 case 2:
-                  snackBarV2(value[1].toString(), Colors.red);
+                  FlushBar()
+                      .snackBarV2(value[1].toString(), Colors.red, context);
                   break;
                 case 3:
-                  snackBarV2(value[1].toString(), Colors.red);
+                  FlushBar()
+                      .snackBarV2(value[1].toString(), Colors.red, context);
                   break;
                 default:
               }
             });
-
-            // if (userLogin.userAcceso != null) {
-            //   if (userLogin.userAcceso!.userData != null) {
-            //     snackBarV2("Ingresando...", Colors.green);
-            //   } else {}
-            // } else {
-            //   snackBarV2("Error del servidor!!!", Colors.indigo);
-            // }
-
-            ///
           } else {
-            snackBarV2("Usuario y/o contraseña vacias", Colors.red);
+            FlushBar().snackBarV2(
+                "Usuario y/o contraseña vacias", Colors.red, context);
           }
         },
         child: const Text(
@@ -140,24 +137,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Future<dynamic> snackBarV2(String msg, Color colorState) {
-    return Flushbar(
-      duration: const Duration(milliseconds: 3000),
-      message: msg,
-      messageSize: 25,
-      backgroundGradient: LinearGradient(colors: [
-        Colors.black,
-        colorState,
-      ]),
-      // mainButton: IconButton(
-      //   icon: const Icon(Icons.copy, size: 30),
-      //   onPressed: () {
-      //     _copyToClipboard(scanData.code!);
-      //   },
-      // ),
-    ).show(context);
   }
 
   Row _txtDontHaveAccount() {
@@ -187,6 +166,7 @@ class _LoginPageState extends State<LoginPage> {
           onTap: () {
             // _con.goToRegisterPage();
             // Fluttertoast.showToast(msg: "Registrando");
+            Navigator.pushNamed(context, "register");
           },
         ),
       ],

@@ -1,18 +1,3 @@
-class UserLoginBody {
-  String? user;
-  String? contrasenia;
-
-  UserLoginBody({
-    required this.user,
-    required this.contrasenia,
-  });
-
-  Map<String, dynamic> toJson() => {
-        "user": user,
-        "contrasenia": contrasenia,
-      };
-}
-
 class Login {
   Login({
     this.state,

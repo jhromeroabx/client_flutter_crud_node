@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../dto/login.dart';
+import '../dto/responseDTO/login.dart';
+import '../dto/requestDTO/user_request_dto.dart';
+import '../dto/responseDTO/user.dart';
 
 class UserService {
   static const String _apiHost = "192.168.18.5:5000";
   static const String _routePath_login = "/login";
+  static const String _routePath_AddUserOrEdit = "/AddUserOrEdit";
 
   UserService();
 
@@ -34,6 +37,31 @@ class UserService {
       }
     } catch (e) {
       print("ERROR $_routePath_login: $e");
+      return null;
+    }
+  }
+
+  Future<UserResponse?> registerOrEditUser(
+      UserReqAddEditBody userReqAddEditBody) async {
+    try {
+      var headers = {
+        'accept': 'text/plain',
+        'Content-Type': 'application/json',
+      };
+
+      final body = jsonEncode(userReqAddEditBody);
+
+      final response = await http.post(
+        Uri.http(_apiHost, _routePath_AddUserOrEdit),
+        headers: headers,
+        body: body,
+      );
+      print("API" + response.statusCode.toString());
+      if (response.statusCode == 200) {
+        return UserResponse.fromMap(jsonDecode(response.body));
+      }
+    } catch (e) {
+      print("ERROR $_routePath_AddUserOrEdit: $e");
       return null;
     }
   }
