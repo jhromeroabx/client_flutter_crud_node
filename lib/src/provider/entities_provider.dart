@@ -1,10 +1,12 @@
+import 'package:client_flutter_crud_node/src/dto/responseDTO/user.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import '../apis/employee_service.dart';
-import '../dto/employee.dart';
+import '../apis/user_service.dart';
+import '../dto/requestDTO/user_request_dto.dart';
+import '../dto/responseDTO/employee.dart';
+import '../dto/responseDTO/login.dart';
 
-class EmployeeProvider extends ChangeNotifier {
+class EntitiesProvider extends ChangeNotifier {
   //IS LOADING
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -14,34 +16,51 @@ class EmployeeProvider extends ChangeNotifier {
   } //IS LOADING
 
   EmployeeList? employeeListService;
-  EmployeeTypeList? employeeTypeListService;
   Employee? employeeService;
 
-  EmployeeProvider();
+  Login? userAcceso;
+  UserResponse? userResponse;
 
-  Future getAllEmployeeTypes() async {
+  EntitiesProvider();
+
+  Future<List<Object>> accessLogin(String user, String contrasenia) async {
     _isLoading = true;
 
-    employeeTypeListService = await EmployeeService().getAllEmployeeTypes();
-    notifyListeners();
+    userAcceso = await UserService().login(user, contrasenia);
 
-    // await Future.delayed(const Duration(seconds: 2));
-
-    if (employeeTypeListService != null) {
+    if (userAcceso != null) {
       isLoading = false;
-      // Fluttertoast.showToast(
-      //     msg: 'ALL EMPLOYEES WERE DOWNLOAD SUCCESFULLY',
-      //     textColor: Colors.black,
-      //     backgroundColor: Colors.greenAccent);
+      if (userAcceso!.userData != null) {
+        return [1, "Ingresando al Sistema"];
+      } else {
+        return [2, "Accesos denegados!!!"];
+      }
     } else {
       isLoading = false;
-      // Fluttertoast.showToast(
-      //     msg: 'ALL EMPLOYEES WERE NOT DOWNLOAD SUCCESFULLY',
-      //     backgroundColor: Colors.redAccent);
-      return;
+      return [3, "Error del servidor!!!"];
     }
   }
 
+  Future<List<Object>> registerUser(
+      UserReqAddEditBody userReqAddEditBody) async {
+    _isLoading = true;
+
+    userResponse = await UserService().registerOrEditUser(userReqAddEditBody);
+
+    if (userResponse != null) {
+      isLoading = false;
+      if (userResponse!.state == true) {
+        return [1, "Registrado"];
+      } else {
+        return [2, userResponse!.response!.error!];
+      }
+    } else {
+      isLoading = false;
+      return [3, "Error del servidor!!!"];
+    }
+  }
+
+////EMPLOYEE
   Future getAllEmployee() async {
     _isLoading = true;
 
@@ -74,14 +93,14 @@ class EmployeeProvider extends ChangeNotifier {
 
     if (employeeService != null) {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'THE EMPLOYEE WAS DOWNLOAD SUCCESFULLY',
-          backgroundColor: Colors.greenAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'THE EMPLOYEE WAS DOWNLOAD SUCCESFULLY',
+      //     backgroundColor: Colors.greenAccent);
     } else {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'THE EMPLOYEE WAS NOT DOWNLOAD SUCCESFULLY',
-          backgroundColor: Colors.redAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'THE EMPLOYEE WAS NOT DOWNLOAD SUCCESFULLY',
+      //     backgroundColor: Colors.redAccent);
       return;
     }
   }
@@ -96,15 +115,15 @@ class EmployeeProvider extends ChangeNotifier {
     if (rptaDelete) {
       isLoading = false;
       getAllEmployee();
-      Fluttertoast.showToast(
-          msg: 'THE EMPLOYEE $id WAS DELETED SUCCESFULLY',
-          backgroundColor: Colors.greenAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'THE EMPLOYEE $id WAS DELETED SUCCESFULLY',
+      //     backgroundColor: Colors.greenAccent);
       return true;
     } else {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'THE EMPLOYEE $id WAS NOT DELETED SUCCESFULLY',
-          backgroundColor: Colors.redAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'THE EMPLOYEE $id WAS NOT DELETED SUCCESFULLY',
+      //     backgroundColor: Colors.redAccent);
       return false;
     }
   }
@@ -121,15 +140,15 @@ class EmployeeProvider extends ChangeNotifier {
     if (rptaEditDelete) {
       isLoading = false;
       getAllEmployee();
-      Fluttertoast.showToast(
-          msg: 'THE EMPLOYEE WAS CREATED SUCCESFULLY',
-          backgroundColor: Colors.greenAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'THE EMPLOYEE WAS CREATED SUCCESFULLY',
+      //     backgroundColor: Colors.greenAccent);
       return true;
     } else {
       isLoading = false;
-      Fluttertoast.showToast(
-          msg: 'THE EMPLOYEE WAS NOT CREATED SUCCESFULLY',
-          backgroundColor: Colors.redAccent);
+      // Fluttertoast.showToast(
+      //     msg: 'THE EMPLOYEE WAS NOT CREATED SUCCESFULLY',
+      //     backgroundColor: Colors.redAccent);
       return false;
     }
   }

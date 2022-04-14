@@ -1,5 +1,6 @@
-import 'package:client_flutter_crud_node/src/dto/employee.dart';
-import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
+import 'package:client_flutter_crud_node/src/dto/responseDTO/employee.dart';
+import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,16 +27,15 @@ class _EditOrCreatePageState extends State<EditOrCreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    final employeeProviderMain = Provider.of<EmployeeProvider>(context);
+    final entitiesProvider = Provider.of<EntitiesProvider>(context);
 
-    controlName.text = employeeProviderMain.employeeService?.name ?? '';
+    controlName.text = entitiesProvider.employeeService?.name ?? '';
     controlSalary.text =
-        employeeProviderMain.employeeService?.salary.toString() ?? '';
+        entitiesProvider.employeeService?.salary.toString() ?? '';
     controlIdTypeEmployee.text =
-        employeeProviderMain.employeeService?.id_employee_type.toString() ??
-            '0';
+        entitiesProvider.employeeService?.id_employee_type.toString() ?? '0';
 
-    String _titlePage = employeeProviderMain.employeeService != null
+    String _titlePage = entitiesProvider.employeeService != null
         ? "Edicion del Empleado: ${controlName.text}"
         : "Creacion de un nuevo Empleado";
 
@@ -61,9 +61,9 @@ class _EditOrCreatePageState extends State<EditOrCreatePage> {
         ),
         ElevatedButton(
             onPressed: () {
-              if (employeeProviderMain.employeeService != null) {
+              if (entitiesProvider.employeeService != null) {
                 _employee = Employee(
-                  id: employeeProviderMain.employeeService!.id,
+                  id: entitiesProvider.employeeService!.id,
                   name: controlName.text,
                   salary: controlSalary.text,
                   id_employee_type: controlIdTypeEmployee.text,
@@ -77,7 +77,7 @@ class _EditOrCreatePageState extends State<EditOrCreatePage> {
                 );
               }
 
-              employeeProviderMain.addEmployeeOrEdit(_employee);
+              entitiesProvider.addEmployeeOrEdit(_employee);
               Navigator.pop(context);
             },
             child: const Text("Guardar cambios"))

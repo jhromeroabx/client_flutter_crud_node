@@ -1,12 +1,12 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/employee_provider.dart';
+import '../provider/app_state_provider.dart';
 import '../utils/my_colors.dart';
 import '../widgets/flush_bar.dart';
 
@@ -39,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var userLogin = Provider.of<UserProvider>(context);
-    final employeeProviderMain = Provider.of<EmployeeProvider>(context);
+    var userLogin = Provider.of<EntitiesProvider>(context);
+    final employeeProviderMain = Provider.of<AppStateProvider>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buttomAcceder(
-      UserProvider userLogin, EmployeeProvider employeeProviderMain) {
+      EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -95,8 +95,8 @@ class _LoginPageState extends State<LoginPage> {
           String controlUserText = controlUser.text.trim();
           String controlContraseniaText = controlContrasenia.text.trim();
           if (controlUserText.isNotEmpty && controlContraseniaText.isNotEmpty) {
-            var rpta =
-                userLogin.accessLogin(controlUserText, controlContraseniaText);
+            var rpta = entitiesProvider.accessLogin(
+                controlUserText, controlContraseniaText);
 
             final FocusScopeNode focus = FocusScope.of(context);
             if (!focus.hasPrimaryFocus && focus.hasFocus) {
@@ -110,8 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                 case 1:
                   FlushBar()
                       .snackBarV2(value[1].toString(), Colors.green, context);
-                  employeeProviderMain.getAllEmployee();
-                  employeeProviderMain.getAllEmployeeTypes();
+                  entitiesProvider.getAllEmployee();
+                  appStateProvider.getAllEmployeeTypes();
                   await Future.delayed(const Duration(seconds: 2));
                   Navigator.pushNamed(context, "home");
                   break;
@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           child: Text(
             "¿No tienes cuenta?",
-            style: TextStyle(color: MyColors.primaryColor),
+            style: TextStyle(fontSize: 20, color: MyColors.primaryColor),
           ),
           margin: const EdgeInsets.only(right: 15),
         ),
@@ -160,7 +160,9 @@ class _LoginPageState extends State<LoginPage> {
             child: Text(
               "Registrate",
               style: TextStyle(
-                  color: MyColors.primaryColor, fontWeight: FontWeight.bold),
+                  fontSize: 20,
+                  color: MyColors.primaryColor,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           onTap: () {
@@ -238,8 +240,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Center _lottieDeliverMan() {
-    return Center(
+  Widget _lottieDeliverMan() {
+    return Container(
+      // padding: const EdgeInsets.all(35),
+      margin: const EdgeInsets.only(top: 70, bottom: 30),
       child: Lottie.asset(
         'assets/lotties/phoneAppDelivery.json',
         fit: BoxFit.fill,
@@ -266,8 +270,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Container _tagLoaSi() {
     return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.all(60),
+      padding: const EdgeInsets.all(25),
+      margin: const EdgeInsets.only(top: 40, right: 15),
       decoration: BoxDecoration(
         color: MyColors.secondaryColorOpacity,
         borderRadius: BorderRadius.circular(15),

@@ -2,8 +2,8 @@ import 'package:client_flutter_crud_node/src/dto/requestDTO/user_request_dto.dar
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../provider/employee_provider.dart';
-import '../provider/user_provider.dart';
+import '../provider/app_state_provider.dart';
+import '../provider/entities_provider.dart';
 import '../utils/my_colors.dart';
 import '../widgets/flush_bar.dart';
 import '../widgets/simple_date_picker.dart';
@@ -57,8 +57,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    var userRegister = Provider.of<UserProvider>(context);
-    var employeeProviderMain = Provider.of<EmployeeProvider>(context);
+    var entitiesProvider = Provider.of<EntitiesProvider>(context);
+    var appStateProvider = Provider.of<AppStateProvider>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     //     15,
                     //     TextInputType.visiblePassword,
                     //     controlContrasenaRepeat),
-                    _buttomRegistrar(userRegister, employeeProviderMain)
+                    _buttomRegistrar(entitiesProvider, appStateProvider)
                   ],
                 ),
               )
@@ -257,7 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buttomRegistrar(
-      UserProvider userRegister, EmployeeProvider employeeProviderMain) {
+      EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -269,7 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () {
           if (_validateFormNullSafety()) {
-            var rpta = userRegister.registerUser(userReqAddEditBody!);
+            var rpta = entitiesProvider.registerUser(userReqAddEditBody!);
 
             final FocusScopeNode focus = FocusScope.of(context);
             if (!focus.hasPrimaryFocus && focus.hasFocus) {
@@ -283,8 +283,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   FlushBar()
                       .snackBarV2(value[1].toString(), Colors.green, context);
                   //AUTO LOGIN
-                  employeeProviderMain.getAllEmployee();
-                  employeeProviderMain.getAllEmployeeTypes();
+                  entitiesProvider.getAllEmployee();
+                  appStateProvider.getAllEmployeeTypes();
                   await Future.delayed(const Duration(seconds: 2));
                   Navigator.pushNamed(context, "home");
                   break;
@@ -343,6 +343,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // }
 
     userReqAddEditBody = UserReqAddEditBody(
+        id: 0,
         nombre: controlNombreText,
         apellido: controlApellidoText,
         dni: controlDNIText,

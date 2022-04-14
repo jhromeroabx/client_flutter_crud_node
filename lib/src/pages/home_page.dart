@@ -1,10 +1,11 @@
-import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import '../dto/employee.dart';
+import '../dto/responseDTO/employee.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -46,10 +47,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final employeeProviderMain = Provider.of<EmployeeProvider>(context);
+    var appStateProvider = Provider.of<AppStateProvider>(context);
+    var entitiesProvider = Provider.of<EntitiesProvider>(context);
 
     Widget _buildBody() {
-      if (employeeProviderMain.isLoading) {
+      if (entitiesProvider.isLoading) {
         return ListView(
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
@@ -60,17 +62,16 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         );
-      } else if (employeeProviderMain.employeeListService == null) {
+      } else if (entitiesProvider.employeeListService == null) {
         return ListView(
           children: const [Text("NO DATA, THERES NO CONECTION WITH SERVER")],
         );
-      } else if (employeeProviderMain.employeeListService!.listaEmployee ==
-          null) {
+      } else if (entitiesProvider.employeeListService!.listaEmployee == null) {
         return ListView(
           children: const [Center(child: Text("NO DATA"))],
         );
       } else {
-        EmployeeList? employeeList = employeeProviderMain.employeeListService;
+        EmployeeList? employeeList = entitiesProvider.employeeListService;
 
         return ListView.builder(
           itemCount: employeeList!.listaEmployee!.length,
@@ -81,8 +82,8 @@ class _HomePageState extends State<HomePage> {
 
             return ListTile(
               onTap: () async {
-                await employeeProviderMain.getEmployeeById(id).then((value) {
-                  if (employeeProviderMain.employeeService != null) {
+                await entitiesProvider.getEmployeeById(id).then((value) {
+                  if (entitiesProvider.employeeService != null) {
                     Navigator.pushNamed(context, "edit/create");
                   }
                 });
@@ -98,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                employeeProviderMain.deleteEmployeeById(id);
+                                entitiesProvider.deleteEmployeeById(id);
                                 Navigator.pop(context);
                               },
                               child: const Text(
@@ -166,10 +167,9 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       // if (employeeProviderMain.employeeTypeListService != null)
                       //   comboBox(dropDownMenuItems, employeeProviderMain)
-                      Consumer<EmployeeProvider>(
-                          builder: (context, employeeProviderInit, child) {
-                        if (employeeProviderInit.employeeTypeListService ==
-                            null) {
+                      Consumer<AppStateProvider>(
+                          builder: (context, appStateProvider, child) {
+                        if (appStateProvider.employeeTypeListService == null) {
                           return Container(
                             color: Colors.amber[200],
                             child: const Text("COMBO VACIO"),
@@ -186,8 +186,7 @@ class _HomePageState extends State<HomePage> {
 
                           print("VALUE CURRENT: $currentData");
 
-                          return comboBox(
-                              dropDownMenuItems, employeeProviderMain);
+                          return comboBox(dropDownMenuItems);
                         }
                       })
                     ],
@@ -204,7 +203,7 @@ class _HomePageState extends State<HomePage> {
               displacement: 150,
               color: Colors.blueGrey[900],
               backgroundColor: Colors.lightBlueAccent[70],
-              onRefresh: employeeProviderMain.getAllEmployee,
+              onRefresh: entitiesProvider.getAllEmployee,
               child: _buildBody(),
             ),
           ),
@@ -212,7 +211,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          employeeProviderMain.employeeService = null;
+          entitiesProvider.employeeService = null;
           Navigator.pushNamed(context, "edit/create");
         },
         tooltip: "Agregar Empleado",
@@ -223,7 +222,6 @@ class _HomePageState extends State<HomePage> {
 
   CircleAvatar _backAppBar(BuildContext context) {
     return CircleAvatar(
-      minRadius: 10,
       backgroundColor: Colors.white,
       child: IconButton(
         icon: const Icon(Icons.arrow_back_ios_new,
@@ -261,8 +259,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container comboBox(
-      List<DropdownMenuItem> items, EmployeeProvider employeeProviderMain) {
+  Container comboBox(List<DropdownMenuItem> items) {
     return items.isNotEmpty
         ? Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),

@@ -4,8 +4,8 @@ import 'package:client_flutter_crud_node/src/pages/login_page.dart';
 import 'package:client_flutter_crud_node/src/pages/register_page.dart';
 import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/pages/test/incrementador.dart';
-import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
-import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -35,14 +35,14 @@ class MyApp extends StatelessWidget {
     ]);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => EmployeeProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => AppStateProvider()),
+        ChangeNotifierProvider(create: (context) => EntitiesProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
             primaryColor: MyColors.primaryColor, fontFamily: 'Roboto'),
         debugShowCheckedModeBanner: false,
-        title: 'Gestion Productos',
+        // title: 'Gestion Productos',
         initialRoute: 'login',
         routes: {
           'incrementador': (_) =>

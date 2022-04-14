@@ -4,9 +4,10 @@ import 'package:http/http.dart' as http;
 import '../dto/responseDTO/login.dart';
 import '../dto/requestDTO/user_request_dto.dart';
 import '../dto/responseDTO/user.dart';
+import 'config_host.dart';
 
 class UserService {
-  static const String _apiHost = "192.168.18.5:5000";
+  final String _apiHost = AppData().hostNodeServer;
   static const String _routePath_login = "/login";
   static const String _routePath_AddUserOrEdit = "/AddUserOrEdit";
 
@@ -64,5 +65,6 @@ class UserService {
       print("ERROR $_routePath_AddUserOrEdit: $e");
       return null;
     }
+    return null;
   }
 }

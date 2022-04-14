@@ -1,10 +1,12 @@
 import 'dart:convert';
 
-import 'package:client_flutter_crud_node/src/dto/employee.dart';
+import 'package:client_flutter_crud_node/src/dto/responseDTO/employee.dart';
 import 'package:http/http.dart' as http;
 
+import 'config_host.dart';
+
 class EmployeeService {
-  static const String _apiHost = "192.168.18.5:5000";
+  final String _apiHost = AppData().hostNodeServer;
   static const String _routePath_getAllUser = "/getAllEmployee";
   static const String _routePath_getAllEmplopyeeType = "/getAllEmployeeType";
   static const String _routePath_getUserByID = "/findEmployee/";
