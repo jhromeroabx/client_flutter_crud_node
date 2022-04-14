@@ -19,9 +19,9 @@ class _RegisterPageState extends State<RegisterPage> {
   bool obscureText = false;
 
   DateTime now = DateTime.now();
-  late String currentDate = DateFormat('dd-MM-yyyy').format(now);
+  late String currentDate = DateFormat('yyyy-MM-dd').format(now);
   late String _startTextDate = currentDate;
-  String formatStringDate = 'dd-MM-yyyy';
+  String formatStringDate = 'yyyy-MM-dd';
 
   late DateTime _currentTime;
   late DateTime _startMinDate;
