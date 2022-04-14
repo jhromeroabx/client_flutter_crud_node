@@ -50,10 +50,10 @@ class SimpleDatePicker extends StatelessWidget {
                 String dateFormatted;
                 if (formatDatePattern != null &&
                     formatDatePattern!.isNotEmpty) {
-                  DateFormat dateFormat = DateFormat('dd-MM-yyyy');
+                  DateFormat dateFormat = DateFormat('yyyy-MM-dd');
                   dateFormatted = dateFormat.format(date);
                 } else {
-                  DateFormat dateFormat = DateFormat('dd-MM-yyyy');
+                  DateFormat dateFormat = DateFormat('yyyy-MM-dd');
                   dateFormatted = dateFormat.format(date);
                 }
                 onConfirm!(date, dateFormatted);
