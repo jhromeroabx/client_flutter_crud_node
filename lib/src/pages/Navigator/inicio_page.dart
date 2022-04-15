@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../dto/responseDTO/product.dart';
 import '../../provider/entities_provider.dart';
+import '../../utils/my_colors.dart';
 import '../../widgets/card_products.dart';
 
 class InicioApp extends StatefulWidget {
@@ -26,33 +27,45 @@ class _InicioAppState extends State<InicioApp> {
       products = entitiesProvider.products!.products!;
     }
 
-    return SingleChildScrollView(
-      child: Column(children: [
-        Container(
-          margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.all(20),
-          child: const Text("TODOS LOS PRODUCTOS"),
-        ),
-        ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: itemsCount,
-            itemBuilder: (BuildContext context, int index) {
-              Product pro = entitiesProvider.products!.products![index];
-              return CardCustomType2(
-                imageURL: pro.imagen_url!,
-                name: pro.nombre,
-              );
-              // return ListTile(
-              //     leading: const Icon(Icons.list),
-              //     trailing: const Text(
-              //       "GFG",
-              //       style: TextStyle(color: Colors.green, fontSize: 15),
-              //     ),
-              //     title: Text("List item $index"));
-            }),
-      ]),
-    );
+    return SizedBox(
+        width: double.infinity,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(25),
+                margin: const EdgeInsets.only(top: 20, left: 15, bottom: 10),
+                decoration: BoxDecoration(
+                  color: Colors.lightGreenAccent[100],
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Text(
+                  "TODOS LOS PRODUCTOS",
+                  style: TextStyle(fontSize: 25),
+                ),
+              ),
+              if (itemsCount != 0)
+                SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.spaceEvenly,
+                    spacing: 32,
+                    runSpacing: 20,
+                    children: [
+                      for (var pro in products)
+                        ProductItems(
+                          imageURL: pro.imagen_url!,
+                          name: pro.nombre,
+                          precio: pro.precio.toString(),
+                          cantidad: pro.cantidad.toString(),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ));
   }
 }

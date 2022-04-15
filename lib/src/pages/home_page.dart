@@ -1,6 +1,7 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inventario.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,8 +23,54 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sistema de Almacene"),
-        actions: [],
+        automaticallyImplyLeading: false,
+        title: const Text("Sistema de Almacen"),
+        actions: [
+          Container(
+            padding: const EdgeInsets.only(right: 10),
+            child: CircleAvatar(
+              backgroundColor: Colors.red[100],
+              child: IconButton(
+                tooltip: "Cerrar sesion",
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.red[300],
+                  size: 30,
+                ),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                            insetAnimationCurve: Curves.bounceIn,
+                            title: const Text("Cerrar Sesion"),
+                            content:
+                                const Text("¿Estas seguro de Cerrar Sesion? "),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, "login");
+                                },
+                                child: const Text(
+                                  "Cerrar Sesion",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  "Cancelar",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                            ],
+                          ));
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       resizeToAvoidBottomInset: false,
       body: screens[index],
