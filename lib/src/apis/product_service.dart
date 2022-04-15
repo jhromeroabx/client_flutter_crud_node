@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../dto/responseDTO/login.dart';
 import '../dto/requestDTO/user_request_dto.dart';
 import '../dto/responseDTO/product.dart';
 import '../dto/responseDTO/user.dart';
@@ -31,7 +29,7 @@ class ProductService {
       );
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        return Products.fromMap(jsonDecode(response.body));
+        return Products.fromMap(response.body);
       }
     } catch (e) {
       print("ERROR $_routePath_getAllProducts: $e");

@@ -1,5 +1,5 @@
-import 'package:client_flutter_crud_node/src/pages/edit_or_create_page.dart';
-import 'package:client_flutter_crud_node/src/pages/home_page.dart';
+import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_employee.dart';
+import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
 import 'package:client_flutter_crud_node/src/pages/login_page.dart';
 import 'package:client_flutter_crud_node/src/pages/register_page.dart';
 import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
+import 'src/pages/home_page.dart';
 import 'src/pages/test/refresh_basic.dart';
 import 'src/pages/test/refresh_future_builder.dart';
 import 'src/utils/my_colors.dart';
@@ -47,10 +48,12 @@ class MyApp extends StatelessWidget {
         routes: {
           'incrementador': (_) =>
               const IncrementadorPage(title: 'Flutter Demo Home Page'),
-          'home': (_) => const HomePage(title: 'Gestion de Usuarios'),
+          'home': (_) => const HomePage(),
+          'manageEmployee': (_) =>
+              const ManageEmployeePage(title: 'Gestion de Empleados'),
           'login': (_) => const LoginPage(),
           'barcode': (_) => const BarCodePage(),
-          'edit/create': (_) => const EditOrCreatePage(),
+          'edit/create': (_) => const EditOrCreateEmployeePage(),
           'refreshFutBuild': (_) => const RefreshFutBuild(),
           'refreshBasic': (_) => const RefreshBasic(),
           'register': (_) => const RegisterPage(),

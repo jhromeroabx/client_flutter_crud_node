@@ -1,3 +1,5 @@
+import 'package:client_flutter_crud_node/src/apis/product_service.dart';
+import 'package:client_flutter_crud_node/src/dto/responseDTO/product.dart';
 import 'package:client_flutter_crud_node/src/dto/responseDTO/user.dart';
 import 'package:flutter/material.dart';
 import '../apis/employee_service.dart';
@@ -149,6 +151,18 @@ class EntitiesProvider extends ChangeNotifier {
       // Fluttertoast.showToast(
       //     msg: 'THE EMPLOYEE WAS NOT CREATED SUCCESFULLY',
       //     backgroundColor: Colors.redAccent);
+      return false;
+    }
+  }
+
+  Products? products;
+
+  Future<bool> getAllProducts() async {
+    products = await ProductService().getAllProducts();
+
+    if (products != null) {
+      return true;
+    } else {
       return false;
     }
   }

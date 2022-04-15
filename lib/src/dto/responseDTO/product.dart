@@ -28,6 +28,8 @@ class Product {
   double? precio;
   int? idCategoria;
   int? active;
+  String? barcode;
+  String? imagen_url;
   String? categoria;
 
   Product({
@@ -38,6 +40,8 @@ class Product {
     this.precio,
     this.idCategoria,
     this.active,
+    this.barcode,
+    this.imagen_url,
     this.categoria,
   });
 
@@ -49,6 +53,8 @@ class Product {
         precio: json["precio"].toDouble(),
         idCategoria: json["id_categoria"],
         active: json["active"],
+        barcode: json["barcode"],
+        imagen_url: json["imagen_url"],
         categoria: json["categoria"],
       );
 }

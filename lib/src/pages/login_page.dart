@@ -111,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                   FlushBar()
                       .snackBarV2(value[1].toString(), Colors.green, context);
                   entitiesProvider.getAllEmployee();
+                  entitiesProvider.getAllProducts();
                   appStateProvider.getAllEmployeeTypes();
                   await Future.delayed(const Duration(seconds: 2));
                   Navigator.pushNamed(context, "home");

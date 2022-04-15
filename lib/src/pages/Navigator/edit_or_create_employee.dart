@@ -4,14 +4,15 @@ import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class EditOrCreatePage extends StatefulWidget {
-  const EditOrCreatePage({Key? key}) : super(key: key);
+class EditOrCreateEmployeePage extends StatefulWidget {
+  const EditOrCreateEmployeePage({Key? key}) : super(key: key);
 
   @override
-  State<EditOrCreatePage> createState() => _EditOrCreatePageState();
+  State<EditOrCreateEmployeePage> createState() =>
+      _EditOrCreateEmployeePageState();
 }
 
-class _EditOrCreatePageState extends State<EditOrCreatePage> {
+class _EditOrCreateEmployeePageState extends State<EditOrCreateEmployeePage> {
   late TextEditingController controlName;
   late TextEditingController controlSalary;
   late TextEditingController controlIdTypeEmployee;
