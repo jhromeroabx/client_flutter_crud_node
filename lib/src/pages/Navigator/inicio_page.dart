@@ -17,55 +17,6 @@ class InicioApp extends StatefulWidget {
 class _InicioAppState extends State<InicioApp> {
   @override
   Widget build(BuildContext context) {
-    var entitiesProvider = Provider.of<EntitiesProvider>(context);
-    int itemsCount = 0;
-    List<Product> products = [];
-    if (entitiesProvider.products!.products == null) {
-      Fluttertoast.showToast(msg: "NO HAY DATA");
-    } else {
-      itemsCount = entitiesProvider.products!.products!.length;
-      products = entitiesProvider.products!.products!;
-    }
-
-    return SizedBox(
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(25),
-                margin: const EdgeInsets.only(top: 20, left: 15, bottom: 10),
-                decoration: BoxDecoration(
-                  color: Colors.lightGreenAccent[100],
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: const Text(
-                  "TODOS LOS PRODUCTOS",
-                  style: TextStyle(fontSize: 25),
-                ),
-              ),
-              if (itemsCount != 0)
-                SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.spaceEvenly,
-                    spacing: 32,
-                    runSpacing: 20,
-                    children: [
-                      for (var pro in products)
-                        ProductItems(
-                          imageURL: pro.imagen_url!,
-                          name: pro.nombre,
-                          precio: pro.precio.toString(),
-                          cantidad: pro.cantidad.toString(),
-                        ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ));
+    return Container();
   }
 }

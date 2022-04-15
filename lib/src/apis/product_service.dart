@@ -58,7 +58,7 @@ class ProductService {
     }
   }
 
-  Future<UserResponse?> registerOrEditUser(
+  Future<UserResponse?> registerOrEditProduct(
       UserReqAddEditBody userReqAddEditBody) async {
     try {
       var headers = {
