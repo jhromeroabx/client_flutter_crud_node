@@ -26,9 +26,9 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     //para tener el context despues de construida la app??
-    SchedulerBinding.instance?.addPersistentFrameCallback((timeStamp) {
-      // _con.init(context);
-    });
+    // SchedulerBinding.instance?.addPersistentFrameCallback((timeStamp) {
+    //   // _con.init(context);
+    // });
     initializationANDRemoveSplashScreen();
   }
 

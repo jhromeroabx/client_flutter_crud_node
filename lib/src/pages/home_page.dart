@@ -1,6 +1,7 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inventario.dart';
+import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -38,34 +39,17 @@ class _HomePageState extends State<HomePage> {
                   size: 30,
                 ),
                 onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) => CupertinoAlertDialog(
-                            insetAnimationCurve: Curves.bounceIn,
-                            title: const Text("Cerrar Sesion"),
-                            content:
-                                const Text("¿Estas seguro de Cerrar Sesion? "),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, "login");
-                                },
-                                child: const Text(
-                                  "Cerrar Sesion",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  "Cancelar",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                            ],
-                          ));
+                  CupertinoAlertDialogCustom().showCupertinoAlertDialog(
+                    title: "Cerrar Sesion",
+                    msg: "¿Estas seguro de Cerrar Sesion?",
+                    onPressedPositive: () {
+                      Navigator.pushNamed(context, "login");
+                    },
+                    onPressedNegative: () {
+                      Navigator.pop(context);
+                    },
+                    context: context,
+                  );
                 },
               ),
             ),
