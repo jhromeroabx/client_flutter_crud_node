@@ -27,7 +27,6 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
         itemsCount = 0;
         products = [];
       });
-      // Fluttertoast.showToast(msg: "NO HAY DATA");
     } else {
       setState(() {
         itemsCount = entitiesProvider.products!.products!.length;
@@ -42,6 +41,8 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
 
 //TIPICO ERROR DE REFRESCAR CADA RATO, SATURA APP
     // _getAllProducts(entitiesProvider);
+    itemsCount = entitiesProvider.products!.products!.length;
+    products = entitiesProvider.products!.products!;
 
     return Scaffold(
       body: Column(
@@ -89,11 +90,18 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                           runSpacing: 20,
                           children: [
                             for (var pro in products)
-                              ProductItems(
-                                imageURL: pro.imagen_url!,
-                                name: pro.nombre,
-                                precio: pro.precio.toString(),
-                                cantidad: pro.cantidad.toString(),
+                              GestureDetector(
+                                onTap: () {
+                                  entitiesProvider.productSelected = pro;
+                                  Navigator.pushNamed(
+                                      context, "edit/create_product");
+                                },
+                                child: ProductItems(
+                                  imageURL: pro.imagen_url!,
+                                  name: pro.nombre,
+                                  precio: pro.precio.toString(),
+                                  cantidad: pro.cantidad.toString(),
+                                ),
                               ),
                           ],
                         ),
@@ -106,7 +114,9 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, "edit/create_product");
+        },
         child: const Icon(
           Icons.add_circle_outline_sharp,
           size: 40,

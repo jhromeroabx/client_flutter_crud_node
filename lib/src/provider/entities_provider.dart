@@ -156,6 +156,11 @@ class EntitiesProvider extends ChangeNotifier {
   }
 
   Products? products;
+  Product? _productSelected;
+  Product get productSelected => _productSelected!;
+  set productSelected(product) {
+    _productSelected = product;
+  }
 
   Future<bool> getAllProducts() async {
     products = await ProductService().getAllProducts();

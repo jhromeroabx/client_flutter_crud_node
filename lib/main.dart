@@ -1,4 +1,5 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_employee.dart';
+import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_product.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
 import 'package:client_flutter_crud_node/src/pages/login_page.dart';
 import 'package:client_flutter_crud_node/src/pages/register_page.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
           'refreshFutBuild': (_) => const RefreshFutBuild(),
           'refreshBasic': (_) => const RefreshBasic(),
           'register': (_) => const RegisterPage(),
+          'edit/create_product': (_) => const EditOrCreateProduct(),
         },
       ),
     );

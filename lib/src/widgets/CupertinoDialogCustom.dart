@@ -19,9 +19,6 @@ class CupertinoAlertDialogCustom {
               content: Text(msg),
               actions: [
                 TextButton(
-                  // onPressed: () {
-                  //   Navigator.pushNamed(context, "login");
-                  // },
                   onPressed: onPressedPositive ??
                       () {
                         Navigator.pushNamed(context, "login");
@@ -33,9 +30,6 @@ class CupertinoAlertDialogCustom {
                 ),
                 TextButton(
                   onPressed: onPressedNegative,
-                  // onPressed: () {
-                  //   Navigator.pop(context);
-                  // },
                   child: const Text(
                     "Cancelar",
                     style: TextStyle(color: Colors.blue),
