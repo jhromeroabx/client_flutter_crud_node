@@ -50,7 +50,7 @@ class ProductService {
       );
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        return Categorias.fromMap(jsonDecode(response.body));
+        return Categorias.fromMap(response.body);
       }
     } catch (e) {
       print("ERROR $_routePath_getAllCategory: $e");

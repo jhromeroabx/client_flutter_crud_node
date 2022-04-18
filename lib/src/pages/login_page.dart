@@ -113,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                   entitiesProvider.getAllEmployee();
                   entitiesProvider.getAllProducts();
                   appStateProvider.getAllEmployeeTypes();
+                  appStateProvider.getAllCategories();
                   await Future.delayed(const Duration(seconds: 2));
                   Navigator.pushNamed(context, "home");
                   break;

@@ -1,8 +1,10 @@
+import 'package:client_flutter_crud_node/src/apis/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../apis/employee_service.dart';
 import '../dto/responseDTO/employee.dart';
+import '../dto/responseDTO/product.dart';
 
 class AppStateProvider extends ChangeNotifier {
   //IS LOADING
@@ -16,6 +18,7 @@ class AppStateProvider extends ChangeNotifier {
   AppStateProvider();
 
   EmployeeTypeList? employeeTypeListService;
+  Categorias? categorias;
 
   Future getAllEmployeeTypes() async {
     _isLoading = true;
@@ -24,6 +27,19 @@ class AppStateProvider extends ChangeNotifier {
     //notifyListeners();
 
     if (employeeTypeListService != null) {
+      isLoading = false;
+    } else {
+      isLoading = false;
+      return;
+    }
+  }
+
+  Future getAllCategories() async {
+    _isLoading = true;
+
+    categorias = await ProductService().getAllCategory();
+
+    if (categorias != null) {
       isLoading = false;
     } else {
       isLoading = false;
