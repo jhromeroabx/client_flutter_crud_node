@@ -30,26 +30,36 @@ class ProductItems extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (imageURL != null)
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: Image.network(
-                imageURL!,
-                // placeholder: const AssetImage('assets/carga.gif'),
-                // image: NetworkImage(imageURL),
-                //limitamos el tamaño del widget para que no crezca mas de los limites
-                width: 120,
-                height: 125,
-                //imagen cubren el tamaño del widget
-                fit: BoxFit.cover,
-              ),
-            ),
+          imageURL!.isNotEmpty
+              ? Container(
+                  padding: const EdgeInsets.all(10),
+                  child: FadeInImage.assetNetwork(
+                    width: 120,
+                    height: 125,
+                    fadeInDuration: const Duration(milliseconds: 500),
+                    fadeInCurve: Curves.easeInExpo,
+                    fadeOutCurve: Curves.easeOutExpo,
+                    placeholder: 'assets/images/gallery.jpg',
+                    image: imageURL!,
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/images/gallery.jpg",
+                        height: 100,
+                        width: 100,
+                      );
+                    },
+                    fit: BoxFit.scaleDown,
+                  ),
+                )
+              : Image.asset(
+                  'assets/images/gallery.jpg',
+                  height: 100,
+                  width: 100,
+                ),
           if (name != null)
             Container(
-              // alignment: AlignmentDirectional.topEnd,
               padding: const EdgeInsets.only(
                   left: 10, right: 10, top: 10, bottom: 10),
-              // child: Text(name ?? "Un hermoso paisaje. no titulo"),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

@@ -1,6 +1,6 @@
 import 'package:client_flutter_crud_node/src/apis/product_service.dart';
 import 'package:client_flutter_crud_node/src/dto/responseDTO/product.dart';
-import 'package:client_flutter_crud_node/src/dto/responseDTO/user.dart';
+import 'package:client_flutter_crud_node/src/dto/responseDTO/UiResponse.dart';
 import 'package:flutter/material.dart';
 import '../apis/employee_service.dart';
 import '../apis/user_service.dart';
@@ -21,7 +21,6 @@ class EntitiesProvider extends ChangeNotifier {
   Employee? employeeService;
 
   Login? userAcceso;
-  UserResponse? userResponse;
 
   EntitiesProvider();
 
@@ -47,14 +46,15 @@ class EntitiesProvider extends ChangeNotifier {
       UserReqAddEditBody userReqAddEditBody) async {
     _isLoading = true;
 
-    userResponse = await UserService().registerOrEditUser(userReqAddEditBody);
+    UiResponse? response =
+        await UserService().registerOrEditUser(userReqAddEditBody);
 
-    if (userResponse != null) {
+    if (response != null) {
       isLoading = false;
-      if (userResponse!.state == true) {
+      if (response.state == true) {
         return [1, "Registrado"];
       } else {
-        return [2, userResponse!.response!.error!];
+        return [2, response.response!.error!];
       }
     } else {
       isLoading = false;
@@ -179,6 +179,25 @@ class EntitiesProvider extends ChangeNotifier {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<List<Object>> productAddOrEdit(Product product) async {
+    _isLoading = true;
+
+    UiResponse? response =
+        await ProductService().registerOrEditProduct(product);
+
+    if (response != null) {
+      isLoading = false;
+      if (response.state == true) {
+        return [1, "Registrado"];
+      } else {
+        return [2, response.response!.error!];
+      }
+    } else {
+      isLoading = false;
+      return [3, "Error del servidor!!!"];
     }
   }
 }

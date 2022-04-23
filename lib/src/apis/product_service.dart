@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 import '../dto/requestDTO/user_request_dto.dart';
 import '../dto/responseDTO/product.dart';
-import '../dto/responseDTO/user.dart';
+import '../dto/responseDTO/UiResponse.dart';
 import 'config_host.dart';
 
 class ProductService {
@@ -85,7 +85,7 @@ class ProductService {
     }
   }
 
-  Future<UserResponse?> registerOrEditProduct(Product product) async {
+  Future<UiResponse?> registerOrEditProduct(Product product) async {
     try {
       var headers = {
         'accept': 'text/plain',
@@ -101,7 +101,7 @@ class ProductService {
       );
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        return UserResponse.fromMap(jsonDecode(response.body));
+        return UiResponse.fromMap(jsonDecode(response.body));
       }
     } catch (e) {
       print("ERROR $_routePath_productoAddOrEdit: $e");

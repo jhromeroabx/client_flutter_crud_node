@@ -1,13 +1,13 @@
-class UserResponse {
+class UiResponse {
   Response? response;
   bool? state;
 
-  UserResponse({
+  UiResponse({
     this.response,
     this.state,
   });
 
-  factory UserResponse.fromMap(Map<String, dynamic> json) => UserResponse(
+  factory UiResponse.fromMap(Map<String, dynamic> json) => UiResponse(
         response: Response.fromMap(json["response"]),
         state: json["state"],
       );

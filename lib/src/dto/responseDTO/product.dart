@@ -57,6 +57,19 @@ class Product {
         imagen_url: json["imagen_url"],
         categoria: json["categoria"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id ?? 0,
+        "nombre": nombre,
+        "comentario": comentario,
+        "cantidad": cantidad,
+        "precio": precio,
+        "id_categoria": idCategoria,
+        "active": active,
+        "barcode": barcode,
+        "imagen_url": imagen_url,
+        "categoria": categoria,
+      };
 }
 
 class Categorias {

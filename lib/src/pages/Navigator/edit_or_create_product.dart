@@ -7,6 +7,7 @@ import '../../dto/responseDTO/product.dart';
 import '../../provider/app_state_provider.dart';
 import '../../provider/entities_provider.dart';
 import '../../utils/my_colors.dart';
+import '../../widgets/flush_bar.dart';
 import '../../widgets/input_data_text_field.dart';
 
 class EditOrCreateProduct extends StatefulWidget {
@@ -28,7 +29,10 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
   TextEditingController imagen_url = TextEditingController();
 
   int idCategoria = 0;
-  bool active = true;
+  int idProduct = 0;
+
+  Product? productoCreateOrEdit;
+
   List<DropdownMenuItem> dropDownMenuItems = [];
 
   bool? _value;
@@ -44,29 +48,31 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
     if (entitiesProvider.productSelected != null) {
       final productSelected = entitiesProvider.productSelected;
 
+      idProduct = productSelected!.id!;
+
       // controlComentario.text = productSelected!.comentario!;
       controlNombreProduct.text = controlNombreProduct.text.isEmpty
-          ? productSelected!.nombre!
+          ? productSelected.nombre!
           : controlNombreProduct.text;
 
       controlComentario.text = controlComentario.text.isEmpty
-          ? productSelected!.comentario!
+          ? productSelected.comentario!
           : controlComentario.text;
 
       controlCantidad.text = controlCantidad.text.isEmpty
-          ? productSelected!.cantidad!.toString()
+          ? productSelected.cantidad!.toString()
           : controlCantidad.text;
 
       controlPrecio.text = controlPrecio.text.isEmpty
-          ? productSelected!.precio!.toString()
+          ? productSelected.precio!.toString()
           : controlPrecio.text;
 
       barCode.text = barCode.text.isEmpty
-          ? productSelected!.barcode!.toString()
+          ? productSelected.barcode!.toString()
           : barCode.text;
 
       imagen_url.text = imagen_url.text.isEmpty
-          ? productSelected!.imagen_url!.toString()
+          ? productSelected.imagen_url!.toString()
           : imagen_url.text;
 
       _registerOrUpdate = "ACTUALIZAR";
@@ -103,8 +109,8 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                 children: [
                   // if (entitiesProvider.productSelected != null)
                   _productImage(entitiesProvider.productSelected == null
-                      ? null
-                      : entitiesProvider.productSelected!.imagen_url),
+                      ? ""
+                      : entitiesProvider.productSelected!.imagen_url!),
                   TextDataBasic(
                       size: 100,
                       label: 'Nombre',
@@ -127,6 +133,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                     TextInputType.number,
                     controlCantidad,
                     onlyNumbers: true,
+                    read: true,
                   ),
                   _txtDatosQuantityOrPrice(
                     'Precio',
@@ -135,6 +142,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                     TextInputType.number,
                     controlPrecio,
                     twoDecimals: true,
+                    read: true,
                   ),
                   Consumer<AppStateProvider>(
                       builder: (context, appStateProvider, child) {
@@ -148,10 +156,8 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                           appStateProvider.categorias!.categorias!);
 
                       idCategoria = idCategoria == 0
-                          ? appStateProvider.categorias!.categorias![0].id!
+                          ? entitiesProvider.productSelected!.idCategoria!
                           : idCategoria;
-
-                      print("VALUE CURRENT: $idCategoria");
 
                       return comboBox(dropDownMenuItems);
                     }
@@ -180,9 +186,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                       imagen_url.clear();
                     },
                   ),
-                  //falta barcode
-                  //falta imagen url
-                  _buttomRegistrarOrUpdate(),
+                  _buttomRegistrarOrUpdate(entitiesProvider),
                 ],
               ),
             )
@@ -192,7 +196,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
     );
   }
 
-  Widget _buttomRegistrarOrUpdate() {
+  Widget _buttomRegistrarOrUpdate(EntitiesProvider entitiesProvider) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -204,7 +208,38 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () async {
           if (validarCamposVacios()) {
-          } else {}
+            var rpta = entitiesProvider.productAddOrEdit(productoCreateOrEdit!);
+
+            final FocusScopeNode focus = FocusScope.of(context);
+            if (!focus.hasPrimaryFocus && focus.hasFocus) {
+              //SI EL TECLADO ESTA ACTIVO LO QUITAMOS
+              FocusManager.instance.primaryFocus!.unfocus();
+            }
+
+            rpta.then((value) async {
+              switch (value[0]) {
+                case 1:
+                  FlushBar()
+                      .snackBarV2(value[1].toString(), Colors.green, context);
+                  //REGRESO A LA PAG ANTERIOR
+                  entitiesProvider.getAllProducts();
+                  await Future.delayed(const Duration(seconds: 2));
+                  Navigator.pushNamed(context, "home");
+                  break;
+                case 2:
+                  FlushBar()
+                      .snackBarV2(value[1].toString(), Colors.red, context);
+                  break;
+                case 3:
+                  FlushBar()
+                      .snackBarV2(value[1].toString(), Colors.red, context);
+                  break;
+                default:
+              }
+            });
+          } else {
+            FlushBar().snackBarV2("Campos vacios!!!", Colors.red, context);
+          }
         },
         child: Text(
           _registerOrUpdate,
@@ -240,7 +275,6 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
             onChanged: (newValue) {
               setState(() {
                 _value = newValue;
-                print("VALUE SWITCH: $_value");
               });
             },
           ),
@@ -249,7 +283,14 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
     );
   }
 
-  Widget _productImage(String? imagen_url) {
+  Widget _productImage(String imagen_url) {
+    String image = "";
+    if (imagen_url.isEmpty) {
+      image = 'https://shpl.info/sites/default/files/2020-11/new.jpg';
+    } else {
+      image = imagen_url;
+    }
+
     return FadeInImage.assetNetwork(
       height: 300,
       width: 300,
@@ -257,8 +298,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
       fadeInCurve: Curves.easeInExpo,
       fadeOutCurve: Curves.easeOutExpo,
       placeholder: 'assets/images/gallery.jpg',
-      image:
-          imagen_url ?? 'https://shpl.info/sites/default/files/2020-11/new.jpg',
+      image: image,
       imageErrorBuilder: (context, error, stackTrace) {
         return Image.asset(
           "assets/images/gallery.jpg",
@@ -272,7 +312,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
 
   Widget _txtDatosQuantityOrPrice(String label, IconData icon, int maxLength,
       TextInputType type, TextEditingController controller,
-      {bool onlyNumbers = false, bool twoDecimals = false}) {
+      {bool onlyNumbers = false, bool twoDecimals = false, bool read = false}) {
     return Container(
       height: 80,
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
@@ -282,7 +322,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextFormField(
-        // readOnly: true,
+        readOnly: read,
         style: const TextStyle(fontSize: 20),
         controller: controller,
         maxLength: maxLength,
@@ -361,11 +401,25 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
     //edit
     //id = id_real
 
-    String controlApellidoText = controlNombreProduct.text.trim();
-    String controlDNIText = controlDNI.text.trim();
-    String controlTelefonoText = controlTelefono.text.trim();
-    String controlEmailText = controlEmail.text.trim();
-    String controlContrasenaText = controlContrasena.text.trim();
+    String controlNombreProductText = controlNombreProduct.text.trim();
+    String controlComentarioText = controlComentario.text.trim();
+
+    if (controlNombreProductText.isEmpty) {
+      return false;
+    }
+    if (controlComentarioText.isEmpty) {
+      return false;
+    }
+
+    productoCreateOrEdit = Product(
+      id: idProduct,
+      nombre: controlNombreProductText,
+      comentario: controlComentarioText,
+      barcode: barCode.text.trim(),
+      imagen_url: imagen_url.text.trim(),
+      idCategoria: idCategoria,
+      active: _value,
+    );
 
     return true;
   }

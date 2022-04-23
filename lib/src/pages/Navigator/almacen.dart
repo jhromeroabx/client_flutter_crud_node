@@ -96,9 +96,6 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                                   var rpta =
                                       entitiesProvider.getProductByIdOrBarCode(
                                           id: pro.id, barcode: "");
-                                  // entitiesProvider.getProductByIdOrBarCode(
-                                  //     barcode: "BARCODE");
-                                  // entitiesProvider.productSelected = pro;
                                   rpta.then((value) async {
                                     if (value) {
                                       Navigator.pushNamed(
@@ -110,11 +107,9 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                                           context);
                                     }
                                   });
-//                                   Navigator.pushNamed(
-//                                       context, "edit/create_product");
                                 },
                                 child: ProductItems(
-                                  imageURL: pro.imagen_url!,
+                                  imageURL: pro.imagen_url,
                                   name: pro.nombre,
                                   precio: pro.precio.toString(),
                                   cantidad: pro.cantidad.toString(),

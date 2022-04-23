@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 import '../dto/responseDTO/login.dart';
 import '../dto/requestDTO/user_request_dto.dart';
-import '../dto/responseDTO/user.dart';
+import '../dto/responseDTO/UiResponse.dart';
 import 'config_host.dart';
 
 class UserService {
@@ -42,7 +42,7 @@ class UserService {
     }
   }
 
-  Future<UserResponse?> registerOrEditUser(
+  Future<UiResponse?> registerOrEditUser(
       UserReqAddEditBody userReqAddEditBody) async {
     try {
       var headers = {
@@ -59,7 +59,7 @@ class UserService {
       );
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        return UserResponse.fromMap(jsonDecode(response.body));
+        return UiResponse.fromMap(jsonDecode(response.body));
       }
     } catch (e) {
       print("ERROR $_routePath_AddUserOrEdit: $e");
