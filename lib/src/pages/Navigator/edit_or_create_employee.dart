@@ -1,5 +1,4 @@
 import 'package:client_flutter_crud_node/src/dto/responseDTO/employee.dart';
-import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

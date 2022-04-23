@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:client_flutter_crud_node/src/widgets/flush_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -92,9 +93,25 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                             for (var pro in products)
                               GestureDetector(
                                 onTap: () {
-                                  entitiesProvider.productSelected = pro;
-                                  Navigator.pushNamed(
-                                      context, "edit/create_product");
+                                  var rpta =
+                                      entitiesProvider.getProductByIdOrBarCode(
+                                          id: pro.id, barcode: "");
+                                  // entitiesProvider.getProductByIdOrBarCode(
+                                  //     barcode: "BARCODE");
+                                  // entitiesProvider.productSelected = pro;
+                                  rpta.then((value) async {
+                                    if (value) {
+                                      Navigator.pushNamed(
+                                          context, "edit/create_product");
+                                    } else {
+                                      FlushBar().snackBarV2(
+                                          "No cargo el objeto",
+                                          Colors.red,
+                                          context);
+                                    }
+                                  });
+//                                   Navigator.pushNamed(
+//                                       context, "edit/create_product");
                                 },
                                 child: ProductItems(
                                   imageURL: pro.imagen_url!,
@@ -113,8 +130,10 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          entitiesProvider.productSelected = null;
           Navigator.pushNamed(context, "edit/create_product");
         },
         child: const Icon(

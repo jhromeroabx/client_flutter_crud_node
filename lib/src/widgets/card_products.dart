@@ -56,6 +56,7 @@ class ProductItems extends StatelessWidget {
                   Text(
                     name!,
                     style: const TextStyle(fontSize: 20),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
                     height: 10,

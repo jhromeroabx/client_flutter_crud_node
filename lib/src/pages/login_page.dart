@@ -1,10 +1,9 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/app_state_provider.dart';
 import '../utils/my_colors.dart';
@@ -25,16 +24,34 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    //para tener el context despues de construida la app??
-    // SchedulerBinding.instance?.addPersistentFrameCallback((timeStamp) {
-    //   // _con.init(context);
-    // });
     initializationANDRemoveSplashScreen();
+    initSharedPreferences();
   }
+
+  // @override
+  // initState() {
+  //   super.initState();
+  //   //para tener el context despues de construida la app??
+  //   // SchedulerBinding.instance?.addPersistentFrameCallback((timeStamp) {
+  //   //   // _con.init(context);
+  //   // });
+  //   initializationANDRemoveSplashScreen();
+  //   initSharedPreferences();
+  // }
 
   void initializationANDRemoveSplashScreen() async {
     await Future.delayed(const Duration(seconds: 3));
     FlutterNativeSplash.remove();
+  }
+
+  void initSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    String? user = prefs.getString('user');
+    String? contra = prefs.getString('contrasenia');
+
+    controlUser.text = user ?? '';
+    controlContrasenia.text = contra ?? '';
   }
 
   @override
@@ -110,6 +127,12 @@ class _LoginPageState extends State<LoginPage> {
                 case 1:
                   FlushBar()
                       .snackBarV2(value[1].toString(), Colors.green, context);
+
+                  final prefs = await SharedPreferences.getInstance();
+
+                  await prefs.setString('user', controlUserText);
+                  await prefs.setString('contrasenia', controlContraseniaText);
+
                   entitiesProvider.getAllEmployee();
                   entitiesProvider.getAllProducts();
                   appStateProvider.getAllEmployeeTypes();

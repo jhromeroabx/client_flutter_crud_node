@@ -1,6 +1,7 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inventario.dart';
+import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,8 @@ class _HomePageState extends State<HomePage> {
   int index = 0;
   final screens = [
     const InicioApp(),
-    const Inventario(),
     const AlmacenGestion(),
+    const ManageEmployeePage(title: "Gestion de empleados"),
   ];
 
   @override

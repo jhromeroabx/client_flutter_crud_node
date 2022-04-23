@@ -157,7 +157,7 @@ class EntitiesProvider extends ChangeNotifier {
 
   Products? products;
   Product? _productSelected;
-  Product get productSelected => _productSelected!;
+  Product? get productSelected => _productSelected;
   set productSelected(product) {
     _productSelected = product;
   }
@@ -166,6 +166,16 @@ class EntitiesProvider extends ChangeNotifier {
     products = await ProductService().getAllProducts();
 
     if (products != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> getProductByIdOrBarCode({int? id, String? barcode}) async {
+    productSelected = await ProductService().findProductBy(id, barcode);
+
+    if (productSelected != null) {
       return true;
     } else {
       return false;

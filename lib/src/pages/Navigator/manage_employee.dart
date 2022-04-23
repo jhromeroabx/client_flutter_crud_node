@@ -18,7 +18,7 @@ class ManageEmployeePage extends StatefulWidget {
 class _ManageEmployeePageState extends State<ManageEmployeePage> {
   late List<DropdownMenuItem> dropDownMenuItems = [];
   int currentData = 0;
-  dynamic employeeProviderInit;
+  // dynamic employeeProviderInit;
 
   List<DropdownMenuItem> getDropDownMenuItems(List<dynamic> typesEmployee) {
     List<DropdownMenuItem> items = [];
@@ -47,7 +47,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
 
   @override
   Widget build(BuildContext context) {
-    var appStateProvider = Provider.of<AppStateProvider>(context);
+    // var appStateProvider = Provider.of<AppStateProvider>(context);
     var entitiesProvider = Provider.of<EntitiesProvider>(context);
 
     Widget _buildBody() {
@@ -145,11 +145,11 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: _backAppBar(context),
-        title: Text(widget.title),
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   leading: _backAppBar(context),
+      //   title: Text(widget.title),
+      // ),
       body: Column(
         children: [
           Visibility(
@@ -169,25 +169,27 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
                       //   comboBox(dropDownMenuItems, employeeProviderMain)
                       Consumer<AppStateProvider>(
                           builder: (context, appStateProvider, child) {
-                        if (appStateProvider.employeeTypeListService == null) {
-                          return Container(
-                            color: Colors.amber[200],
-                            child: const Text("COMBO VACIO"),
-                          );
-                        } else {
-                          dropDownMenuItems = getDropDownMenuItems(
-                              employeeProviderInit
-                                  .employeeTypeListService!.listaEmployeeType!);
+                        // print(
+                        //     "DATA ${appStateProvider.employeeTypeListService}");
+                        // if (appStateProvider.employeeTypeListService!
+                        //     .listaEmployeeType!.isEmpty) {
+                        //   return Container(
+                        //     color: Colors.amber[200],
+                        //     child: const Text("COMBO VACIO"),
+                        //   );
+                        // } else {
+                        dropDownMenuItems = getDropDownMenuItems(
+                            appStateProvider
+                                .employeeTypeListService!.listaEmployeeType!);
 
-                          currentData = currentData == 0
-                              ? employeeProviderInit.employeeTypeListService!
-                                  .listaEmployeeType![0].id!
-                              : currentData;
+                        currentData = currentData == 0
+                            ? appStateProvider.employeeTypeListService!
+                                .listaEmployeeType![0].id!
+                            : currentData;
 
-                          print("VALUE CURRENT: $currentData");
+                        print("VALUE CURRENT: $currentData");
 
-                          return comboBox(dropDownMenuItems);
-                        }
+                        return comboBox(dropDownMenuItems);
                       })
                     ],
                   ),

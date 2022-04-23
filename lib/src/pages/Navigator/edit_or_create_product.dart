@@ -31,11 +31,46 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
   bool active = true;
   List<DropdownMenuItem> dropDownMenuItems = [];
 
-  bool _value = true;
+  bool? _value;
+
+  late String _registerOrUpdate = "REGISTRAR";
 
   @override
   void initState() {
     super.initState();
+  }
+
+  loadProductData(EntitiesProvider entitiesProvider) {
+    if (entitiesProvider.productSelected != null) {
+      final productSelected = entitiesProvider.productSelected;
+
+      // controlComentario.text = productSelected!.comentario!;
+      controlNombreProduct.text = controlNombreProduct.text.isEmpty
+          ? productSelected!.nombre!
+          : controlNombreProduct.text;
+
+      controlComentario.text = controlComentario.text.isEmpty
+          ? productSelected!.comentario!
+          : controlComentario.text;
+
+      controlCantidad.text = controlCantidad.text.isEmpty
+          ? productSelected!.cantidad!.toString()
+          : controlCantidad.text;
+
+      controlPrecio.text = controlPrecio.text.isEmpty
+          ? productSelected!.precio!.toString()
+          : controlPrecio.text;
+
+      barCode.text = barCode.text.isEmpty
+          ? productSelected!.barcode!.toString()
+          : barCode.text;
+
+      imagen_url.text = imagen_url.text.isEmpty
+          ? productSelected!.imagen_url!.toString()
+          : imagen_url.text;
+
+      _registerOrUpdate = "ACTUALIZAR";
+    }
   }
 
   List<DropdownMenuItem> getMenuItems(List<Categoria> lista) {
@@ -54,6 +89,8 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
   Widget build(BuildContext context) {
     var entitiesProvider = Provider.of<EntitiesProvider>(context);
 
+    loadProductData(entitiesProvider);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -64,8 +101,12 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
               margin: const EdgeInsets.only(top: 30),
               child: Column(
                 children: [
-                  _productImage(entitiesProvider.productSelected.imagen_url!),
+                  // if (entitiesProvider.productSelected != null)
+                  _productImage(entitiesProvider.productSelected == null
+                      ? null
+                      : entitiesProvider.productSelected!.imagen_url),
                   TextDataBasic(
+                      size: 100,
                       label: 'Nombre',
                       icon: Icons.card_giftcard,
                       maxLength: 50,
@@ -73,9 +114,11 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                       controller: controlNombreProduct),
                   TextDataBasic(
                       label: 'Comentario',
+                      size: 200,
+                      maxLines: null,
                       icon: Icons.comment_bank_outlined,
-                      maxLength: 50,
-                      type: TextInputType.name,
+                      maxLength: 200,
+                      type: TextInputType.multiline,
                       controller: controlComentario),
                   _txtDatosQuantityOrPrice(
                     'Cantidad',
@@ -113,10 +156,33 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                       return comboBox(dropDownMenuItems);
                     }
                   }),
-                  _switchProduct()
+                  _switchProduct(entitiesProvider),
+                  TextDataBasic(
+                    size: 100,
+                    label: 'Codigo de barras',
+                    icon: Icons.document_scanner_outlined,
+                    maxLength: 50,
+                    type: TextInputType.number,
+                    controller: barCode,
+                    readOnly: true,
+                  ),
+                  TextDataBasic(
+                    label: 'URL imagen',
+                    size: 150,
+                    maxLines: null,
+                    icon: Icons.card_giftcard,
+                    // maxLength: 50,
+                    type: TextInputType.name,
+                    controller: imagen_url,
+                    iconSuffix: Icons.delete_forever_sharp,
+                    colorIconSuffix: Colors.red,
+                    onTapSuffix: () {
+                      imagen_url.clear();
+                    },
+                  ),
                   //falta barcode
                   //falta imagen url
-                  // _buttomRegistrar(entitiesProvider, appStateProvider),
+                  _buttomRegistrarOrUpdate(),
                 ],
               ),
             )
@@ -126,34 +192,78 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
     );
   }
 
-  Widget _switchProduct() {
-    return CupertinoSwitch(
-      value: _value,
-      onChanged: (newValue) {
-        setState(() {
-          _value = newValue;
-          print("VALUE SWITCH: $_value");
-        });
-      },
+  Widget _buttomRegistrarOrUpdate() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            primary: MyColors.primaryColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25))),
+        onPressed: () async {},
+        child: Text(
+          _registerOrUpdate,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 
-  Widget _productImage(String imagen_url) {
-    // return Container(
-    //   height: 170,
-    //   width: 250,
-    //   decoration: BoxDecoration(
-    //     color: MyColors.secondaryColorOpacity,
-    //     borderRadius: BorderRadius.circular(25),
-    //   ),
-    //   child: Image.network(imagen_url),
-    // );
+  Widget _switchProduct(EntitiesProvider entitiesProvider) {
+    if (entitiesProvider.productSelected == null) {
+      _value = _value ?? true;
+    } else {
+      _value = _value ?? entitiesProvider.productSelected!.active!;
+    }
     return Container(
-      height: 250,
-      child: Image.network(
-        imagen_url,
-        // fit: BoxFit.cover,
+      height: 80,
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: MyColors.secondaryColorOpacity,
+        borderRadius: BorderRadius.circular(25),
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Habilitado: ",
+            style: TextStyle(fontSize: 20),
+          ),
+          CupertinoSwitch(
+            value: _value!,
+            onChanged: (newValue) {
+              setState(() {
+                _value = newValue;
+                print("VALUE SWITCH: $_value");
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _productImage(String? imagen_url) {
+    return FadeInImage.assetNetwork(
+      height: 300,
+      width: 300,
+      fadeInDuration: const Duration(milliseconds: 500),
+      fadeInCurve: Curves.easeInExpo,
+      fadeOutCurve: Curves.easeOutExpo,
+      placeholder: 'assets/images/gallery.jpg',
+      image:
+          imagen_url ?? 'https://shpl.info/sites/default/files/2020-11/new.jpg',
+      imageErrorBuilder: (context, error, stackTrace) {
+        return Image.asset(
+          "assets/images/gallery.jpg",
+          height: 300,
+          width: 300,
+        );
+      },
+      fit: BoxFit.contain,
     );
   }
 
@@ -210,17 +320,25 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
   Container comboBox(List<DropdownMenuItem> items) {
     if (items.isNotEmpty) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        height: 80,
+        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+        padding: const EdgeInsets.all(3),
+        // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.blueAccent, width: 4)),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton(
-              iconSize: 50,
-              isExpanded: true,
-              value: idCategoria,
-              items: items,
-              onChanged: changedDropDownItem),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: MyColors.primaryColor, width: 4)),
+        child: Column(
+          children: [
+            const Text("Categoria"),
+            DropdownButtonHideUnderline(
+              child: DropdownButton(
+                  iconSize: 50,
+                  isExpanded: true,
+                  value: idCategoria,
+                  items: items,
+                  onChanged: changedDropDownItem),
+            ),
+          ],
         ),
       );
     } else {

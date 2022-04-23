@@ -37,6 +37,33 @@ class ProductService {
     }
   }
 
+  Future<Product?> findProductBy(int? id, String? barcode) async {
+    try {
+      var headers = {
+        'accept': 'text/plain',
+        'Content-Type': 'application/json',
+      };
+
+      final body = jsonEncode({
+        'id': '$id',
+        'barcode': barcode,
+      });
+
+      final response = await http.post(
+          Uri.http(_apiHost, _routePath_findProductBy),
+          headers: headers,
+          body: body);
+
+      print("API" + response.statusCode.toString());
+      if (response.statusCode == 200) {
+        return Product.fromJson(jsonDecode(response.body));
+      }
+    } catch (e) {
+      print("ERROR $_routePath_findProductBy: $e");
+      return null;
+    }
+  }
+
   Future<Categorias?> getAllCategory() async {
     try {
       var headers = {

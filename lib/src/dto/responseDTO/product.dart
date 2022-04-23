@@ -27,7 +27,7 @@ class Product {
   int? cantidad;
   double? precio;
   int? idCategoria;
-  int? active;
+  bool? active;
   String? barcode;
   String? imagen_url;
   String? categoria;
@@ -52,7 +52,7 @@ class Product {
         cantidad: json["cantidad"],
         precio: json["precio"].toDouble(),
         idCategoria: json["id_categoria"],
-        active: json["active"],
+        active: json["active"] == 0 ? false : true,
         barcode: json["barcode"],
         imagen_url: json["imagen_url"],
         categoria: json["categoria"],
