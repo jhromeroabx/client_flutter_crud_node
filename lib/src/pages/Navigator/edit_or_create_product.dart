@@ -202,7 +202,10 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
             primary: MyColors.primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25))),
-        onPressed: () async {},
+        onPressed: () async {
+          if (validarCamposVacios()) {
+          } else {}
+        },
         child: Text(
           _registerOrUpdate,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -344,5 +347,26 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
     } else {
       return Container(color: Colors.blue, child: const Text("NO TYPE"));
     }
+  }
+
+  bool validarCamposVacios() {
+    //ADD
+    //id = 0
+    //nombre
+    //comentario
+    //barcode (solo con camera) NULL
+    //imagen_url NULL
+    //id_categoria
+
+    //edit
+    //id = id_real
+
+    String controlApellidoText = controlNombreProduct.text.trim();
+    String controlDNIText = controlDNI.text.trim();
+    String controlTelefonoText = controlTelefono.text.trim();
+    String controlEmailText = controlEmail.text.trim();
+    String controlContrasenaText = controlContrasena.text.trim();
+
+    return true;
   }
 }

@@ -85,15 +85,14 @@ class ProductService {
     }
   }
 
-  Future<UserResponse?> registerOrEditProduct(
-      UserReqAddEditBody userReqAddEditBody) async {
+  Future<UserResponse?> registerOrEditProduct(Product product) async {
     try {
       var headers = {
         'accept': 'text/plain',
         'Content-Type': 'application/json',
       };
 
-      final body = jsonEncode(userReqAddEditBody);
+      final body = jsonEncode(product);
 
       final response = await http.post(
         Uri.http(_apiHost, _routePath_productoAddOrEdit),
