@@ -53,7 +53,14 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
               onRefresh: () async {
                 _getAllProducts(entitiesProvider);
               },
-              child: SizedBox(
+              child: Container(
+                margin: const EdgeInsets.only(
+                  // bottom: 50,
+                  top: 10,
+                  left: 2,
+                  right: 2,
+                ),
+                // padding: const EdgeInsets.all(25),
                 height: double.infinity,
                 child: ListView(
                   // crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +74,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: const Text(
-                        "TODOS LOS PRODUCTOS",
+                        "ADD FILTROS",
                         style: TextStyle(fontSize: 25),
                       ),
                     ),
@@ -118,6 +125,9 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                           ],
                         ),
                       ),
+                    const SizedBox(
+                      height: 70,
+                    ),
                   ],
                 ),
               ),
@@ -125,7 +135,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           entitiesProvider.productSelected = null;

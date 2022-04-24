@@ -1,10 +1,11 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
-import 'package:client_flutter_crud_node/src/pages/Navigator/inventario.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
+import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'Navigator/ingreso_compra.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,11 +15,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int index = 0;
+  int index = 1;
   final screens = [
     const InicioApp(),
     const AlmacenGestion(),
     const ManageEmployeePage(title: "Gestion de empleados"),
+    const IngresoAlmacen(),
+    const BarCodePage(),
   ];
 
   @override
@@ -68,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               Icons.home_filled,
               color: index == 0 ? Colors.orange : Colors.black,
             ),
-            label: 'Inicio',
+            label: 'Dashboard',
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -80,12 +83,26 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.precision_manufacturing_outlined,
-              color: index == 2 ? Colors.blue : Colors.black,
+              color: index == 2 ? Colors.green : Colors.black,
             ),
             label: 'Gestion Almacen',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.file_upload,
+              color: index == 3 ? Colors.blue : Colors.black,
+            ),
+            label: 'Ingreso',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.download,
+              color: index == 4 ? Colors.orange : Colors.black,
+            ),
+            label: 'Retiro',
+          ),
         ],
-        iconSize: 30,
+        iconSize: 25,
         backgroundColor: Colors.lightBlueAccent[500],
         currentIndex: index,
         unselectedItemColor: Colors.black,

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:provider/provider.dart';
 
 import '../../dto/responseDTO/product.dart';
@@ -155,10 +157,16 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                       dropDownMenuItems = getMenuItems(
                           appStateProvider.categorias!.categorias!);
 
-                      idCategoria = idCategoria == 0
-                          ? entitiesProvider.productSelected!.idCategoria!
-                          : idCategoria;
-
+                      if (entitiesProvider.productSelected != null) {
+                        //edit
+                        idCategoria = idCategoria == 0
+                            ? entitiesProvider.productSelected!.idCategoria!
+                            : idCategoria;
+                      } else {
+                        //new
+                        idCategoria = idCategoria == 0 ? 1 : idCategoria;
+                      }
+                      print("COMBO: $idCategoria");
                       return comboBox(dropDownMenuItems);
                     }
                   }),
@@ -171,6 +179,17 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                     type: TextInputType.number,
                     controller: barCode,
                     readOnly: true,
+                    onTapSuffix: () async {
+                      await Permission.camera.request();
+                      String? barcode = await scanner.scan();
+                      if (barcode == null) {
+                        FlushBar().snackBarV2(
+                            "Campos vacios!!!", Colors.red, context);
+                      } else {
+                        barCode.text = barcode;
+                      }
+                    },
+                    iconSuffix: Icons.document_scanner,
                   ),
                   TextDataBasic(
                     label: 'URL imagen',
@@ -223,7 +242,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                       .snackBarV2(value[1].toString(), Colors.green, context);
                   //REGRESO A LA PAG ANTERIOR
                   entitiesProvider.getAllProducts();
-                  await Future.delayed(const Duration(seconds: 2));
+                  await Future.delayed(const Duration(seconds: 1));
                   Navigator.pushNamed(context, "home");
                   break;
                 case 2:

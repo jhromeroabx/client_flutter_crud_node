@@ -49,7 +49,6 @@ class TextDataBasic extends StatelessWidget {
         keyboardType: type,
         decoration: InputDecoration(
           border: InputBorder.none,
-          // hintText: hintText,
           hintStyle: TextStyle(
             color: MyColors.primaryColor,
           ),

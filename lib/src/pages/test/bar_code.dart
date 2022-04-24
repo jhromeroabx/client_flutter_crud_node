@@ -29,63 +29,61 @@ class _BarCodePageState extends State<BarCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.grey[300],
-        body: Builder(
-          builder: (BuildContext context) {
-            return ListView(
-              children: <Widget>[
-                _qrCodeWidget(bytes, context),
-                Container(
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        controller: _inputController,
-                        keyboardType: TextInputType.url,
-                        textInputAction: TextInputAction.go,
-                        onSubmitted: (value) => _generateBarCode(value),
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.text_fields),
-                          helperText:
-                              'Ingrese su código para generar una imagen de código qr.',
-                          hintText: 'Por favor ingrese su código.',
-                          hintStyle: TextStyle(fontSize: 15),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 15),
-                        ),
+    return Scaffold(
+      backgroundColor: Colors.grey[300],
+      body: Builder(
+        builder: (BuildContext context) {
+          return ListView(
+            children: <Widget>[
+              _qrCodeWidget(bytes, context),
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      controller: _inputController,
+                      keyboardType: TextInputType.url,
+                      textInputAction: TextInputAction.go,
+                      onSubmitted: (value) => _generateBarCode(value),
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.text_fields),
+                        helperText:
+                            'Ingrese su código para generar una imagen de código qr.',
+                        hintText: 'Por favor ingrese su código.',
+                        hintStyle: TextStyle(fontSize: 15),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 7, vertical: 15),
                       ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _outputController,
-                        maxLines: 2,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.wrap_text),
-                          helperText:
-                              'El código de barras o qrcode que escanee se mostrará en esta área.',
-                          hintText:
-                              'El código de barras o qrcode que escanee se mostrará en esta área.',
-                          hintStyle: TextStyle(fontSize: 15),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 15),
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: _outputController,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.wrap_text),
+                        helperText:
+                            'El código de barras o qrcode que escanee se mostrará en esta área.',
+                        hintText:
+                            'El código de barras o qrcode que escanee se mostrará en esta área.',
+                        hintStyle: TextStyle(fontSize: 15),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 7, vertical: 15),
                       ),
-                      const SizedBox(height: 20),
-                      _buttonGroup(),
-                      const SizedBox(height: 70),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                    _buttonGroup(),
+                    const SizedBox(height: 70),
+                  ],
                 ),
-              ],
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _scanBytes(),
-          tooltip: 'Take a Photo',
-          child: const Icon(Icons.camera_alt),
-        ),
+              ),
+            ],
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _scanBytes(),
+        tooltip: 'Take a Photo',
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }
@@ -280,6 +278,7 @@ class _BarCodePageState extends State<BarCodePage> {
       Fluttertoast.showToast(msg: "NADA PARA MOSTRAR!");
     } else {
       _outputController.text = barcode;
+      _inputController.text = barcode;
     }
   }
 
@@ -304,7 +303,11 @@ class _BarCodePageState extends State<BarCodePage> {
   }
 
   Future _generateBarCode(String inputCode) async {
-    Uint8List result = await scanner.generateBarCode(inputCode);
-    setState(() => bytes = result);
+    if (inputCode.isNotEmpty) {
+      Uint8List result = await scanner.generateBarCode(inputCode);
+      setState(() => bytes = result);
+    } else {
+      Fluttertoast.showToast(msg: "NO DATA POR GENERATE!");
+    }
   }
 }

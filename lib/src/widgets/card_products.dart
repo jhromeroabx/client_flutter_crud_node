@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../utils/my_colors.dart';
 
@@ -8,6 +9,7 @@ class ProductItems extends StatelessWidget {
   final String? cantidad;
   final String? precio;
   final Color? color;
+  final double? ancho;
 
   const ProductItems({
     Key? key,
@@ -16,6 +18,7 @@ class ProductItems extends StatelessWidget {
     this.precio,
     this.cantidad,
     this.color,
+    this.ancho,
   }) : super(key: key);
 
   @override
@@ -25,31 +28,28 @@ class ProductItems extends StatelessWidget {
         color: color ?? MyColors.secondaryColorOpacity,
         borderRadius: BorderRadius.circular(25),
       ),
-      width: 170,
-      height: 250,
+      width: ancho ?? 170,
+      height: 230,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           imageURL!.isNotEmpty
-              ? Container(
-                  padding: const EdgeInsets.all(10),
-                  child: FadeInImage.assetNetwork(
-                    width: 120,
-                    height: 125,
-                    fadeInDuration: const Duration(milliseconds: 500),
-                    fadeInCurve: Curves.easeInExpo,
-                    fadeOutCurve: Curves.easeOutExpo,
-                    placeholder: 'assets/images/gallery.jpg',
-                    image: imageURL!,
-                    imageErrorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        "assets/images/gallery.jpg",
-                        height: 100,
-                        width: 100,
-                      );
-                    },
-                    fit: BoxFit.scaleDown,
-                  ),
+              ? FadeInImage.assetNetwork(
+                  width: 120,
+                  height: 125,
+                  fadeInDuration: const Duration(milliseconds: 500),
+                  fadeInCurve: Curves.easeInExpo,
+                  fadeOutCurve: Curves.easeOutExpo,
+                  placeholder: 'assets/images/gallery.jpg',
+                  image: imageURL!,
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      "assets/images/gallery.jpg",
+                      height: 100,
+                      width: 100,
+                    );
+                  },
+                  fit: BoxFit.scaleDown,
                 )
               : Image.asset(
                   'assets/images/gallery.jpg',
@@ -63,28 +63,49 @@ class ProductItems extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    name!,
-                    style: const TextStyle(fontSize: 20),
-                    overflow: TextOverflow.ellipsis,
+                  RichText(
+                    textAlign: TextAlign.justify,
+                    text: TextSpan(
+                      text: name!,
+                      style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold),
+                      // overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Precio:"),
-                      Text(precio!),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Cantidad:"),
-                      Text(cantidad!),
-                    ],
-                  ),
+                  if (precio != null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Precio:"),
+                        Text(
+                          precio!,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.green[700],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (cantidad != null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Cantidad:"),
+                        Text(
+                          cantidad!,
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             )
