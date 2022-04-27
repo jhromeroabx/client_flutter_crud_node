@@ -26,11 +26,15 @@ class EntitiesProvider extends ChangeNotifier {
 
   Future<List<Object>> accessLogin(String user, String contrasenia) async {
     _isLoading = true;
+    notifyListeners();
 
     userAcceso = await UserService().login(user, contrasenia);
 
+    // await Future.delayed(Duration(seconds: 2));
+
     if (userAcceso != null) {
       isLoading = false;
+      notifyListeners();
       if (userAcceso!.userData != null) {
         return [1, "Ingresando al Sistema"];
       } else {
@@ -38,6 +42,7 @@ class EntitiesProvider extends ChangeNotifier {
       }
     } else {
       isLoading = false;
+      notifyListeners();
       return [3, "Error del servidor!!!"];
     }
   }
@@ -155,24 +160,25 @@ class EntitiesProvider extends ChangeNotifier {
     }
   }
 
-  Products? products;
+  List<Product>? lista_products;
   Product? _productSelected;
   Product? get productSelected => _productSelected;
   set productSelected(product) {
     _productSelected = product;
   }
 
-  Future<bool> getAllProducts() async {
-    products = await ProductService().getAllProducts();
+  Future<bool> getAllProducts(String id_categoria, int active) async {
+    lista_products =
+        await ProductService().getAllProducts(id_categoria, active);
 
-    if (products != null) {
+    if (lista_products != null) {
       return true;
     } else {
       return false;
     }
   }
 
-  Future<bool> getProductByIdOrBarCode({int? id, String? barcode}) async {
+  Future<bool> getProductByIdOrBarCode({String? id, String? barcode}) async {
     productSelected = await ProductService().findProductBy(id, barcode);
 
     if (productSelected != null) {

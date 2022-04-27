@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/app_state_provider.dart';
 import '../utils/my_colors.dart';
+import '../widgets/card_modal_product.dart';
 import '../widgets/flush_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,9 +18,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool obscureText = false;
+  bool obscureText = true;
   TextEditingController controlUser = TextEditingController();
   TextEditingController controlContrasenia = TextEditingController();
+
+  //usable
+  bool proceso_login = false;
+  int primera_vez = 0;
 
   @override
   void initState() {
@@ -99,6 +104,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buttomAcceder(
       EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
+    //si es true no es usable
+    if (entitiesProvider.isLoading) {
+      //indicamos que no sea usable
+      proceso_login = entitiesProvider.isLoading;
+    }
+
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -109,56 +120,66 @@ class _LoginPageState extends State<LoginPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () async {
-          String controlUserText = controlUser.text.trim();
-          String controlContraseniaText = controlContrasenia.text.trim();
-          if (controlUserText.isNotEmpty && controlContraseniaText.isNotEmpty) {
-            var rpta = entitiesProvider.accessLogin(
-                controlUserText, controlContraseniaText);
+          if (proceso_login == false) {
+            String controlUserText = controlUser.text.trim();
+            String controlContraseniaText = controlContrasenia.text.trim();
+            if (controlUserText.isNotEmpty &&
+                controlContraseniaText.isNotEmpty) {
+              var rpta = entitiesProvider.accessLogin(
+                  controlUserText, controlContraseniaText);
 
-            final FocusScopeNode focus = FocusScope.of(context);
-            if (!focus.hasPrimaryFocus && focus.hasFocus) {
-              //SI EL TECLADO ESTA ACTIVO LO QUITAMOS
-              FocusManager.instance.primaryFocus!.unfocus();
-            }
-
-            ///
-            rpta.then((value) async {
-              switch (value[0]) {
-                case 1:
-                  FlushBar()
-                      .snackBarV2(value[1].toString(), Colors.green, context);
-
-                  final prefs = await SharedPreferences.getInstance();
-
-                  await prefs.setString('user', controlUserText);
-                  await prefs.setString('contrasenia', controlContraseniaText);
-
-                  entitiesProvider.getAllEmployee();
-                  entitiesProvider.getAllProducts();
-                  appStateProvider.getAllEmployeeTypes();
-                  appStateProvider.getAllCategories();
-                  await Future.delayed(const Duration(seconds: 2));
-                  Navigator.pushNamed(context, "home");
-                  break;
-                case 2:
-                  FlushBar()
-                      .snackBarV2(value[1].toString(), Colors.red, context);
-                  break;
-                case 3:
-                  FlushBar()
-                      .snackBarV2(value[1].toString(), Colors.red, context);
-                  break;
-                default:
+              final FocusScopeNode focus = FocusScope.of(context);
+              if (!focus.hasPrimaryFocus && focus.hasFocus) {
+                //SI EL TECLADO ESTA ACTIVO LO QUITAMOS
+                FocusManager.instance.primaryFocus!.unfocus();
               }
-            });
+
+              ///
+              rpta.then((value) async {
+                switch (value[0]) {
+                  case 1:
+                    FlushBar()
+                        .snackBarV2(value[1].toString(), Colors.green, context);
+
+                    final prefs = await SharedPreferences.getInstance();
+
+                    await prefs.setString('user', controlUserText);
+                    await prefs.setString(
+                        'contrasenia', controlContraseniaText);
+
+                    entitiesProvider.getAllEmployee();
+                    entitiesProvider.getAllProducts("", 1);
+                    appStateProvider.getAllEmployeeTypes();
+                    appStateProvider.getAllCategories();
+                    await Future.delayed(const Duration(milliseconds: 2000));
+                    Navigator.pushNamed(context, "home");
+                    break;
+                  case 2:
+                    FlushBar()
+                        .snackBarV2(value[1].toString(), Colors.red, context);
+                    break;
+                  case 3:
+                    FlushBar()
+                        .snackBarV2(value[1].toString(), Colors.red, context);
+                    break;
+                  default:
+                }
+              });
+            } else {
+              FlushBar().snackBarV2(
+                  "Usuario y/o contraseña vacias", Colors.red, context);
+            }
           } else {
-            FlushBar().snackBarV2(
-                "Usuario y/o contraseña vacias", Colors.red, context);
+            //solo mostrar el snackbar de cargando por primera vez
+            if (primera_vez == 0) {
+              primera_vez++;
+              FlushBar().snackBarV2("Cargando", Colors.purple[700]!, context);
+            }
           }
         },
-        child: const Text(
-          "ACCEDER",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        child: Text(
+          entitiesProvider.isLoading ? "CARGANDO ..." : "ACCEDER",
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
     );

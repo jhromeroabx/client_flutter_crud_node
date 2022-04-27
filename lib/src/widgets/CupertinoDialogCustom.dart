@@ -12,6 +12,7 @@ class CupertinoAlertDialogCustom {
     required BuildContext context,
   }) {
     return showDialog(
+        // barrierColor: Color.fromARGB(137, 4, 40, 82),
         context: context,
         builder: (_) => CupertinoAlertDialog(
               insetAnimationCurve: Curves.bounceIn,

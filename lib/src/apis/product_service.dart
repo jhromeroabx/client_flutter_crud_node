@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../dto/requestDTO/user_request_dto.dart';
 import '../dto/responseDTO/product.dart';
 import '../dto/responseDTO/UiResponse.dart';
 import 'config_host.dart';
@@ -16,28 +15,7 @@ class ProductService {
 
   ProductService();
 
-  Future<Products?> getAllProducts() async {
-    try {
-      var headers = {
-        'accept': 'text/plain',
-        'Content-Type': 'application/json',
-      };
-
-      final response = await http.get(
-        Uri.http(_apiHost, _routePath_getAllProducts),
-        headers: headers,
-      );
-      print("API" + response.statusCode.toString());
-      if (response.statusCode == 200) {
-        return Products.fromMap(response.body);
-      }
-    } catch (e) {
-      print("ERROR $_routePath_getAllProducts: $e");
-      return null;
-    }
-  }
-
-  Future<Product?> findProductBy(int? id, String? barcode) async {
+  Future<List<Product>?> getAllProducts(String id_categoria, int active) async {
     try {
       var headers = {
         'accept': 'text/plain',
@@ -45,7 +23,33 @@ class ProductService {
       };
 
       final body = jsonEncode({
-        'id': '$id',
+        'id_categoria': id_categoria,
+        'active': active,
+      });
+
+      final response = await http.post(
+          Uri.http(_apiHost, _routePath_getAllProducts),
+          headers: headers,
+          body: body);
+      print("API" + response.statusCode.toString());
+      if (response.statusCode == 200) {
+        return Products.fromMap(response.body).products;
+      }
+    } catch (e) {
+      print("ERROR $_routePath_getAllProducts: $e");
+      return null;
+    }
+  }
+
+  Future<Product?> findProductBy(String? id, String? barcode) async {
+    try {
+      var headers = {
+        'accept': 'text/plain',
+        'Content-Type': 'application/json',
+      };
+
+      final body = jsonEncode({
+        'id': id,
         'barcode': barcode,
       });
 

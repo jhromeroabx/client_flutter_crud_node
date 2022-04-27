@@ -19,7 +19,8 @@ class EditOrCreateProduct extends StatefulWidget {
   State<EditOrCreateProduct> createState() => _EditOrCreateProductState();
 }
 
-class _EditOrCreateProductState extends State<EditOrCreateProduct> {
+class _EditOrCreateProductState extends State<EditOrCreateProduct>
+    with TickerProviderStateMixin {
   TextEditingController controlNombreProduct = TextEditingController();
   TextEditingController controlComentario = TextEditingController();
   TextEditingController controlCantidad = TextEditingController();
@@ -33,6 +34,10 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
   int idCategoria = 0;
   int idProduct = 0;
 
+  int index = 0;
+
+  late TabController _tabController;
+
   Product? productoCreateOrEdit;
 
   List<DropdownMenuItem> dropDownMenuItems = [];
@@ -40,10 +45,25 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
   bool? _value;
 
   late String _registerOrUpdate = "REGISTRAR";
+  late String _labelAppBar = "Nuevo Produco";
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      index = _tabController.index;
+    });
+    _tabController.index = index;
+    // WidgetsBinding.instance!.addPostFrameCallback((_) => _tabController.animateTo(index, duration: const Duration(seconds: 4)));
+  }
+
+  @override
+  void dispose() {
+    index = _tabController.index;
+    _tabController.removeListener(() {});
+    _tabController.dispose();
+    super.dispose();
   }
 
   loadProductData(EntitiesProvider entitiesProvider) {
@@ -78,6 +98,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
           : imagen_url.text;
 
       _registerOrUpdate = "ACTUALIZAR";
+      _labelAppBar = productSelected.nombre!;
     }
   }
 
@@ -100,6 +121,47 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
     loadProductData(entitiesProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_labelAppBar),
+        backgroundColor: Colors.black,
+        bottom: TabBar(
+          indicator: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            color: Colors.white,
+          ),
+          controller: _tabController,
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.white,
+          onTap: (index) {},
+          tabs: [
+            Tab(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.edit,
+                    color: Colors.orange[500]!,
+                  ),
+                  const Text("Registro y Edicion")
+                ],
+              ),
+            ),
+            Tab(
+              child: Row(
+                children: const [
+                  Icon(
+                    Icons.receipt_rounded,
+                    color: Colors.grey,
+                    size: 50,
+                  ),
+                  Text("Reporte")
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
@@ -241,7 +303,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct> {
                   FlushBar()
                       .snackBarV2(value[1].toString(), Colors.green, context);
                   //REGRESO A LA PAG ANTERIOR
-                  entitiesProvider.getAllProducts();
+                  entitiesProvider.getAllProducts("", 1);
                   await Future.delayed(const Duration(seconds: 1));
                   Navigator.pushNamed(context, "home");
                   break;

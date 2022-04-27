@@ -10,6 +10,9 @@ class ProductItems extends StatelessWidget {
   final String? precio;
   final Color? color;
   final double? ancho;
+  //
+  final bool? counterShow;
+  final int? counterCantidad;
 
   const ProductItems({
     Key? key,
@@ -19,98 +22,110 @@ class ProductItems extends StatelessWidget {
     this.cantidad,
     this.color,
     this.ancho,
+    this.counterShow = false,
+    this.counterCantidad = 0,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color ?? MyColors.secondaryColorOpacity,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      width: ancho ?? 170,
-      height: 230,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          imageURL!.isNotEmpty
-              ? FadeInImage.assetNetwork(
-                  width: 120,
-                  height: 125,
-                  fadeInDuration: const Duration(milliseconds: 500),
-                  fadeInCurve: Curves.easeInExpo,
-                  fadeOutCurve: Curves.easeOutExpo,
-                  placeholder: 'assets/images/gallery.jpg',
-                  image: imageURL!,
-                  imageErrorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      "assets/images/gallery.jpg",
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: color ?? MyColors.secondaryColorOpacity,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          width: ancho ?? 170,
+          height: 230,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              imageURL!.isNotEmpty
+                  ? FadeInImage.assetNetwork(
+                      width: 120,
+                      height: 125,
+                      fadeInDuration: const Duration(milliseconds: 500),
+                      fadeInCurve: Curves.easeInExpo,
+                      fadeOutCurve: Curves.easeOutExpo,
+                      placeholder: 'assets/images/gallery.jpg',
+                      image: imageURL!,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          "assets/images/gallery.jpg",
+                          height: 100,
+                          width: 100,
+                        );
+                      },
+                      fit: BoxFit.scaleDown,
+                    )
+                  : Image.asset(
+                      'assets/images/gallery.jpg',
                       height: 100,
                       width: 100,
-                    );
-                  },
-                  fit: BoxFit.scaleDown,
-                )
-              : Image.asset(
-                  'assets/images/gallery.jpg',
-                  height: 100,
-                  width: 100,
-                ),
-          if (name != null)
-            Container(
-              padding: const EdgeInsets.only(
-                  left: 10, right: 10, top: 10, bottom: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      text: name!,
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold),
-                      // overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  if (precio != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Precio:"),
-                        Text(
-                          precio!,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.green[700],
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (cantidad != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Cantidad:"),
-                        Text(
-                          cantidad!,
+              if (name != null)
+                Container(
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, top: 10, bottom: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.justify,
+                        text: TextSpan(
+                          text: name!,
                           style: const TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 15,
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold),
+                          // overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
-                ],
-              ),
-            )
-        ],
-      ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      if (precio != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Precio:"),
+                            Text(
+                              precio!,
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.green[700],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (cantidad != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Cantidad:"),
+                            Text(
+                              cantidad!,
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                )
+            ],
+          ),
+        ),
+        // if (counterShow!)
+        //   Positioned(
+        //     child: CircleAvatar(
+        //       child: Text("$counterCantidad"),
+        //     ),
+        //   )
+      ],
     );
   }
 }

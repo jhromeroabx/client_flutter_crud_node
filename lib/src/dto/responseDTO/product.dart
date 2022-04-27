@@ -15,7 +15,7 @@ class Products {
     }
 
     return Products(
-      products: products_temp.isNotEmpty ? products_temp : null,
+      products: products_temp.isNotEmpty ? products_temp : [],
     );
   }
 }
