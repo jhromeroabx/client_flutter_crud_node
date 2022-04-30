@@ -4,6 +4,7 @@ import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dar
 import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'Navigator/ingreso_compra.dart';
 
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int index = 1;
+  int index_page = 1;
   final screens = [
     const InicioApp(),
     const AlmacenGestion(),
@@ -61,55 +62,112 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       resizeToAvoidBottomInset: false,
-      body: screens[index],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        elevation: 5,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_filled,
-              color: index == 0 ? Colors.orange : Colors.black,
-            ),
-            label: 'Dashboard',
+      body: screens[index_page],
+      bottomNavigationBar: GNav(
+        rippleColor: Colors.grey[200]!,
+        hoverColor: Colors.grey[200]!,
+        // haptic: true,
+        tabBorderRadius: 15,
+        tabActiveBorder:
+            Border.all(color: Colors.black, width: 1), // tab button border
+        tabBorder:
+            Border.all(color: Colors.grey, width: 1), // tab button border
+        tabShadow: [
+          BoxShadow(color: Colors.blue.withOpacity(0.1), blurRadius: 8)
+        ], // tab button shadow
+        curve: Curves.easeOutExpo, // tab animation curves
+        duration: const Duration(milliseconds: 200), // tab animation duration
+        gap: 2, // the tab button gap between icon and text
+        color: Colors.grey[100], // unselected icon color
+        activeColor: Colors.blue[900], // selected icon and text color
+        iconSize: 40, // tab button icon size
+        textSize: 100,
+        // style: GnavStyle.google,
+        tabBackgroundColor:
+            Colors.blue[100]!.withOpacity(0.1), // selected tab background color
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+        tabs: [
+          GButton(
+            icon: Icons.home_filled,
+            text: 'Dashboard',
+            iconColor: index_page != 0 ? Colors.orange : Colors.black,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.check_box,
-              color: index == 1 ? Colors.green : Colors.black,
-            ),
-            label: 'Inventario',
+          GButton(
+            icon: Icons.check_box,
+            text: 'Inventario',
+            iconColor: index_page != 1 ? Colors.green : Colors.black,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.precision_manufacturing_outlined,
-              color: index == 2 ? Colors.green : Colors.black,
-            ),
-            label: 'Gestion Almacen',
+          GButton(
+            icon: Icons.precision_manufacturing_outlined,
+            text: 'Gestion Personal',
+            iconColor: index_page != 2 ? Colors.grey[700] : Colors.black,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.file_upload,
-              color: index == 3 ? Colors.blue : Colors.black,
-            ),
-            label: 'Ingreso',
+          GButton(
+            icon: Icons.file_upload,
+            text: 'Ingreso',
+            iconColor: index_page != 3 ? Colors.blue : Colors.black,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.download,
-              color: index == 4 ? Colors.orange : Colors.black,
-            ),
-            label: 'Retiro',
+          GButton(
+            icon: Icons.download,
+            text: 'Retiro',
+            iconColor: index_page != 4 ? Colors.red : Colors.black,
           ),
         ],
-        iconSize: 25,
-        backgroundColor: Colors.lightBlueAccent[500],
-        currentIndex: index,
-        unselectedItemColor: Colors.black,
-        selectedFontSize: 15,
-        selectedItemColor: Colors.blue,
-        onTap: (index) => setState(() => this.index = index),
+        // selectedIndex: index_page,
+        onTabChange: (index) {
+          setState(() {
+            index_page = index;
+          });
+        },
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   elevation: 5,
+      //   items: <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(
+      //         Icons.home_filled,
+      //         color: index == 0 ? Colors.orange : Colors.black,
+      //       ),
+      //       label: 'Dashboard',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(
+      //         Icons.check_box,
+      //         color: index == 1 ? Colors.green : Colors.black,
+      //       ),
+      //       label: 'Inventario',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(
+      //         Icons.precision_manufacturing_outlined,
+      //         color: index == 2 ? Colors.green : Colors.black,
+      //       ),
+      //       label: 'Gestion Almacen',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(
+      //         Icons.file_upload,
+      //         color: index == 3 ? Colors.blue : Colors.black,
+      //       ),
+      //       label: 'Ingreso',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(
+      //         Icons.download,
+      //         color: index == 4 ? Colors.orange : Colors.black,
+      //       ),
+      //       label: 'Retiro',
+      //     ),
+      //   ],
+      //   iconSize: 25,
+      //   backgroundColor: Colors.lightBlueAccent[500],
+      //   currentIndex: index,
+      //   unselectedItemColor: Colors.black,
+      //   selectedFontSize: 15,
+      //   selectedItemColor: Colors.blue,
+      //   onTap: (index) => setState(() => this.index = index),
+      // ),
     );
   }
 }

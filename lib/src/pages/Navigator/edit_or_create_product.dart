@@ -251,7 +251,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                         barCode.text = barcode;
                       }
                     },
-                    iconSuffix: Icons.document_scanner,
+                    iconSuffix: Icons.photo_camera_sharp,
                   ),
                   TextDataBasic(
                     label: 'URL imagen',

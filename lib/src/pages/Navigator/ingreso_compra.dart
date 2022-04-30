@@ -105,11 +105,11 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             bottom: 80,
             child: buttomCamera(entitiesProvider),
           ),
-          Positioned(
-            right: 10,
-            bottom: 10,
-            child: buttomCameraV2(entitiesProvider),
-          ),
+          // Positioned(
+          //   right: 10,
+          //   bottom: 10,
+          //   child: buttomCameraV2(entitiesProvider),
+          // ),
           Visibility(
             visible: _showModalForCategory,
             child: WillPopScope(
@@ -235,39 +235,45 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
     return FloatingActionButton(
       isExtended: true,
       onPressed: () async {
-        //abri la camara de codigo de barra
-        await Permission.camera.request();
-        String? barcode = await scanner.scan();
-        if (barcode == null) {
-          FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
-        } else {
-          barcode;
+        try {
+          //abri la camara de codigo de barra
+          await Permission.camera.request();
+          String? barcode = await scanner.scan();
+          FlushBar().snackBarV2("$barcode", Colors.red, context);
+          if (barcode == null) {
+            FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
+          } else {
+            // barcode;
 
-          var rpta = entitiesProvider.getProductByIdOrBarCode(
-              id: "", barcode: barcode);
-          rpta.then((value) async {
-            if (value) {
-              //agregar producto en el MAP
-              setState(() {
-                ProductSelected productSelected = ProductSelected(
-                  id: entitiesProvider.productSelected!.id,
-                  imagenUrl: entitiesProvider.productSelected!.imagen_url,
-                  nombre: entitiesProvider.productSelected!.nombre,
-                  cantidadSelected: 0,
-                  precioCompra: 0,
-                );
-                if (bucketProductSelected[productSelected.id] == null) {
-                  bucketProductSelected[productSelected.id!] = productSelected;
-                } else {
-                  FlushBar().snackBarV2("El producto ya esta seleccionado",
-                      Colors.purple[900]!, context);
-                }
-              });
-            } else {
-              FlushBar()
-                  .snackBarV2("No cargo el producto!", Colors.red, context);
-            }
-          });
+            var rpta = entitiesProvider.getProductByIdOrBarCode(
+                id: "", barcode: barcode);
+            rpta.then((value) async {
+              if (value) {
+                //agregar producto en el MAP
+                setState(() {
+                  ProductSelected productSelected = ProductSelected(
+                    id: entitiesProvider.productSelected!.id,
+                    imagenUrl: entitiesProvider.productSelected!.imagen_url,
+                    nombre: entitiesProvider.productSelected!.nombre,
+                    cantidadSelected: 0,
+                    precioCompra: 0,
+                  );
+                  if (bucketProductSelected[productSelected.id] == null) {
+                    bucketProductSelected[productSelected.id!] =
+                        productSelected;
+                  } else {
+                    FlushBar().snackBarV2("El producto ya esta seleccionado",
+                        Colors.purple[900]!, context);
+                  }
+                });
+              } else {
+                FlushBar()
+                    .snackBarV2("No cargo el producto!", Colors.red, context);
+              }
+            });
+          }
+        } catch (e) {
+          FlushBar().snackBarV2("Error: $e", Colors.red, context);
         }
       },
       child: const Icon(
