@@ -7,6 +7,7 @@ import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/pages/test/incrementador.dart';
 import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/products_in_out_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => AppStateProvider()),
         ChangeNotifierProvider(create: (context) => EntitiesProvider()),
+        ChangeNotifierProvider(create: (context) => ProductsInOutProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(

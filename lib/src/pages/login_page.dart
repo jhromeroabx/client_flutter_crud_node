@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/app_state_provider.dart';
 import '../utils/my_colors.dart';
-import '../widgets/card_modal_product.dart';
 import '../widgets/flush_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -32,17 +31,6 @@ class _LoginPageState extends State<LoginPage> {
     initializationANDRemoveSplashScreen();
     initSharedPreferences();
   }
-
-  // @override
-  // initState() {
-  //   super.initState();
-  //   //para tener el context despues de construida la app??
-  //   // SchedulerBinding.instance?.addPersistentFrameCallback((timeStamp) {
-  //   //   // _con.init(context);
-  //   // });
-  //   initializationANDRemoveSplashScreen();
-  //   initSharedPreferences();
-  // }
 
   void initializationANDRemoveSplashScreen() async {
     await Future.delayed(const Duration(seconds: 3));
@@ -137,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
               ///
               rpta.then((value) async {
                 switch (value[0]) {
-                  case 1:
+                  case 1: //ACCESOS CONCEDIDOS
                     FlushBar()
                         .snackBarV2(value[1].toString(), Colors.green, context);
 
@@ -154,11 +142,12 @@ class _LoginPageState extends State<LoginPage> {
                     await Future.delayed(const Duration(milliseconds: 2000));
                     Navigator.pushNamed(context, "home");
                     break;
-                  case 2:
+                  case 2: //ACCESOS DENEGADOS
                     FlushBar()
                         .snackBarV2(value[1].toString(), Colors.red, context);
                     break;
-                  case 3:
+                  case 3: //NO TUVO INFO DEL LOGIN
+                    proceso_login = false;
                     FlushBar()
                         .snackBarV2(value[1].toString(), Colors.red, context);
                     break;

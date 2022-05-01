@@ -1,16 +1,41 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:client_flutter_crud_node/src/widgets/flush_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+import '../dto/requestDTO/product_selected.dart';
+import '../provider/products_in_out_provider.dart';
 import '../utils/my_colors.dart';
 
-class CardModalProduct extends StatelessWidget {
+class CardModalProduct extends StatefulWidget {
+  const CardModalProduct({Key? key}) : super(key: key);
+
+  @override
+  State<CardModalProduct> createState() => _CardModalProductState();
+}
+
+class _CardModalProductState extends State<CardModalProduct> {
   TextEditingController controlCantidad = TextEditingController();
+
   TextEditingController controlPrecio = TextEditingController();
-  CardModalProduct({Key? key}) : super(key: key);
+
+  loadData(ProductsInOutProvider productsInOutProvider) {
+    var product = productsInOutProvider.productSelectedTemp!;
+
+    controlCantidad.text = controlCantidad.text.isEmpty
+        ? "${product.cantidadSelected}"
+        : controlCantidad.text;
+
+    controlPrecio.text = controlPrecio.text.isEmpty
+        ? "${product.precioCompra!}"
+        : controlCantidad.text;
+  }
 
   @override
   Widget build(BuildContext context) {
+    var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
+
     return SafeArea(
       top: true,
       right: false,
@@ -47,8 +72,8 @@ class CardModalProduct extends StatelessWidget {
                   child: Column(
                     children: [
                       Row(
-                        children: [
-                          Text("Modal de seleccion de producto"),
+                        children: const [
+                          Text("Ingrese Precio y Cantidad"),
                         ],
                       ),
                       _txtDatosQuantityOrPrice(
@@ -69,7 +94,7 @@ class CardModalProduct extends StatelessWidget {
                         twoDecimals: true,
                         // read: true,
                       ),
-                      _buttomRegistrarOrUpdate()
+                      _buttomRegistrarOrUpdate(productSelectedProvider)
                     ],
                   ),
                 ),
@@ -130,7 +155,8 @@ class CardModalProduct extends StatelessWidget {
     );
   }
 
-  Widget _buttomRegistrarOrUpdate() {
+  Widget _buttomRegistrarOrUpdate(
+      ProductsInOutProvider productSelectedProvider) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
@@ -140,7 +166,24 @@ class CardModalProduct extends StatelessWidget {
             primary: MyColors.primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25))),
-        onPressed: () async {},
+        onPressed: () async {
+          if (controlCantidad.text.trim().isNotEmpty ||
+              controlPrecio.text.trim().isNotEmpty) {
+            ProductSelected updateProduct =
+                productSelectedProvider.productSelectedTemp!;
+            updateProduct.cantidadSelectedSet = int.parse(controlCantidad.text);
+            updateProduct.precioCompraSet = double.parse(controlPrecio.text);
+
+            int rpta =
+                productSelectedProvider.putProductInBuckert(updateProduct);
+            switch (rpta) {
+              case 1:
+                FlushBar().snackBarV2(
+                    "Producto Actualizado!", Colors.indigo[900]!, context);
+                break;
+            }
+          }
+        },
         child: const Text(
           "REGISTRAR",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

@@ -4,7 +4,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
+import '../../dto/requestDTO/product_selected.dart';
 import '../../provider/entities_provider.dart';
+import '../../provider/products_in_out_provider.dart';
 import '../../widgets/card_modal_product.dart';
 import '../../widgets/card_products.dart';
 import '../../widgets/flush_bar.dart';
@@ -17,13 +19,12 @@ class IngresoAlmacen extends StatefulWidget {
 }
 
 class _IngresoAlmacenState extends State<IngresoAlmacen> {
-  Map<int, ProductSelected> bucketProductSelected = {};
-
   bool _showModalForCategory = false;
 
   @override
   Widget build(BuildContext context) {
     var entitiesProvider = Provider.of<EntitiesProvider>(context);
+    var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -34,7 +35,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             height: double.infinity,
             child: ListView(
               children: [
-                if (bucketProductSelected.isEmpty)
+                if (productSelectedProvider.bucketProductSelected.isEmpty)
                   Center(
                     child: ProductItems(
                       color: Colors.red[100],
@@ -44,7 +45,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                       ancho: 300,
                     ),
                   ),
-                if (bucketProductSelected.isNotEmpty)
+                if (productSelectedProvider.bucketProductSelected.isNotEmpty)
                   SizedBox(
                     width: double.infinity,
                     child: Wrap(
@@ -53,7 +54,8 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                       spacing: 32,
                       runSpacing: 20,
                       children: [
-                        for (var key in bucketProductSelected.keys)
+                        for (var key in productSelectedProvider
+                            .bucketProductSelected.keys)
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -63,9 +65,10 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                               //OPEN MODAL
                               //FOR CANTIDAD & PRECIO GLOBAL
 
-                              //store & get cantidad y precio
-                              bucketProductSelected[key]!.cantidadSelected;
-                              bucketProductSelected[key]!.precioCompra;
+                              //pasamos el producto del bucle
+                              productSelectedProvider.productSelectedTempSet =
+                                  productSelectedProvider
+                                      .bucketProductSelected[key]!;
 
                               //INTERACTURAR CON EL MAP
                               //contador de map map.lenght
@@ -73,10 +76,13 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                             },
                             child: ProductItems(
                               counterShow: true,
-                              imageURL: bucketProductSelected[key]!.imagenUrl,
-                              name: bucketProductSelected[key]!.nombre,
-                              counterCantidad:
-                                  bucketProductSelected[key]!.cantidadSelected!,
+                              imageURL: productSelectedProvider
+                                  .bucketProductSelected[key]!.imagenUrl,
+                              name: productSelectedProvider
+                                  .bucketProductSelected[key]!.nombre,
+                              counterCantidad: productSelectedProvider
+                                  .bucketProductSelected[key]!
+                                  .cantidadSelected!,
                             ),
                           ),
                       ],
@@ -103,7 +109,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           Positioned(
             right: 15,
             bottom: 80,
-            child: buttomCamera(entitiesProvider),
+            child: buttomCamera(entitiesProvider, productSelectedProvider),
           ),
           // Positioned(
           //   right: 10,
@@ -113,7 +119,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           Visibility(
             visible: _showModalForCategory,
             child: WillPopScope(
-              child: CardModalProduct(),
+              child: const CardModalProduct(),
               onWillPop: () async {
                 _showModalForCategory = false;
                 setState(() {});
@@ -231,7 +237,8 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
     );
   }
 
-  Widget buttomCamera(EntitiesProvider entitiesProvider) {
+  Widget buttomCamera(EntitiesProvider entitiesProvider,
+      ProductsInOutProvider productSelectedProvider) {
     return FloatingActionButton(
       isExtended: true,
       onPressed: () async {
@@ -250,22 +257,21 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             rpta.then((value) async {
               if (value) {
                 //agregar producto en el MAP
-                setState(() {
-                  ProductSelected productSelected = ProductSelected(
-                    id: entitiesProvider.productSelected!.id,
-                    imagenUrl: entitiesProvider.productSelected!.imagen_url,
-                    nombre: entitiesProvider.productSelected!.nombre,
-                    cantidadSelected: 0,
-                    precioCompra: 0,
-                  );
-                  if (bucketProductSelected[productSelected.id] == null) {
-                    bucketProductSelected[productSelected.id!] =
-                        productSelected;
-                  } else {
-                    FlushBar().snackBarV2("El producto ya esta seleccionado",
-                        Colors.purple[900]!, context);
-                  }
-                });
+
+                ProductSelected productSelected = ProductSelected(
+                  id: entitiesProvider.productSelected!.id,
+                  imagenUrl: entitiesProvider.productSelected!.imagen_url,
+                  nombre: entitiesProvider.productSelected!.nombre,
+                  cantidadSelected: 0,
+                  precioCompra: 0,
+                );
+
+                int rpta = productSelectedProvider
+                    .putProductInBuckert(productSelected);
+
+                // FlushBar().snackBarV2("El producto ya esta seleccionado",
+                //     Colors.purple[900]!, context);
+
               } else {
                 FlushBar()
                     .snackBarV2("No cargo el producto!", Colors.red, context);
@@ -301,22 +307,6 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
               id: "", barcode: barcode);
           rpta.then((value) async {
             if (value) {
-              //agregar producto en el MAP
-              setState(() {
-                ProductSelected productSelected = ProductSelected(
-                  id: entitiesProvider.productSelected!.id,
-                  imagenUrl: entitiesProvider.productSelected!.imagen_url,
-                  nombre: entitiesProvider.productSelected!.nombre,
-                  cantidadSelected: 0,
-                  precioCompra: 0,
-                );
-                if (bucketProductSelected[productSelected.id] == null) {
-                  bucketProductSelected[productSelected.id!] = productSelected;
-                } else {
-                  FlushBar().snackBarV2("El producto ya esta seleccionado",
-                      Colors.purple[900]!, context);
-                }
-              });
             } else {
               FlushBar()
                   .snackBarV2("No cargo el producto!", Colors.red, context);
@@ -332,20 +322,4 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
       tooltip: "BUSCAR POR CODIGO DE BARRA",
     );
   }
-}
-
-class ProductSelected {
-  int? id;
-  String? imagenUrl;
-  String? nombre;
-  int? cantidadSelected;
-  double? precioCompra;
-
-  ProductSelected({
-    this.id,
-    this.imagenUrl,
-    this.nombre,
-    this.cantidadSelected = 0,
-    this.precioCompra,
-  });
 }
