@@ -5,7 +5,9 @@ import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:provider/provider.dart';
 
+import '../provider/products_in_out_provider.dart';
 import 'Navigator/ingreso_compra.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,6 +29,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -48,6 +52,7 @@ class _HomePageState extends State<HomePage> {
                     title: "Cerrar Sesion",
                     msg: "¿Estas seguro de Cerrar Sesion?",
                     onPressedPositive: () {
+                      productSelectedProvider.cleanShoppingCart();
                       Navigator.pushNamed(context, "login");
                     },
                     onPressedNegative: () {

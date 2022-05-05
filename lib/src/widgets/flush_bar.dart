@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class FlushBar {
   FlushBar();
 
-  Future<dynamic> snackBarV2(
-      String msg, Color colorState, BuildContext context) {
+  Future<dynamic> snackBarV2(String msg, Color colorState, BuildContext context,
+      {int? milliseconds}) {
     return Flushbar(
-      duration: const Duration(milliseconds: 3000),
+      duration: Duration(milliseconds: milliseconds ?? 3000),
       message: msg,
       messageSize: 25,
       backgroundGradient: LinearGradient(colors: [

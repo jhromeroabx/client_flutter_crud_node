@@ -20,8 +20,8 @@ class _CardModalProductState extends State<CardModalProduct> {
 
   TextEditingController controlPrecio = TextEditingController();
 
-  loadData(ProductsInOutProvider productsInOutProvider) {
-    var product = productsInOutProvider.productSelectedTemp!;
+  loadData(ProductSelected product) {
+    // var product = productsInOutProvider.productSelectedTemp!;
 
     controlCantidad.text = controlCantidad.text.isEmpty
         ? "${product.cantidadSelected}"
@@ -29,12 +29,14 @@ class _CardModalProductState extends State<CardModalProduct> {
 
     controlPrecio.text = controlPrecio.text.isEmpty
         ? "${product.precioCompra!}"
-        : controlCantidad.text;
+        : controlPrecio.text;
   }
 
   @override
   Widget build(BuildContext context) {
     var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
+
+    loadData(productSelectedProvider.productSelectedTemp!);
 
     return SafeArea(
       top: true,
@@ -54,7 +56,7 @@ class _CardModalProductState extends State<CardModalProduct> {
               child: ZoomIn(
                 duration: const Duration(milliseconds: 300),
                 child: Container(
-                  height: 300,
+                  // height: 300,
                   // margin: const EdgeInsets.symmetric(horizontal: 30),
                   width: MediaQuery.of(context).size.width * 0.7,
                   padding:
@@ -94,7 +96,9 @@ class _CardModalProductState extends State<CardModalProduct> {
                         twoDecimals: true,
                         // read: true,
                       ),
-                      _buttomRegistrarOrUpdate(productSelectedProvider)
+                      _buttomRegistrarOrUpdate(productSelectedProvider),
+                      _buttomRemoveProductFromCart(
+                          productSelectedProvider, Colors.red)
                     ],
                   ),
                 ),
@@ -174,19 +178,55 @@ class _CardModalProductState extends State<CardModalProduct> {
             updateProduct.cantidadSelectedSet = int.parse(controlCantidad.text);
             updateProduct.precioCompraSet = double.parse(controlPrecio.text);
 
-            int rpta =
-                productSelectedProvider.putProductInBuckert(updateProduct);
-            switch (rpta) {
-              case 1:
-                FlushBar().snackBarV2(
-                    "Producto Actualizado!", Colors.indigo[900]!, context);
-                break;
-            }
+            //ponemos un nuevo obj del producto actualizado
+            productSelectedProvider.putProductInBucket(updateProduct);
+            //cerramos modal
+            productSelectedProvider.isActiveModal = false;
+
+            FlushBar().snackBarV2(
+                "Producto Actualizado!", Colors.indigo[900]!, context);
           }
         },
         child: const Text(
           "REGISTRAR",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget _buttomRemoveProductFromCart(
+    ProductsInOutProvider productSelectedProvider,
+    Color? colors,
+  ) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            primary: colors ?? MyColors.primaryColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25))),
+        onPressed: () async {
+          productSelectedProvider.quitProductInBucket(
+              productSelectedProvider.productSelectedTemp!);
+          //cerramos modal
+          productSelectedProvider.isActiveModal = false;
+
+          FlushBar().snackBarV2(
+              "Producto Actualizado!", Colors.indigo[900]!, context);
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            Icon(Icons.delete_forever_rounded),
+            Text(
+              "RETIRAR",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
     );

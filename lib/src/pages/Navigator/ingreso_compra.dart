@@ -19,8 +19,6 @@ class IngresoAlmacen extends StatefulWidget {
 }
 
 class _IngresoAlmacenState extends State<IngresoAlmacen> {
-  bool _showModalForCategory = false;
-
   @override
   Widget build(BuildContext context) {
     var entitiesProvider = Provider.of<EntitiesProvider>(context);
@@ -58,9 +56,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                             .bucketProductSelected.keys)
                           GestureDetector(
                             onTap: () {
-                              setState(() {
-                                _showModalForCategory = !_showModalForCategory;
-                              });
+                              productSelectedProvider.isActiveModal = true;
                               Fluttertoast.showToast(msg: "TEST ITEM MODAL");
                               //OPEN MODAL
                               //FOR CANTIDAD & PRECIO GLOBAL
@@ -117,12 +113,11 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           //   child: buttomCameraV2(entitiesProvider),
           // ),
           Visibility(
-            visible: _showModalForCategory,
+            visible: productSelectedProvider.isActiveModal,
             child: WillPopScope(
               child: const CardModalProduct(),
               onWillPop: () async {
-                _showModalForCategory = false;
-                setState(() {});
+                productSelectedProvider.isActiveModal = false;
                 return false;
               },
             ),
@@ -246,9 +241,15 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           //abri la camara de codigo de barra
           await Permission.camera.request();
           String? barcode = await scanner.scan();
-          FlushBar().snackBarV2("$barcode", Colors.red, context);
+          // if (!mounted) {
+          FlushBar()
+              .snackBarV2("$barcode", Colors.blue, context, milliseconds: 5000);
+          // }
+
           if (barcode == null) {
-            FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
+            if (!mounted) {
+              FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
+            }
           } else {
             // barcode;
 
@@ -266,20 +267,27 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                   precioCompra: 0,
                 );
 
-                int rpta = productSelectedProvider
-                    .putProductInBuckert(productSelected);
-
-                // FlushBar().snackBarV2("El producto ya esta seleccionado",
-                //     Colors.purple[900]!, context);
-
+                int rpta =
+                    productSelectedProvider.putProductInBucket(productSelected);
+                switch (rpta) {
+                  case 2:
+                    FlushBar().snackBarV2("El producto ya esta seleccionado",
+                        Colors.purple[900]!, context);
+                    break;
+                  default:
+                }
               } else {
-                FlushBar()
-                    .snackBarV2("No cargo el producto!", Colors.red, context);
+                if (!mounted) {
+                  FlushBar()
+                      .snackBarV2("No cargo el producto!", Colors.red, context);
+                }
               }
             });
           }
         } catch (e) {
-          FlushBar().snackBarV2("Error: $e", Colors.red, context);
+          if (!mounted) {
+            FlushBar().snackBarV2("Error: $e", Colors.red, context);
+          }
         }
       },
       child: const Icon(
