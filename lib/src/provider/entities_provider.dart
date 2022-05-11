@@ -161,11 +161,11 @@ class EntitiesProvider extends ChangeNotifier {
   }
 
   List<Product>? lista_products;
-  Product? _productSelected;
-  Product? get productSelected => _productSelected;
-  set productSelected(product) {
-    _productSelected = product;
-  }
+  // Product? _productSelected;
+  // Product? get productSelected => _productSelected;
+  // set productSelected(product) {
+  //   _productSelected = product;
+  // }
 
   Future<bool> getAllProducts(String id_categoria, int active) async {
     lista_products =
@@ -178,14 +178,12 @@ class EntitiesProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> getProductByIdOrBarCode({String? id, String? barcode}) async {
-    productSelected = await ProductService().findProductBy(id, barcode);
+  Future<Product?> getProductByIdOrBarCode(
+      {String? id, String? barcode}) async {
+    Product? _productSelected =
+        await ProductService().findProductBy(id, barcode);
 
-    if (productSelected != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return _productSelected;
   }
 
   Future<List<Object>> productAddOrEdit(Product product) async {

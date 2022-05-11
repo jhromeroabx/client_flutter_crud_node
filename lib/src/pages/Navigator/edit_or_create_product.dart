@@ -13,7 +13,9 @@ import '../../widgets/flush_bar.dart';
 import '../../widgets/input_data_text_field.dart';
 
 class EditOrCreateProduct extends StatefulWidget {
-  const EditOrCreateProduct({Key? key}) : super(key: key);
+  Product? product;
+
+  EditOrCreateProduct({this.product, Key? key}) : super(key: key);
 
   @override
   State<EditOrCreateProduct> createState() => _EditOrCreateProductState();
@@ -21,6 +23,8 @@ class EditOrCreateProduct extends StatefulWidget {
 
 class _EditOrCreateProductState extends State<EditOrCreateProduct>
     with TickerProviderStateMixin {
+  Product? product;
+
   TextEditingController controlNombreProduct = TextEditingController();
   TextEditingController controlComentario = TextEditingController();
   TextEditingController controlCantidad = TextEditingController();
@@ -56,6 +60,20 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
     });
     _tabController.index = index;
     // WidgetsBinding.instance!.addPostFrameCallback((_) => _tabController.animateTo(index, duration: const Duration(seconds: 4)));
+    if (widget.product != null) {
+      product = widget.product!;
+
+      idProduct = product!.id!;
+      controlNombreProduct.text = product!.nombre!;
+      controlComentario.text = product!.comentario!;
+      controlCantidad.text = product!.cantidad!.toString();
+      controlPrecio.text = product!.precio!.toString();
+      barCode.text = product!.barcode!;
+      imagen_url.text = product!.imagen_url!;
+
+      _registerOrUpdate = "ACTUALIZAR";
+      _labelAppBar = product!.nombre!;
+    }
   }
 
   @override
@@ -66,41 +84,41 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
     super.dispose();
   }
 
-  loadProductData(EntitiesProvider entitiesProvider) {
-    if (entitiesProvider.productSelected != null) {
-      final productSelected = entitiesProvider.productSelected;
+  // loadProductData(EntitiesProvider entitiesProvider) {
+  // if (entitiesProvider.productSelected != null) {
+  //   final productSelected = entitiesProvider.productSelected;
 
-      idProduct = productSelected!.id!;
+  // idProduct = productSelected!.id!;
 
-      // controlComentario.text = productSelected!.comentario!;
-      controlNombreProduct.text = controlNombreProduct.text.isEmpty
-          ? productSelected.nombre!
-          : controlNombreProduct.text;
+  // controlComentario.text = productSelected!.comentario!;
+  // controlNombreProduct.text = controlNombreProduct.text.isEmpty
+  //     ? productSelected.nombre!
+  //     : controlNombreProduct.text;
 
-      controlComentario.text = controlComentario.text.isEmpty
-          ? productSelected.comentario!
-          : controlComentario.text;
+  // controlComentario.text = controlComentario.text.isEmpty
+  //     ? productSelected.comentario!
+  //     : controlComentario.text;
 
-      controlCantidad.text = controlCantidad.text.isEmpty
-          ? productSelected.cantidad!.toString()
-          : controlCantidad.text;
+  // controlCantidad.text = controlCantidad.text.isEmpty
+  //     ? productSelected.cantidad!.toString()
+  //     : controlCantidad.text;
 
-      controlPrecio.text = controlPrecio.text.isEmpty
-          ? productSelected.precio!.toString()
-          : controlPrecio.text;
+  // controlPrecio.text = controlPrecio.text.isEmpty
+  //     ? productSelected.precio!.toString()
+  //     : controlPrecio.text;
 
-      barCode.text = barCode.text.isEmpty
-          ? productSelected.barcode!.toString()
-          : barCode.text;
+  // barCode.text = barCode.text.isEmpty
+  //     ? productSelected.barcode!.toString()
+  //     : barCode.text;
 
-      imagen_url.text = imagen_url.text.isEmpty
-          ? productSelected.imagen_url!.toString()
-          : imagen_url.text;
+  // imagen_url.text = imagen_url.text.isEmpty
+  //     ? productSelected.imagen_url!.toString()
+  //     : imagen_url.text;
 
-      _registerOrUpdate = "ACTUALIZAR";
-      _labelAppBar = productSelected.nombre!;
-    }
-  }
+  // _registerOrUpdate = "ACTUALIZAR";
+  // _labelAppBar = productSelected.nombre!;
+  // }
+  // }
 
   List<DropdownMenuItem> getMenuItems(List<Categoria> lista) {
     List<DropdownMenuItem> items = [];
@@ -118,7 +136,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
   Widget build(BuildContext context) {
     var entitiesProvider = Provider.of<EntitiesProvider>(context);
 
-    loadProductData(entitiesProvider);
+    // loadProductData(entitiesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -172,9 +190,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
               child: Column(
                 children: [
                   // if (entitiesProvider.productSelected != null)
-                  _productImage(entitiesProvider.productSelected == null
-                      ? ""
-                      : entitiesProvider.productSelected!.imagen_url!),
+                  _productImage(product == null ? "" : product!.imagen_url!),
                   TextDataBasic(
                       size: 100,
                       label: 'Nombre',
@@ -219,10 +235,10 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                       dropDownMenuItems = getMenuItems(
                           appStateProvider.categorias!.categorias!);
 
-                      if (entitiesProvider.productSelected != null) {
+                      if (product != null) {
                         //edit
                         idCategoria = idCategoria == 0
-                            ? entitiesProvider.productSelected!.idCategoria!
+                            ? product!.idCategoria!
                             : idCategoria;
                       } else {
                         //new
@@ -331,10 +347,10 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
   }
 
   Widget _switchProduct(EntitiesProvider entitiesProvider) {
-    if (entitiesProvider.productSelected == null) {
+    if (product == null) {
       _value = _value ?? true;
     } else {
-      _value = _value ?? entitiesProvider.productSelected!.active!;
+      _value = _value ?? product!.active!;
     }
     return Container(
       height: 80,

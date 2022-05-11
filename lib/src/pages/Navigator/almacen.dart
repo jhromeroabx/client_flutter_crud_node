@@ -1,3 +1,4 @@
+import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_product.dart';
 import 'package:client_flutter_crud_node/src/widgets/flush_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../dto/responseDTO/product.dart';
 import '../../provider/app_state_provider.dart';
 import '../../provider/entities_provider.dart';
+import '../../transitions/right_route.dart';
 import '../../utils/my_colors.dart';
 import '../../widgets/card_products.dart';
 
@@ -32,7 +34,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
     await entitiesProvider.getAllProducts(idCategoria, active);
 
     if (entitiesProvider.lista_products == null ||
-        entitiesProvider.lista_products!.length == 0) {
+        entitiesProvider.lista_products!.isEmpty) {
       setState(() {
         itemsCount = 0;
         products = [];
@@ -108,23 +110,27 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                                 dropDownMenuItems = getMenuItems(
                                     appStateProvider.categorias!.categorias!);
 
-                                if (entitiesProvider.productSelected != null) {
-                                  //edit
-                                  idCategoria = idCategoria == 0
-                                      ? entitiesProvider
-                                          .productSelected!.idCategoria!
-                                      : idCategoria;
-                                } else {
-                                  //new
-                                  idCategoria =
-                                      idCategoria == 0 ? 1 : idCategoria;
-                                }
+                                // if (entitiesProvider.productSelected != null) {
+                                //   //edit
+                                //   idCategoria = idCategoria == 0
+                                //       ? entitiesProvider
+                                //           .productSelected!.idCategoria!
+                                //       : idCategoria;
+                                // } else {
+                                //   //new
+                                //   idCategoria =
+                                //       idCategoria == 0 ? 1 : idCategoria;
+                                // }
+
+                                idCategoria =
+                                    idCategoria == 0 ? 1 : idCategoria;
+
                                 print("COMBO: $idCategoria");
                                 return comboBox(
                                     dropDownMenuItems, entitiesProvider);
                               }
                             },
-                          ), 
+                          ),
                           _switchProduct(entitiesProvider)
                         ],
                       ),
@@ -155,9 +161,15 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                                       entitiesProvider.getProductByIdOrBarCode(
                                           id: "${pro.id}", barcode: "");
                                   rpta.then((value) async {
-                                    if (value) {
-                                      Navigator.pushNamed(
-                                          context, "edit/create_product");
+                                    if (value != null) {
+                                      Navigator.push(
+                                          context,
+                                          RightRoute(
+                                              page: EditOrCreateProduct(
+                                            product: value,
+                                          )));
+                                      // Navigator.pushNamed(
+                                      //     context, "edit/create_product");
                                     } else {
                                       FlushBar().snackBarV2(
                                           "No cargo el objeto",
@@ -189,8 +201,9 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          entitiesProvider.productSelected = null;
-          Navigator.pushNamed(context, "edit/create_product");
+          Navigator.pushReplacement(
+              context, RightRoute(page: EditOrCreateProduct()));
+          // Navigator.pushNamed(context, "edit/create_product");
         },
         child: const Icon(
           Icons.add_circle_outline_sharp,

@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           'refreshFutBuild': (_) => const RefreshFutBuild(),
           'refreshBasic': (_) => const RefreshBasic(),
           'register': (_) => const RegisterPage(),
-          'edit/create_product': (_) => const EditOrCreateProduct(),
+          'edit/create_product': (_) => EditOrCreateProduct(),
         },
       ),
     );

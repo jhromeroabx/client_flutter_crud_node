@@ -256,13 +256,13 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             var rpta = entitiesProvider.getProductByIdOrBarCode(
                 id: "", barcode: barcode);
             rpta.then((value) async {
-              if (value) {
+              if (value != null) {
                 //agregar producto en el MAP
 
                 ProductSelected productSelected = ProductSelected(
-                  id: entitiesProvider.productSelected!.id,
-                  imagenUrl: entitiesProvider.productSelected!.imagen_url,
-                  nombre: entitiesProvider.productSelected!.nombre,
+                  id: value.id,
+                  imagenUrl: value.imagen_url,
+                  nombre: value.nombre,
                   cantidadSelected: 0,
                   precioCompra: 0,
                 );
@@ -314,7 +314,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           var rpta = entitiesProvider.getProductByIdOrBarCode(
               id: "", barcode: barcode);
           rpta.then((value) async {
-            if (value) {
+            if (value != null) {
             } else {
               FlushBar()
                   .snackBarV2("No cargo el producto!", Colors.red, context);
