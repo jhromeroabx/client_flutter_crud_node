@@ -25,8 +25,7 @@ class EntitiesProvider extends ChangeNotifier {
   EntitiesProvider();
 
   Future<List<Object>> accessLogin(String user, String contrasenia) async {
-    _isLoading = true;
-    notifyListeners();
+    isLoading = true;
 
     userAcceso = await UserService().login(user, contrasenia);
 
@@ -34,7 +33,6 @@ class EntitiesProvider extends ChangeNotifier {
 
     if (userAcceso != null) {
       isLoading = false;
-      notifyListeners();
       if (userAcceso!.userData != null) {
         return [1, "Ingresando al Sistema"];
       } else {
@@ -42,14 +40,13 @@ class EntitiesProvider extends ChangeNotifier {
       }
     } else {
       isLoading = false;
-      notifyListeners();
       return [3, "Error del servidor!!!"];
     }
   }
 
   Future<List<Object>> registerUser(
       UserReqAddEditBody userReqAddEditBody) async {
-    _isLoading = true;
+    isLoading = true;
 
     UiResponse? response =
         await UserService().registerOrEditUser(userReqAddEditBody);
@@ -69,10 +66,9 @@ class EntitiesProvider extends ChangeNotifier {
 
 ////EMPLOYEE
   Future getAllEmployee() async {
-    _isLoading = true;
+    isLoading = true;
 
     employeeListService = await EmployeeService().getAllUsers();
-    notifyListeners();
 
     // await Future.delayed(const Duration(seconds: 2));
 
@@ -94,7 +90,6 @@ class EntitiesProvider extends ChangeNotifier {
     _isLoading = true;
 
     employeeService = await EmployeeService().getUsersById(id);
-    notifyListeners();
 
     // await Future.delayed(const Duration(seconds: 2));
 
@@ -113,7 +108,7 @@ class EntitiesProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteEmployeeById(int id) async {
-    _isLoading = true;
+    isLoading = true;
 
     bool rptaDelete = false;
 
@@ -121,7 +116,6 @@ class EntitiesProvider extends ChangeNotifier {
 
     if (rptaDelete) {
       isLoading = false;
-      getAllEmployee();
       // Fluttertoast.showToast(
       //     msg: 'THE EMPLOYEE $id WAS DELETED SUCCESFULLY',
       //     backgroundColor: Colors.greenAccent);
@@ -136,7 +130,7 @@ class EntitiesProvider extends ChangeNotifier {
   }
 
   Future<bool> addEmployeeOrEdit(Employee employee) async {
-    _isLoading = true;
+    isLoading = true;
 
     bool rptaEditDelete = false;
 
@@ -146,7 +140,6 @@ class EntitiesProvider extends ChangeNotifier {
 
     if (rptaEditDelete) {
       isLoading = false;
-      getAllEmployee();
       // Fluttertoast.showToast(
       //     msg: 'THE EMPLOYEE WAS CREATED SUCCESFULLY',
       //     backgroundColor: Colors.greenAccent);
@@ -187,7 +180,7 @@ class EntitiesProvider extends ChangeNotifier {
   }
 
   Future<List<Object>> productAddOrEdit(Product product) async {
-    _isLoading = true;
+    isLoading = true;
 
     UiResponse? response =
         await ProductService().registerOrEditProduct(product);

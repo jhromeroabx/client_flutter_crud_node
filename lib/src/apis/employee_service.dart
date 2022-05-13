@@ -18,7 +18,7 @@ class EmployeeService {
   Future<EmployeeList?> getAllUsers() async {
     try {
       final response =
-          await http.get(Uri.http(_apiHost, _routePath_getAllUser));
+          await http.get(Uri.https(_apiHost, _routePath_getAllUser));
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
         return EmployeeList.fromMap(response.body);
@@ -32,7 +32,7 @@ class EmployeeService {
   Future<EmployeeTypeList?> getAllEmployeeTypes() async {
     try {
       final response =
-          await http.get(Uri.http(_apiHost, _routePath_getAllEmplopyeeType));
+          await http.get(Uri.https(_apiHost, _routePath_getAllEmplopyeeType));
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
         return EmployeeTypeList.fromMap(response.body);
@@ -46,7 +46,7 @@ class EmployeeService {
   Future<Employee?> getUsersById(int id) async {
     try {
       final response = await http.get(
-        Uri.http(
+        Uri.https(
           _apiHost,
           (_routePath_getUserByID + id.toString()),
         ),
@@ -64,7 +64,7 @@ class EmployeeService {
   Future<bool> deleteUserById(int id) async {
     try {
       final response = await http.delete(
-        Uri.http(
+        Uri.https(
           _apiHost,
           (_routePath_deleteUserByID + id.toString()),
         ),
@@ -82,7 +82,7 @@ class EmployeeService {
   Future<bool> addEmployeeOrEdit(Employee employee) async {
     try {
       final response = await http.post(
-        Uri.http(
+        Uri.https(
           _apiHost,
           (_routePath_addEmployeeOrEdit),
         ),

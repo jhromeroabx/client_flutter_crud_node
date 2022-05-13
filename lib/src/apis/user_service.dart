@@ -28,7 +28,7 @@ class UserService {
       final body = jsonEncode(userLoginBody);
 
       final response = await http.post(
-        Uri.http(_apiHost, _routePath_login),
+        Uri.https(_apiHost, _routePath_login),
         headers: headers,
         body: body,
       );
@@ -53,7 +53,7 @@ class UserService {
       final body = jsonEncode(userReqAddEditBody);
 
       final response = await http.post(
-        Uri.http(_apiHost, _routePath_AddUserOrEdit),
+        Uri.https(_apiHost, _routePath_AddUserOrEdit),
         headers: headers,
         body: body,
       );

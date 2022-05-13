@@ -22,8 +22,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controlContrasenia = TextEditingController();
 
   //usable
-  bool proceso_login = false;
-  int primera_vez = 0;
+  bool proceso_login = true;
+  // int primera_vez = 0;
 
   @override
   void initState() {
@@ -92,10 +92,13 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buttomAcceder(
       EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
-    //si es true no es usable
+    proceso_login = true;
+    //ESTA CONSULTANDO AL SERVIDOR
     if (entitiesProvider.isLoading) {
-      //indicamos que no sea usable
-      proceso_login = entitiesProvider.isLoading;
+      proceso_login = false; //DESACTIVAMOS EL PROCESO LOGIN
+    }
+    if (entitiesProvider.userAcceso != null) {
+      proceso_login = false; //DESACTIVAMOS POR QUE TIENE USER
     }
 
     return Container(
@@ -108,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () async {
-          if (proceso_login == false) {
+          if (proceso_login) {
             String controlUserText = controlUser.text.trim();
             String controlContraseniaText = controlContrasenia.text.trim();
             if (controlUserText.isNotEmpty &&
@@ -160,8 +163,11 @@ class _LoginPageState extends State<LoginPage> {
             }
           } else {
             //solo mostrar el snackbar de cargando por primera vez
-            if (primera_vez == 0) {
-              primera_vez++;
+            // if (primera_vez == 0) {
+            //   primera_vez++;
+            //   FlushBar().snackBarV2("Cargando", Colors.purple[700]!, context);
+            // }
+            if (!mounted) {
               FlushBar().snackBarV2("Cargando", Colors.purple[700]!, context);
             }
           }
