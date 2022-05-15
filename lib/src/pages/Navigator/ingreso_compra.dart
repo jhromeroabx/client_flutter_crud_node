@@ -112,6 +112,11 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           ),
           Positioned(
             right: 15,
+            top: 80,
+            child: buttonIngresoAlmacen(),
+          ),
+          Positioned(
+            right: 15,
             bottom: 80,
             child: buttomCamera(entitiesProvider, productSelectedProvider),
           ),
@@ -199,6 +204,15 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
       ),
       backgroundColor: Colors.green[700],
       tooltip: "BUSCAR POR CODIGO DE BARRA",
+    );
+  }
+
+  Widget buttonIngresoAlmacen() {
+    return FloatingActionButton(
+      onPressed: () {
+        Fluttertoast.showToast(msg: "INGRESANDO ALMACEN!!!");
+      },
+      child: const Icon(Icons.add),
     );
   }
 }
