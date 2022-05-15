@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int index_page = 0;
   final screens = [
-    const IncrementadorPage(title: 'Flutter Demo Home Page'),
+    const IncrementadorPage(),
     const AlmacenGestion(),
     const ManageEmployeePage(title: "Gestion de empleados"),
     const IngresoAlmacen(),

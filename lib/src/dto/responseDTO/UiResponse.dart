@@ -30,3 +30,19 @@ class Response {
         state: json["state"],
       );
 }
+
+class UiResponseSimple {
+  String? response;
+  bool? state;
+
+  UiResponseSimple({
+    this.response,
+    this.state,
+  });
+
+  factory UiResponseSimple.fromMap(Map<String, dynamic> json) =>
+      UiResponseSimple(
+        response: json["response"],
+        state: json["state"] == 1 ? true : false,
+      );
+}

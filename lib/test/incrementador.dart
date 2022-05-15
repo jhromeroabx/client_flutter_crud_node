@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class IncrementadorPage extends StatefulWidget {
-  const IncrementadorPage({Key? key, required this.title}) : super(key: key);
+  const IncrementadorPage({
+    Key? key,
+    //  required this.title
+  }) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -12,7 +15,7 @@ class IncrementadorPage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  // final String title;
 
   @override
   State<IncrementadorPage> createState() => _IncrementadorState();
@@ -41,11 +44,6 @@ class _IncrementadorState extends State<IncrementadorPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the incrementadorPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.

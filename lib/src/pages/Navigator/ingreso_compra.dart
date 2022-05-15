@@ -113,7 +113,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           Positioned(
             right: 15,
             top: 80,
-            child: buttonIngresoAlmacen(),
+            child: buttonIngresoAlmacen(productSelectedProvider),
           ),
           Positioned(
             right: 15,
@@ -207,10 +207,18 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
     );
   }
 
-  Widget buttonIngresoAlmacen() {
+  Widget buttonIngresoAlmacen(ProductsInOutProvider productsInOutProvider) {
     return FloatingActionButton(
       onPressed: () {
-        Fluttertoast.showToast(msg: "INGRESANDO ALMACEN!!!");
+        var res = productsInOutProvider.sendCompraSerial();
+        res.then((value) {
+          if (value[0] == 1) {
+            Fluttertoast.showToast(msg: "${value[1]}");
+          } else {
+            Fluttertoast.showToast(
+                msg: "${value[1]}", backgroundColor: Colors.red);
+          }
+        });
       },
       child: const Icon(Icons.add),
     );

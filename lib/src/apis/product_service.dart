@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:client_flutter_crud_node/src/dto/requestDTO/Compra.dart';
 import 'package:http/http.dart' as http;
 
 import '../dto/responseDTO/product.dart';
@@ -12,6 +13,7 @@ class ProductService {
   static const String _routePath_findProductBy = "/findProductBy";
   static const String _routePath_disableProductBy = "/disableProductBy";
   static const String _routePath_productoAddOrEdit = "/productoAddOrEdit";
+  static const String _routePath_compraAdd = "/compraAdd";
 
   ProductService();
 
@@ -109,6 +111,30 @@ class ProductService {
       }
     } catch (e) {
       print("ERROR $_routePath_productoAddOrEdit: $e");
+      return null;
+    }
+  }
+
+  Future<UiResponseSimple?> registerCompra(Compra compra) async {
+    try {
+      var headers = {
+        'accept': 'text/plain',
+        'Content-Type': 'application/json',
+      };
+
+      final body = jsonEncode(compra);
+
+      final response = await http.post(
+        Uri.http(_apiHost, _routePath_compraAdd),
+        headers: headers,
+        body: body,
+      );
+      print("API" + response.statusCode.toString());
+      if (response.statusCode == 200) {
+        return UiResponseSimple.fromMap(jsonDecode(response.body));
+      }
+    } catch (e) {
+      print("ERROR $_routePath_compraAdd: $e");
       return null;
     }
   }

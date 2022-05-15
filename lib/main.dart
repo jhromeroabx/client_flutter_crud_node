@@ -49,8 +49,7 @@ class MyApp extends StatelessWidget {
         // title: 'Gestion Productos',
         initialRoute: 'login',
         routes: {
-          'incrementador': (_) =>
-              const IncrementadorPage(title: 'Flutter Demo Home Page'),
+          'incrementador': (_) => const IncrementadorPage(),
           'home': (_) => const HomePage(),
           'manageEmployee': (_) =>
               const ManageEmployeePage(title: 'Gestion de Empleados'),
