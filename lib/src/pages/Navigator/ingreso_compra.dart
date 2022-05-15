@@ -19,6 +19,8 @@ class IngresoAlmacen extends StatefulWidget {
 }
 
 class _IngresoAlmacenState extends State<IngresoAlmacen> {
+  ProductSelected? productSelectedTempSet;
+
   @override
   Widget build(BuildContext context) {
     var entitiesProvider = Provider.of<EntitiesProvider>(context);
@@ -29,7 +31,8 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
       body: Stack(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 2, right: 2, top: 5, bottom: 2),
+            margin:
+                const EdgeInsets.only(left: 2, right: 2, top: 150, bottom: 10),
             height: double.infinity,
             child: ListView(
               children: [
@@ -38,9 +41,8 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                     child: ProductItems(
                       color: Colors.red[100],
                       imageURL: "",
-                      name:
-                          "No hay productos seleccionados para registrar la compra!",
-                      ancho: 300,
+                      name: "No hay productos seleccionados!",
+                      ancho: 250,
                     ),
                   ),
                 if (productSelectedProvider.bucketProductSelected.isNotEmpty)
@@ -50,7 +52,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                       direction: Axis.horizontal,
                       alignment: WrapAlignment.spaceEvenly,
                       spacing: 32,
-                      runSpacing: 20,
+                      runSpacing: 10,
                       children: [
                         for (var key in productSelectedProvider
                             .bucketProductSelected.keys)
@@ -62,9 +64,10 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                               //FOR CANTIDAD & PRECIO GLOBAL
 
                               //pasamos el producto del bucle
-                              productSelectedProvider.productSelectedTempSet =
-                                  productSelectedProvider
-                                      .bucketProductSelected[key]!;
+                              setState(() {
+                                productSelectedTempSet = productSelectedProvider
+                                    .bucketProductSelected[key]!;
+                              });
 
                               //INTERACTURAR CON EL MAP
                               //contador de map map.lenght
@@ -89,16 +92,21 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           ),
           Positioned(
             left: MediaQuery.of(context).size.width * 0.05,
-            bottom: 30,
+            top: 10,
             child: Container(
-              height: 100,
+              height: 120,
               width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.amber,
+                color: Colors.blue.withOpacity(0.3),
               ),
-              child: const Center(
-                child: Text("SUMARY MARKER !"),
+              child: Center(
+                child: Text(
+                  "${productSelectedProvider.bucketProductSelected.length}" +
+                      "\n Productos Seleccionados",
+                  style: const TextStyle(fontSize: 30),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -115,7 +123,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           Visibility(
             visible: productSelectedProvider.isActiveModal,
             child: WillPopScope(
-              child: const CardModalProduct(),
+              child: CardModalProduct(productSelectedTempSet),
               onWillPop: () async {
                 productSelectedProvider.isActiveModal = false;
                 return false;
@@ -124,111 +132,6 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           ),
         ],
       ),
-      //   floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      //   floatingActionButton: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.end,
-      //     mainAxisAlignment: MainAxisAlignment.end,
-      //     children: [
-      //       FloatingActionButton(
-      //         isExtended: true,
-      //         onPressed: () async {
-      //           //abri la camara de codigo de barra
-      //           await Permission.camera.request();
-      //           String? barcode = await scanner.scan();
-      //           if (barcode == null) {
-      //             FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
-      //           } else {
-      //             barcode;
-
-      //             var rpta = entitiesProvider.getProductByIdOrBarCode(
-      //                 id: "", barcode: barcode);
-      //             rpta.then((value) async {
-      //               if (value) {
-      //                 //agregar producto en el MAP
-      //                 setState(() {
-      //                   ProductSelected productSelected = ProductSelected(
-      //                     id: entitiesProvider.productSelected!.id,
-      //                     imagenUrl: entitiesProvider.productSelected!.imagen_url,
-      //                     nombre: entitiesProvider.productSelected!.nombre,
-      //                     cantidadSelected: 0,
-      //                     precioCompra: 0,
-      //                   );
-      //                   if (bucketProductSelected[productSelected.id] == null) {
-      //                     bucketProductSelected[productSelected.id!] =
-      //                         productSelected;
-      //                   } else {
-      //                     FlushBar().snackBarV2(
-      //                         "El producto ya esta seleccionado",
-      //                         Colors.purple[900]!,
-      //                         context);
-      //                   }
-      //                 });
-      //               } else {
-      //                 FlushBar().snackBarV2(
-      //                     "No cargo el producto!", Colors.red, context);
-      //               }
-      //             });
-      //           }
-      //         },
-      //         child: const Icon(
-      //           Icons.camera_alt_rounded,
-      //           size: 40,
-      //         ),
-      //         backgroundColor: Colors.green[700],
-      //         tooltip: "BUSCAR POR CODIGO DE BARRA",
-      //       ),
-      //       const SizedBox(
-      //         height: 10,
-      //       ),
-      //       FloatingActionButton(
-      //         onPressed: () async {
-      //           //abri la camara de codigo de barra
-      //           await Permission.camera.request();
-      //           String? barcode = await scanner.scan();
-      //           if (barcode == null) {
-      //             FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
-      //           } else {
-      //             barcode;
-
-      //             var rpta = entitiesProvider.getProductByIdOrBarCode(
-      //                 id: "", barcode: barcode);
-      //             rpta.then((value) async {
-      //               if (value) {
-      //                 //agregar producto en el MAP
-      //                 setState(() {
-      //                   ProductSelected productSelected = ProductSelected(
-      //                     id: entitiesProvider.productSelected!.id,
-      //                     imagenUrl: entitiesProvider.productSelected!.imagen_url,
-      //                     nombre: entitiesProvider.productSelected!.nombre,
-      //                     cantidadSelected: 0,
-      //                     precioCompra: 0,
-      //                   );
-      //                   if (bucketProductSelected[productSelected.id] == null) {
-      //                     bucketProductSelected[productSelected.id!] =
-      //                         productSelected;
-      //                   } else {
-      //                     FlushBar().snackBarV2(
-      //                         "El producto ya esta seleccionado",
-      //                         Colors.purple[900]!,
-      //                         context);
-      //                   }
-      //                 });
-      //               } else {
-      //                 FlushBar().snackBarV2(
-      //                     "No cargo el producto!", Colors.red, context);
-      //               }
-      //             });
-      //           }
-      //         },
-      //         child: const Icon(
-      //           Icons.find_in_page_outlined,
-      //           size: 40,
-      //         ),
-      //         backgroundColor: Colors.indigo[700],
-      //         tooltip: "BUSCAR POR NOMBRE O CATEGORIA",
-      //       ),
-      //     ],
-      //   ),
     );
   }
 
@@ -241,13 +144,13 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           //abri la camara de codigo de barra
           await Permission.camera.request();
           String? barcode = await scanner.scan();
-          // if (!mounted) {
-          FlushBar()
-              .snackBarV2("$barcode", Colors.blue, context, milliseconds: 5000);
-          // }
+          if (mounted) {
+            FlushBar().snackBarV2("$barcode", Colors.blue, context,
+                milliseconds: 5000);
+          }
 
           if (barcode == null) {
-            if (!mounted) {
+            if (mounted) {
               FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
             }
           } else {
@@ -277,7 +180,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
                   default:
                 }
               } else {
-                if (!mounted) {
+                if (mounted) {
                   FlushBar()
                       .snackBarV2("No cargo el producto!", Colors.red, context);
                 }
@@ -285,7 +188,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             });
           }
         } catch (e) {
-          if (!mounted) {
+          if (mounted) {
             FlushBar().snackBarV2("Error: $e", Colors.red, context);
           }
         }
@@ -295,38 +198,6 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
         size: 40,
       ),
       backgroundColor: Colors.green[700],
-      tooltip: "BUSCAR POR CODIGO DE BARRA",
-    );
-  }
-
-  Widget buttomCameraV2(EntitiesProvider entitiesProvider) {
-    return FloatingActionButton(
-      isExtended: true,
-      onPressed: () async {
-        //abri la camara de codigo de barra
-        await Permission.camera.request();
-        String? barcode = await scanner.scan();
-        if (barcode == null) {
-          FlushBar().snackBarV2("No hay codigo!", Colors.red, context);
-        } else {
-          barcode;
-
-          var rpta = entitiesProvider.getProductByIdOrBarCode(
-              id: "", barcode: barcode);
-          rpta.then((value) async {
-            if (value != null) {
-            } else {
-              FlushBar()
-                  .snackBarV2("No cargo el producto!", Colors.red, context);
-            }
-          });
-        }
-      },
-      child: const Icon(
-        Icons.find_in_page,
-        size: 40,
-      ),
-      backgroundColor: Colors.indigo[700],
       tooltip: "BUSCAR POR CODIGO DE BARRA",
     );
   }

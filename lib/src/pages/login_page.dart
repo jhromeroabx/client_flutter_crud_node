@@ -21,10 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controlUser = TextEditingController();
   TextEditingController controlContrasenia = TextEditingController();
 
-  //usable
-  bool proceso_login = true;
-  // int primera_vez = 0;
-
   @override
   void initState() {
     super.initState();
@@ -92,14 +88,21 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buttomAcceder(
       EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
-    proceso_login = true;
+    print("EJECUCIONNN");
+    bool proceso_login = true;
     //ESTA CONSULTANDO AL SERVIDOR
     if (entitiesProvider.isLoading) {
-      proceso_login = false; //DESACTIVAMOS EL PROCESO LOGIN
+      setState(() {
+        proceso_login = false; //DESACTIVAMOS EL PROCESO LOGIN
+      });
     }
-    if (entitiesProvider.userAcceso != null) {
-      proceso_login = false; //DESACTIVAMOS POR QUE TIENE USER
-    }
+    // if (entitiesProvider.userAcceso != null) {
+    //   setState(() {
+    //     proceso_login = false; //DESACTIVAMOS POR QUE TIENE USER
+    //   });
+    // }
+
+    print("PROCESO: $proceso_login");
 
     return Container(
       width: double.infinity,
@@ -111,7 +114,9 @@ class _LoginPageState extends State<LoginPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () async {
-          if (proceso_login) {
+          if (proceso_login && entitiesProvider.userAcceso == null) {
+            print("LOGIN : $proceso_login");
+
             String controlUserText = controlUser.text.trim();
             String controlContraseniaText = controlContrasenia.text.trim();
             if (controlUserText.isNotEmpty &&
@@ -125,12 +130,13 @@ class _LoginPageState extends State<LoginPage> {
                 FocusManager.instance.primaryFocus!.unfocus();
               }
 
-              ///
               rpta.then((value) async {
                 switch (value[0]) {
                   case 1: //ACCESOS CONCEDIDOS
-                    FlushBar()
-                        .snackBarV2(value[1].toString(), Colors.green, context);
+                    if (mounted) {
+                      FlushBar().snackBarV2(
+                          value[1].toString(), Colors.green, context);
+                    }
 
                     final prefs = await SharedPreferences.getInstance();
 
@@ -146,35 +152,38 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.pushNamed(context, "home");
                     break;
                   case 2: //ACCESOS DENEGADOS
-                    FlushBar()
-                        .snackBarV2(value[1].toString(), Colors.red, context);
+                    if (mounted) {
+                      FlushBar()
+                          .snackBarV2(value[1].toString(), Colors.red, context);
+                    }
                     break;
                   case 3: //NO TUVO INFO DEL LOGIN
                     proceso_login = false;
-                    FlushBar()
-                        .snackBarV2(value[1].toString(), Colors.red, context);
+                    if (mounted) {
+                      FlushBar()
+                          .snackBarV2(value[1].toString(), Colors.red, context);
+                    }
                     break;
                   default:
                 }
               });
             } else {
-              FlushBar().snackBarV2(
-                  "Usuario y/o contraseña vacias", Colors.red, context);
+              if (mounted) {
+                FlushBar().snackBarV2(
+                    "Usuario y/o contraseña vacias", Colors.red, context);
+              }
             }
-          } else {
-            //solo mostrar el snackbar de cargando por primera vez
-            // if (primera_vez == 0) {
-            //   primera_vez++;
-            //   FlushBar().snackBarV2("Cargando", Colors.purple[700]!, context);
-            // }
-            if (!mounted) {
+          } else if (entitiesProvider.userAcceso == null) {
+            print("CARGANDO...");
+            if (mounted) {
               FlushBar().snackBarV2("Cargando", Colors.purple[700]!, context);
             }
           }
         },
-        child: Text(
-          entitiesProvider.isLoading ? "CARGANDO ..." : "ACCEDER",
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        child: const Text(
+          "ACCEDER",
+          // entitiesProvider.isLoading ? "CARGANDO ..." : "ACCEDER",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
     );

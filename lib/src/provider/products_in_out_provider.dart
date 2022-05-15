@@ -10,18 +10,10 @@ class ProductsInOutProvider extends ChangeNotifier {
     notifyListeners();
   } //IS LOADING
 
-  ProductSelected? productSelectedTemp;
-
-  set productSelectedTempSet(ProductSelected productSelected) {
-    productSelectedTemp = productSelected;
-    notifyListeners();
-  }
-
   Map<int, ProductSelected> bucketProductSelected = {};
 
   void cleanShoppingCart() {
     bucketProductSelected = {};
-    productSelectedTemp = null;
   }
 
   int putProductInBucket(ProductSelected productSelected) {

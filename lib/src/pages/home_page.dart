@@ -2,6 +2,7 @@ import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
 import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
+import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int index_page = 1;
+  int index_page = 0;
   final screens = [
     const InicioApp(),
     const AlmacenGestion(),
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
+    var entitiesProvider = Provider.of<EntitiesProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -53,6 +55,7 @@ class _HomePageState extends State<HomePage> {
                     msg: "¿Estas seguro de Cerrar Sesion?",
                     onPressedPositive: () {
                       productSelectedProvider.cleanShoppingCart();
+                      entitiesProvider.userAccesoSet = null;
                       Navigator.pushNamed(context, "login");
                     },
                     onPressedNegative: () {

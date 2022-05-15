@@ -8,10 +8,10 @@ class Login {
   UserData? userData;
 
   factory Login.fromMap(Map<String, dynamic> json) => Login(
-        state: State.fromMap(json["state"][0]),
+        state: State.fromMap(json["state"]),
         userData: json["userData"] == null
             ? null
-            : UserData.fromMap(json["userData"][0]),
+            : UserData.fromMap(json["userData"]),
       );
 }
 

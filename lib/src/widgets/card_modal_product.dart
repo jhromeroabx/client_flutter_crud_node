@@ -9,7 +9,8 @@ import '../provider/products_in_out_provider.dart';
 import '../utils/my_colors.dart';
 
 class CardModalProduct extends StatefulWidget {
-  const CardModalProduct({Key? key}) : super(key: key);
+  ProductSelected? productSelectedTempSet;
+  CardModalProduct(this.productSelectedTempSet, {Key? key}) : super(key: key);
 
   @override
   State<CardModalProduct> createState() => _CardModalProductState();
@@ -20,23 +21,27 @@ class _CardModalProductState extends State<CardModalProduct> {
 
   TextEditingController controlPrecio = TextEditingController();
 
-  loadData(ProductSelected product) {
-    // var product = productsInOutProvider.productSelectedTemp!;
+  late ProductSelected productSelectedTempSet;
 
-    controlCantidad.text = controlCantidad.text.isEmpty
-        ? "${product.cantidadSelected}"
-        : controlCantidad.text;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.productSelectedTempSet != null) {
+      productSelectedTempSet = widget.productSelectedTempSet!;
 
-    controlPrecio.text = controlPrecio.text.isEmpty
-        ? "${product.precioCompra!}"
-        : controlPrecio.text;
+      controlCantidad.text = "${productSelectedTempSet.cantidadSelected}";
+      controlCantidad.selection = TextSelection.fromPosition(
+          TextPosition(offset: controlCantidad.text.length));
+
+      controlPrecio.text = "${productSelectedTempSet.precioCompra}";
+      controlPrecio.selection = TextSelection.fromPosition(
+          TextPosition(offset: controlPrecio.text.length));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
-
-    loadData(productSelectedProvider.productSelectedTemp!);
 
     return SafeArea(
       top: true,
@@ -173,8 +178,7 @@ class _CardModalProductState extends State<CardModalProduct> {
         onPressed: () async {
           if (controlCantidad.text.trim().isNotEmpty ||
               controlPrecio.text.trim().isNotEmpty) {
-            ProductSelected updateProduct =
-                productSelectedProvider.productSelectedTemp!;
+            ProductSelected updateProduct = productSelectedTempSet;
             updateProduct.cantidadSelectedSet = int.parse(controlCantidad.text);
             updateProduct.precioCompraSet = double.parse(controlPrecio.text);
 
@@ -209,8 +213,7 @@ class _CardModalProductState extends State<CardModalProduct> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () async {
-          productSelectedProvider.quitProductInBucket(
-              productSelectedProvider.productSelectedTemp!);
+          productSelectedProvider.quitProductInBucket(productSelectedTempSet);
           //cerramos modal
           productSelectedProvider.isActiveModal = false;
 

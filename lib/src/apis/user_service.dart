@@ -28,11 +28,11 @@ class UserService {
       final body = jsonEncode(userLoginBody);
 
       final response = await http.post(
-        Uri.https(_apiHost, _routePath_login),
+        Uri.http(_apiHost, _routePath_login),
         headers: headers,
         body: body,
       );
-      print("API" + response.statusCode.toString());
+      print("API login ${response.statusCode}");
       if (response.statusCode == 200) {
         return Login.fromMap(jsonDecode(response.body));
       }
@@ -53,7 +53,7 @@ class UserService {
       final body = jsonEncode(userReqAddEditBody);
 
       final response = await http.post(
-        Uri.https(_apiHost, _routePath_AddUserOrEdit),
+        Uri.http(_apiHost, _routePath_AddUserOrEdit),
         headers: headers,
         body: body,
       );

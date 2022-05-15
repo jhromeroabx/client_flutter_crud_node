@@ -84,42 +84,6 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
     super.dispose();
   }
 
-  // loadProductData(EntitiesProvider entitiesProvider) {
-  // if (entitiesProvider.productSelected != null) {
-  //   final productSelected = entitiesProvider.productSelected;
-
-  // idProduct = productSelected!.id!;
-
-  // controlComentario.text = productSelected!.comentario!;
-  // controlNombreProduct.text = controlNombreProduct.text.isEmpty
-  //     ? productSelected.nombre!
-  //     : controlNombreProduct.text;
-
-  // controlComentario.text = controlComentario.text.isEmpty
-  //     ? productSelected.comentario!
-  //     : controlComentario.text;
-
-  // controlCantidad.text = controlCantidad.text.isEmpty
-  //     ? productSelected.cantidad!.toString()
-  //     : controlCantidad.text;
-
-  // controlPrecio.text = controlPrecio.text.isEmpty
-  //     ? productSelected.precio!.toString()
-  //     : controlPrecio.text;
-
-  // barCode.text = barCode.text.isEmpty
-  //     ? productSelected.barcode!.toString()
-  //     : barCode.text;
-
-  // imagen_url.text = imagen_url.text.isEmpty
-  //     ? productSelected.imagen_url!.toString()
-  //     : imagen_url.text;
-
-  // _registerOrUpdate = "ACTUALIZAR";
-  // _labelAppBar = productSelected.nombre!;
-  // }
-  // }
-
   List<DropdownMenuItem> getMenuItems(List<Categoria> lista) {
     List<DropdownMenuItem> items = [];
     for (var item in lista) {

@@ -36,9 +36,9 @@ class ProductItems extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
           ),
           width: ancho ?? 170,
-          height: 230,
+          height: 220,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               imageURL!.isNotEmpty
                   ? FadeInImage.assetNetwork(

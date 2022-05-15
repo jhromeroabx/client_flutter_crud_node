@@ -21,15 +21,19 @@ class EntitiesProvider extends ChangeNotifier {
   Employee? employeeService;
 
   Login? userAcceso;
+  set userAccesoSet(value) {
+    userAcceso = value;
+    notifyListeners();
+  }
 
   EntitiesProvider();
 
   Future<List<Object>> accessLogin(String user, String contrasenia) async {
     isLoading = true;
 
-    userAcceso = await UserService().login(user, contrasenia);
+    await Future.delayed(Duration(seconds: 2));
 
-    // await Future.delayed(Duration(seconds: 2));
+    userAcceso = await UserService().login(user, contrasenia);
 
     if (userAcceso != null) {
       isLoading = false;
