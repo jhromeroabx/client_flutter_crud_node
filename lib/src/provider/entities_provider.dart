@@ -28,9 +28,7 @@ class EntitiesProvider extends ChangeNotifier {
     isLoading = true;
 
     userAcceso = await UserService().login(user, contrasenia);
-
-    // await Future.delayed(Duration(seconds: 2));
-
+    print("RPTA PROVIDER $userAcceso");
     if (userAcceso != null) {
       isLoading = false;
       if (userAcceso!.userData != null) {

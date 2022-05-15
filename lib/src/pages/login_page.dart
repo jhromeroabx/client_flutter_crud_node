@@ -21,10 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controlUser = TextEditingController();
   TextEditingController controlContrasenia = TextEditingController();
 
-  //usable
-  bool proceso_login = true;
-  // int primera_vez = 0;
-
   @override
   void initState() {
     super.initState();
@@ -92,7 +88,9 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buttomAcceder(
       EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
-    proceso_login = true;
+    //usable
+    bool proceso_login = true;
+    // int primera_vez = 0;
     //ESTA CONSULTANDO AL SERVIDOR
     if (entitiesProvider.isLoading) {
       proceso_login = false; //DESACTIVAMOS EL PROCESO LOGIN

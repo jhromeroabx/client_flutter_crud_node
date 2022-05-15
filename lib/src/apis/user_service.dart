@@ -15,30 +15,21 @@ class UserService {
 
   Future<Login?> login(String user, String contrasenia) async {
     try {
-      var headers = {
-        'accept': 'text/plain',
-        'Content-Type': 'application/json',
-      };
       UserLoginBody userLoginBody =
           UserLoginBody(user: user, contrasenia: contrasenia);
-      // final body = jsonEncode({
-      //   "user": user,
-      //   "contrasenia": contrasenia,
-      // });
       final body = jsonEncode(userLoginBody);
 
-      final response = await http.post(
-        Uri.https(_apiHost, _routePath_login),
-        headers: headers,
-        body: body,
-      );
-      print("API" + response.statusCode.toString());
-      if (response.statusCode == 200) {
-        return Login.fromMap(jsonDecode(response.body));
-      }
+      final res = AppData()
+          .requestBadSsl(_apiHost, _routePath_login, body: body, method: 2);
+
+      await res.then((resContent) {
+        if (resContent != null) {
+          print("RPTA OBJETO");
+          return Login.fromMap(resContent);
+        }
+      });
     } catch (e) {
       print("ERROR $_routePath_login: $e");
-      return null;
     }
   }
 

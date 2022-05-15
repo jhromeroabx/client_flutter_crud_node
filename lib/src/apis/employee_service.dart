@@ -17,12 +17,17 @@ class EmployeeService {
 
   Future<EmployeeList?> getAllUsers() async {
     try {
-      final response =
-          await http.get(Uri.https(_apiHost, _routePath_getAllUser));
-      print("API" + response.statusCode.toString());
-      if (response.statusCode == 200) {
-        return EmployeeList.fromMap(response.body);
-      }
+      // final response =
+      //     await http.get(Uri.https(_apiHost, _routePath_getAllUser));
+
+      var res = AppData().requestBadSsl(_apiHost, _routePath_getAllUser);
+
+      res.then((resContent) {
+        if (resContent != null) {
+          return EmployeeList.fromMap(resContent);
+        }
+        return null;
+      });
     } catch (e) {
       print("ERROR $_routePath_getAllUser: $e");
     }

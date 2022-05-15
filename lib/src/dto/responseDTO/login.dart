@@ -7,12 +7,15 @@ class Login {
   State? state;
   UserData? userData;
 
-  factory Login.fromMap(Map<String, dynamic> json) => Login(
-        state: State.fromMap(json["state"][0]),
-        userData: json["userData"] == null
-            ? null
-            : UserData.fromMap(json["userData"][0]),
-      );
+  factory Login.fromMap(Map<String, dynamic> json) {
+    print("DESERIALIZANDO OBJETO!!!");
+
+    return Login(
+      state: State.fromMap(json["state"]),
+      userData:
+          json["userData"] == null ? null : UserData.fromMap(json["userData"]),
+    );
+  }
 }
 
 class State {
