@@ -1,13 +1,14 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
-import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
 import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../../test/bar_code.dart';
+import '../../test/incrementador.dart';
 import '../provider/products_in_out_provider.dart';
 import 'Navigator/ingreso_compra.dart';
 
@@ -21,7 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int index_page = 0;
   final screens = [
-    const InicioApp(),
+    const IncrementadorPage(title: 'Flutter Demo Home Page'),
     const AlmacenGestion(),
     const ManageEmployeePage(title: "Gestion de empleados"),
     const IngresoAlmacen(),

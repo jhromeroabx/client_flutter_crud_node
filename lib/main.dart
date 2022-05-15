@@ -3,19 +3,19 @@ import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_prod
 import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
 import 'package:client_flutter_crud_node/src/pages/login_page.dart';
 import 'package:client_flutter_crud_node/src/pages/register_page.dart';
-import 'package:client_flutter_crud_node/src/pages/test/bar_code.dart';
-import 'package:client_flutter_crud_node/src/pages/test/incrementador.dart';
 import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/products_in_out_provider.dart';
+import 'package:client_flutter_crud_node/test/bar_code.dart';
+import 'package:client_flutter_crud_node/test/incrementador.dart';
+import 'package:client_flutter_crud_node/test/refresh_basic.dart';
+import 'package:client_flutter_crud_node/test/refresh_future_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import 'src/pages/home_page.dart';
-import 'src/pages/test/refresh_basic.dart';
-import 'src/pages/test/refresh_future_builder.dart';
 import 'src/utils/my_colors.dart';
 
 void main() {

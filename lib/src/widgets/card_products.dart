@@ -10,6 +10,7 @@ class ProductItems extends StatelessWidget {
   final String? precio;
   final Color? color;
   final double? ancho;
+  final double? alto;
   //
   final bool? counterShow;
   final int? counterCantidad;
@@ -22,6 +23,7 @@ class ProductItems extends StatelessWidget {
     this.cantidad,
     this.color,
     this.ancho,
+    this.alto,
     this.counterShow = false,
     this.counterCantidad = 0,
   }) : super(key: key);
@@ -36,7 +38,7 @@ class ProductItems extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
           ),
           width: ancho ?? 170,
-          height: 220,
+          height: alto ?? 220,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

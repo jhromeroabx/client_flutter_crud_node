@@ -183,6 +183,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                                   name: pro.nombre,
                                   precio: pro.precio.toString(),
                                   cantidad: pro.cantidad.toString(),
+                                  alto: 230,
                                 ),
                               ),
                           ],
