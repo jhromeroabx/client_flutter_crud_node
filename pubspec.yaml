@@ -72,8 +72,8 @@ dev_dependencies:
 #2. flutter pub get
 #3. flutter pub run flutter_native_splash:create
 flutter_native_splash:  
-  # background_image: assets/splash_screen/FONDO.png  
-  color: "#cceeff"
+  background_image: assets/splash_screen/vertical_launcher.png  
+  # color: "#cceeff"
   image: assets/splash_screen/box.png
   android_gravity: center
 

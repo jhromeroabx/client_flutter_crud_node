@@ -48,27 +48,33 @@ class _LoginPageState extends State<LoginPage> {
     var userLogin = Provider.of<EntitiesProvider>(context);
     final employeeProviderMain = Provider.of<AppStateProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SingleChildScrollView(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        physics: const BouncingScrollPhysics(),
         child: Stack(
+          alignment: AlignmentDirectional.center,
           children: [
             Positioned(
               top: -80,
               left: -100,
               child: _circularTitleLogin(),
             ),
-            Positioned(
-              child: Container(
-                margin: const EdgeInsets.only(top: 65, left: 20),
-                child: const Text(
-                  "LOGIN",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'NimbusSans'),
-                ),
+            const Positioned(
+              top: 60,
+              left: 20,
+              child: Text(
+                "LOGIN",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'NimbusSans'),
               ),
             ),
+            // Container(
+            //   color: Colors.black,
+            // child:
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -79,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                 _buttomAcceder(userLogin, employeeProviderMain),
                 _txtDontHaveAccount(),
               ],
+              // ),
             ),
           ],
         ),
@@ -109,10 +116,12 @@ class _LoginPageState extends State<LoginPage> {
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            primary: MyColors.primaryColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25))),
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          primary: MyColors.primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
         onPressed: () async {
           if (proceso_login && entitiesProvider.userAcceso == null) {
             print("LOGIN : $proceso_login");
@@ -194,24 +203,27 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          child: Text(
+          child: const Text(
             "¿No tienes cuenta?",
-            style: TextStyle(fontSize: 20, color: MyColors.primaryColor),
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.grey,
+            ),
           ),
           margin: const EdgeInsets.only(right: 15),
         ),
         GestureDetector(
           child: Container(
             decoration: BoxDecoration(
-                color: MyColors.secondaryColorOpacity,
+                color: MyColors.primaryColor,
                 borderRadius: BorderRadius.circular(10)),
             alignment: Alignment.center,
             padding: const EdgeInsets.all(10),
-            child: Text(
+            child: const Text(
               "Registrate",
               style: TextStyle(
                   fontSize: 20,
-                  color: MyColors.primaryColor,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -227,19 +239,22 @@ class _LoginPageState extends State<LoginPage> {
 
   Container _txtContrasena() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: MyColors.secondaryColorOpacity,
+        color: Colors.blueGrey[50],
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextFormField(
+        style: const TextStyle(fontSize: 20),
         controller: controlContrasenia,
         obscureText: obscureText,
         decoration: InputDecoration(
+          border: InputBorder.none,
           hintText: "Contraseña",
           hintStyle: TextStyle(
             color: MyColors.primaryColor,
+            fontSize: 15,
           ),
           prefixIcon: Icon(
             Icons.password_outlined,
@@ -259,6 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                 : const Icon(Icons.visibility_off_rounded),
           ),
         ),
+        textInputAction: TextInputAction.done,
         validator: (value) {
           return value!.isEmpty ? 'Email cannot be blank' : null;
         },
@@ -268,24 +284,28 @@ class _LoginPageState extends State<LoginPage> {
 
   Container _txtCorreo() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: MyColors.secondaryColorOpacity,
+        color: Colors.blueGrey[50],
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextFormField(
+        style: const TextStyle(fontSize: 20),
         controller: controlUser,
         decoration: InputDecoration(
+          border: InputBorder.none,
           hintText: "Correo electronico",
           hintStyle: TextStyle(
             color: MyColors.primaryColor,
+            fontSize: 15,
           ),
           prefixIcon: Icon(
             Icons.alternate_email_outlined,
             color: MyColors.primaryColor,
           ),
         ),
+        textInputAction: TextInputAction.next,
       ),
     );
   }
@@ -312,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
       width: 240,
       height: 230,
       decoration: BoxDecoration(
-        color: MyColors.primaryColor,
+        color: Colors.blue[900],
         borderRadius: BorderRadius.circular(100),
       ),
     );
@@ -323,13 +343,13 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.all(25),
       margin: const EdgeInsets.only(top: 40, right: 15),
       decoration: BoxDecoration(
-        color: MyColors.secondaryColorOpacity,
+        color: MyColors.primaryColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: const Text(
         "LOAsi",
         style: TextStyle(
-            color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
+            color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
       ),
     );
   }

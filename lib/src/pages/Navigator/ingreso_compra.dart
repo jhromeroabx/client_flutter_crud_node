@@ -208,7 +208,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
   }
 
   Widget buttonIngresoAlmacen(ProductsInOutProvider productsInOutProvider) {
-    return FloatingActionButton(
+    return ElevatedButton(
       onPressed: () {
         var res = productsInOutProvider.sendCompraSerial();
         res.then((value) {
@@ -220,7 +220,12 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           }
         });
       },
-      child: const Icon(Icons.add),
+      child: Row(
+        children: const [
+          Text("Ingresar"),
+          Icon(Icons.add),
+        ],
+      ),
     );
   }
 }

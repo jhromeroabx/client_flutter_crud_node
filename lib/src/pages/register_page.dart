@@ -62,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: SizedBox(
           width: double.infinity,
           child: Stack(
@@ -183,9 +184,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _txtDatos(String label, IconData icon, int maxLength,
       TextInputType type, TextEditingController controller) {
     return Container(
-      height: 80,
+      // height: 50,
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-      padding: const EdgeInsets.all(3),
+      // padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: MyColors.secondaryColorOpacity,
         borderRadius: BorderRadius.circular(25),
