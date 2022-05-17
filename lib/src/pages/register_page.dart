@@ -1,4 +1,6 @@
 import 'package:client_flutter_crud_node/src/dto/requestDTO/user_request_dto.dart';
+import 'package:client_flutter_crud_node/src/transitions/left_route.dart';
+import 'package:client_flutter_crud_node/src/transitions/right_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,7 @@ import '../provider/entities_provider.dart';
 import '../utils/my_colors.dart';
 import '../widgets/flush_bar.dart';
 import '../widgets/simple_date_picker.dart';
+import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -152,7 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
       children: [
         IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context, RightRoute(page: const LoginPage()));
             },
             icon: const Icon(
               Icons.arrow_back,

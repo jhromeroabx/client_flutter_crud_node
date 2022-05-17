@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 import '../../dto/responseDTO/employee.dart';
 
 class ManageEmployeePage extends StatefulWidget {
-  final String title;
-  const ManageEmployeePage({Key? key, required this.title}) : super(key: key);
+  const ManageEmployeePage({Key? key}) : super(key: key);
 
   @override
   State<ManageEmployeePage> createState() => _ManageEmployeePageState();

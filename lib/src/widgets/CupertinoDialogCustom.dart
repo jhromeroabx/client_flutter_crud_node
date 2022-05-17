@@ -12,17 +12,17 @@ class CupertinoAlertDialogCustom {
     required BuildContext context,
   }) {
     return showDialog(
-        // barrierColor: Color.fromARGB(137, 4, 40, 82),
         context: context,
         builder: (_) => CupertinoAlertDialog(
               insetAnimationCurve: Curves.bounceIn,
               title: Text(title),
               content: Text(msg),
+              insetAnimationDuration: const Duration(seconds: 1),
               actions: [
                 TextButton(
                   onPressed: onPressedPositive ??
                       () {
-                        Navigator.pushNamed(context, "login");
+                        Navigator.pushReplacementNamed(context, "login");
                       },
                   child: const Text(
                     "Aceptar",
@@ -40,3 +40,24 @@ class CupertinoAlertDialogCustom {
             ));
   }
 }
+
+// return await showDialog(
+      //       context: context,
+      //       builder: (context) => AlertDialog(
+      //         title: const Text('SALIENDO DE LOAsi'),
+      //         content: const Text('¿Quieres cerrar la App?'),
+      //         actions: [
+      //           ElevatedButton(
+      //             onPressed: () => Navigator.of(context).pop(false),
+      //             child: const Text('No'),
+      //           ),
+      //           ElevatedButton(
+      //             onPressed: () {
+      //               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      //             },
+      //             child: const Text('Si'),
+      //           ),
+      //         ],
+      //       ),
+      //     ) ??
+      //     false; //if showDialouge had returned null, then return false

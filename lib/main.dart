@@ -51,8 +51,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'incrementador': (_) => const IncrementadorPage(),
           'home': (_) => const HomePage(),
-          'manageEmployee': (_) =>
-              const ManageEmployeePage(title: 'Gestion de Empleados'),
+          'manageEmployee': (_) => const ManageEmployeePage(),
           'login': (_) => const LoginPage(),
           'barcode': (_) => const BarCodePage(),
           'edit/create': (_) => const EditOrCreateEmployeePage(),

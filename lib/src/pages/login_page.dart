@@ -1,5 +1,10 @@
+import 'package:client_flutter_crud_node/src/pages/register_page.dart';
 import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
+import 'package:client_flutter_crud_node/src/transitions/left_route.dart';
+import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -43,38 +48,41 @@ class _LoginPageState extends State<LoginPage> {
     controlContrasenia.text = contra ?? '';
   }
 
+  Future<bool> showExitPopup() async {
+    return await CupertinoAlertDialogCustom().showCupertinoAlertDialog(
+            title: 'SALIENDO DE LOAsi',
+            msg: '¿Quieres cerrar la App?',
+            context: context,
+            onPressedNegative: () {
+              Navigator.of(context).pop(false);
+            },
+            onPressedPositive: () {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            }) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var userLogin = Provider.of<EntitiesProvider>(context);
     final employeeProviderMain = Provider.of<AppStateProvider>(context);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        physics: const BouncingScrollPhysics(),
-        child: Stack(
-          alignment: AlignmentDirectional.center,
+
+    return WillPopScope(
+      onWillPop: showExitPopup,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body:
+            // SingleChildScrollView(
+            //   physics: const BouncingScrollPhysics(),
+            //   child:
+            Stack(
+          // alignment: AlignmentDirectional.center,
           children: [
             Positioned(
-              top: -80,
-              left: -100,
+              top: -5,
+              left: -90,
               child: _circularTitleLogin(),
             ),
-            const Positioned(
-              top: 60,
-              left: 20,
-              child: Text(
-                "LOGIN",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'NimbusSans'),
-              ),
-            ),
-            // Container(
-            //   color: Colors.black,
-            // child:
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -85,10 +93,33 @@ class _LoginPageState extends State<LoginPage> {
                 _buttomAcceder(userLogin, employeeProviderMain),
                 _txtDontHaveAccount(),
               ],
-              // ),
             ),
+            Visibility(
+              visible: userLogin.isLoading,
+              child: Positioned(
+                top: 1,
+                left: 1,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 1.2,
+                  width: MediaQuery.of(context).size.width * 1,
+                  color: Colors.black.withOpacity(0.6),
+                  child: Center(
+                    child: Container(
+                      // margin: EdgeInsets.all(50),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.black,
+                      ),
+                      child: const CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
+        // ),
       ),
     );
   }
@@ -103,11 +134,6 @@ class _LoginPageState extends State<LoginPage> {
         proceso_login = false; //DESACTIVAMOS EL PROCESO LOGIN
       });
     }
-    // if (entitiesProvider.userAcceso != null) {
-    //   setState(() {
-    //     proceso_login = false; //DESACTIVAMOS POR QUE TIENE USER
-    //   });
-    // }
 
     print("PROCESO: $proceso_login");
 
@@ -207,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
             "¿No tienes cuenta?",
             style: TextStyle(
               fontSize: 20,
-              color: Colors.grey,
+              color: Colors.white,
             ),
           ),
           margin: const EdgeInsets.only(right: 15),
@@ -228,9 +254,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           onTap: () {
-            // _con.goToRegisterPage();
-            // Fluttertoast.showToast(msg: "Registrando");
-            Navigator.pushNamed(context, "register");
+            Navigator.push(context, LeftRoute(page: const RegisterPage()));
           },
         ),
       ],
@@ -242,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.blueGrey[50],
+        color: MyColors.secondaryColor,
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextFormField(
@@ -287,7 +311,7 @@ class _LoginPageState extends State<LoginPage> {
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.blueGrey[50],
+        color: MyColors.secondaryColor,
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextFormField(
@@ -321,19 +345,29 @@ class _LoginPageState extends State<LoginPage> {
         width: double.infinity,
         alignment: Alignment.bottomCenter,
         repeat: true,
-        reverse: true,
-        animate: true,
+        // reverse: true,
+        // animate: true,
       ),
     );
   }
 
   Widget _circularTitleLogin() {
     return Container(
-      width: 240,
-      height: 230,
+      width: MediaQuery.of(context).size.width * 0.6,
+      height: 150,
+      padding: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
-        color: Colors.blue[900],
+        color: MyColors.primaryColor,
         borderRadius: BorderRadius.circular(100),
+      ),
+      alignment: Alignment.centerRight,
+      child: const Text(
+        "LOGIN",
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'NimbusSans'),
       ),
     );
   }

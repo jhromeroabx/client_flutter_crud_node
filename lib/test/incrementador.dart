@@ -44,6 +44,7 @@ class _IncrementadorState extends State<IncrementadorPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -66,10 +67,19 @@ class _IncrementadorState extends State<IncrementadorPage> {
           children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              // style: Theme.of(context).textTheme.headline4,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 50,
+              ),
             ),
           ],
         ),
