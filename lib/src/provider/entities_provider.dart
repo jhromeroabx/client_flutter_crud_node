@@ -14,7 +14,7 @@ class EntitiesProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   set isLoading(value) {
     _isLoading = value;
-    notifyListeners();
+    // notifyListeners();//TEST BORRAR
   } //IS LOADING
 
   EmployeeList? employeeListService;
@@ -30,13 +30,15 @@ class EntitiesProvider extends ChangeNotifier {
 
   Future<List<Object>> accessLogin(String user, String contrasenia) async {
     isLoading = true;
+    notifyListeners(); //TEST BORRAR
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     userAcceso = await UserService().login(user, contrasenia);
 
     if (userAcceso != null) {
       isLoading = false;
+      notifyListeners(); //TEST BORRAR
       if (userAcceso!.userData != null) {
         return [1, "Ingresando al Sistema"];
       } else {
@@ -44,6 +46,7 @@ class EntitiesProvider extends ChangeNotifier {
       }
     } else {
       isLoading = false;
+      notifyListeners(); //TEST BORRAR
       return [3, "Error del servidor!!!"];
     }
   }
@@ -91,7 +94,7 @@ class EntitiesProvider extends ChangeNotifier {
   }
 
   Future getEmployeeById(int id) async {
-    _isLoading = true;
+    isLoading = true;
 
     employeeService = await EmployeeService().getUsersById(id);
 

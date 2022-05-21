@@ -1,4 +1,4 @@
-package com.example.client_flutter_crud_node
+package com.loasi.store
 
 import io.flutter.embedding.android.FlutterActivity
 

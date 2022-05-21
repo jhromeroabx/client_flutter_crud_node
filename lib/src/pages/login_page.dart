@@ -71,55 +71,53 @@ class _LoginPageState extends State<LoginPage> {
       onWillPop: showExitPopup,
       child: Scaffold(
         backgroundColor: Colors.black,
-        body:
-            // SingleChildScrollView(
-            //   physics: const BouncingScrollPhysics(),
-            //   child:
-            Stack(
-          // alignment: AlignmentDirectional.center,
-          children: [
-            Positioned(
-              top: -5,
-              left: -90,
-              child: _circularTitleLogin(),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _tagLoaSi(),
-                _lottieDeliverMan(),
-                _txtCorreo(),
-                _txtContrasena(),
-                _buttomAcceder(userLogin, employeeProviderMain),
-                _txtDontHaveAccount(),
-              ],
-            ),
-            Visibility(
-              visible: userLogin.isLoading,
-              child: Positioned(
-                top: 1,
-                left: 1,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 1.2,
-                  width: MediaQuery.of(context).size.width * 1,
-                  color: Colors.black.withOpacity(0.6),
-                  child: Center(
-                    child: Container(
-                      // margin: EdgeInsets.all(50),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.black,
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                top: -5,
+                left: -90,
+                child: _circularTitleLogin(),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _tagLoaSi(),
+                  _lottieDeliverMan(),
+                  _txtCorreo(),
+                  _txtContrasena(),
+                  _buttomAcceder(userLogin, employeeProviderMain),
+                  _txtDontHaveAccount(),
+                ],
+              ),
+              Visibility(
+                visible: userLogin.isLoading,
+                child: Positioned(
+                  top: 1,
+                  left: 1,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 1.2,
+                    width: MediaQuery.of(context).size.width * 1,
+                    color: Colors.blue.withOpacity(0.4),
+                    child: Center(
+                      child: Container(
+                        // margin: EdgeInsets.all(50),
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.black,
+                        ),
+                        child: const CircularProgressIndicator(),
                       ),
-                      child: const CircularProgressIndicator(),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-        // ),
       ),
     );
   }
