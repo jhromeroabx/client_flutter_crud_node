@@ -29,6 +29,7 @@ class Product {
   int? idCategoria;
   bool? active;
   String? barcode;
+  int? stock_min;
   String? imagen_url;
   String? categoria;
 
@@ -41,6 +42,7 @@ class Product {
     this.idCategoria,
     this.active,
     this.barcode,
+    this.stock_min,
     this.imagen_url,
     this.categoria,
   });
@@ -54,6 +56,7 @@ class Product {
         idCategoria: json["id_categoria"],
         active: json["active"] == 0 ? false : true,
         barcode: json["barcode"],
+        stock_min: json["stock_min"],
         imagen_url: json["imagen_url"],
         categoria: json["categoria"],
       );
@@ -67,6 +70,7 @@ class Product {
         "id_categoria": idCategoria,
         "active": active,
         "barcode": barcode,
+        "stock_min": stock_min,
         "imagen_url": imagen_url,
         "categoria": categoria,
       };

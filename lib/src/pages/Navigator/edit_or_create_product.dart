@@ -29,6 +29,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
   TextEditingController controlComentario = TextEditingController();
   TextEditingController controlCantidad = TextEditingController();
   TextEditingController controlPrecio = TextEditingController();
+  TextEditingController controlStrockMin = TextEditingController();
   // r'(?=.*?\d)^(([1-9]\d{0,2}(\' + this.thousandsSeparator + '\\d{3})*)|\\d+)?(\\' + this.decimalSeparator + '\\d{2})?\$'
   // CATEGORIA
   // ACTIVE
@@ -477,6 +478,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
       nombre: controlNombreProductText,
       comentario: controlComentarioText,
       barcode: barCode.text.trim(),
+      stock_min: int.parse(controlStrockMin.text),
       imagen_url: imagen_url.text.trim(),
       idCategoria: idCategoria,
       active: _value,
