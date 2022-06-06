@@ -178,12 +178,10 @@ class EntitiesProvider extends ChangeNotifier {
     }
   }
 
-  Future<Product?> getProductByIdOrBarCode(
+  Future<FindProduct?> getProductByIdOrBarCode(
       {String? id, String? barcode}) async {
-    Product? _productSelected =
-        await ProductService().findProductBy(id, barcode);
-
-    return _productSelected;
+    FindProduct? rpta = await ProductService().findProductBy(id, barcode);
+    return rpta;
   }
 
   Future<List<Object>> productAddOrEdit(Product product) async {

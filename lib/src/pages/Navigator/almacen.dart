@@ -2,6 +2,7 @@ import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_prod
 import 'package:client_flutter_crud_node/src/widgets/flush_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../dto/responseDTO/product.dart';
@@ -52,8 +53,21 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
     for (var item in lista) {
       items.add(DropdownMenuItem(
         value: item.id,
-        child: Text(item.nombre!),
-        onTap: () {},
+        child: Container(
+          alignment: Alignment.center,
+          constraints: const BoxConstraints(
+            minHeight: 48,
+            minWidth: 170,
+          ),
+          color: Colors.blue,
+          child: Text(
+            item.nombre!,
+            style: const TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ),
+        // onTap: () {},
       ));
     }
     return items;
@@ -70,6 +84,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
     products = entitiesProvider.lista_products!;
 
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Column(
         children: [
           Flexible(
@@ -87,6 +102,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                 // padding: const EdgeInsets.all(25),
                 height: double.infinity,
                 child: ListView(
+                  physics: const BouncingScrollPhysics(),
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
@@ -103,12 +119,13 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                             builder: (context, appStateProvider, child) {
                               if (appStateProvider.categorias == null) {
                                 return Container(
+                                  width: 100,
                                   color: Colors.amber[200],
                                   child: const Text("Categorias Nulas"),
                                 );
                               } else {
-                                dropDownMenuItems = getMenuItems(
-                                    appStateProvider.categorias!.categorias!);
+                                dropDownMenuItems =
+                                    getMenuItems(appStateProvider.categorias!);
 
                                 // if (entitiesProvider.productSelected != null) {
                                 //   //edit
@@ -135,7 +152,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                         ],
                       ),
                     ),
-                    if (products.length == 0)
+                    if (products.isEmpty)
                       Center(
                         child: ProductItems(
                           color: Colors.red[100],
@@ -157,26 +174,38 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                             for (var pro in products)
                               GestureDetector(
                                 onTap: () {
+                                  Fluttertoast.showToast(
+                                      msg: "Cargando",
+                                      gravity: ToastGravity.CENTER_RIGHT,
+                                      backgroundColor: Colors.indigo,
+                                      toastLength: Toast.LENGTH_SHORT);
                                   var rpta =
                                       entitiesProvider.getProductByIdOrBarCode(
                                           id: "${pro.id}", barcode: "");
-                                  rpta.then((value) async {
-                                    if (value != null) {
-                                      Navigator.push(
+                                  rpta.then(
+                                    (value) async {
+                                      if (value == null) {
+                                        FlushBar().snackBarV2(
+                                            "No cargo el objeto",
+                                            Colors.red,
+                                            context);
+                                      } else if (!value.status!) {
+                                        //false
+                                        FlushBar().snackBarV2(value.response!,
+                                            Colors.red, context);
+                                      } else if (value.status!) {
+                                        //true
+                                        Navigator.push(
                                           context,
                                           RightRoute(
-                                              page: EditOrCreateProduct(
-                                            product: value,
-                                          )));
-                                      // Navigator.pushNamed(
-                                      //     context, "edit/create_product");
-                                    } else {
-                                      FlushBar().snackBarV2(
-                                          "No cargo el objeto",
-                                          Colors.red,
-                                          context);
-                                    }
-                                  });
+                                            page: EditOrCreateProduct(
+                                              product: value.product,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  );
                                 },
                                 child: ProductItems(
                                   imageURL: pro.imagen_url,
@@ -239,12 +268,19 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
         // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: MyColors.primaryColor, width: 4)),
+            border: Border.all(
+              color: MyColors.primaryColor,
+              width: 4,
+            )),
         child: Column(
           children: [
-            const Text("Categoria"),
+            const Text(
+              "Categoria",
+              style: TextStyle(color: Colors.white),
+            ),
             DropdownButtonHideUnderline(
               child: DropdownButton(
+                  style: const TextStyle(color: Colors.white),
                   iconSize: 50,
                   // isExpanded: true,
                   value: idCategoria,
@@ -255,22 +291,38 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
         ),
       );
     } else {
-      return Container(color: Colors.blue, child: const Text("NO TYPE"));
+      return Container(
+        width: 100,
+        color: Colors.amber[200],
+        child: const Text(
+          "Categorias desactivadas!",
+          textAlign: TextAlign.center,
+        ),
+      );
     }
   }
 
   Widget _switchProduct(EntitiesProvider entitiesProvider) {
     return Column(
       children: [
-        const Text("Ver Activos:"),
-        CupertinoSwitch(
-          value: _value,
-          onChanged: (newValue) {
-            setState(() {
-              _value = newValue;
-              _getAllProducts(entitiesProvider, "", _value == true ? 1 : 0);
-            });
-          },
+        const Text(
+          "Ver Activos:",
+          style: TextStyle(color: Colors.white),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: _value == true ? Colors.green : Colors.grey,
+          ),
+          child: CupertinoSwitch(
+            value: _value,
+            onChanged: (newValue) {
+              setState(() {
+                _value = newValue;
+                _getAllProducts(entitiesProvider, "", _value == true ? 1 : 0);
+              });
+            },
+          ),
         ),
       ],
     );

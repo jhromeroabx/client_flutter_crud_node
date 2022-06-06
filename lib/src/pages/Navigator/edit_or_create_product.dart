@@ -28,8 +28,8 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
   TextEditingController controlNombreProduct = TextEditingController();
   TextEditingController controlComentario = TextEditingController();
   TextEditingController controlCantidad = TextEditingController();
+  TextEditingController controlStockMin = TextEditingController();
   TextEditingController controlPrecio = TextEditingController();
-  TextEditingController controlStrockMin = TextEditingController();
   // r'(?=.*?\d)^(([1-9]\d{0,2}(\' + this.thousandsSeparator + '\\d{3})*)|\\d+)?(\\' + this.decimalSeparator + '\\d{2})?\$'
   // CATEGORIA
   // ACTIVE
@@ -68,6 +68,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
       controlNombreProduct.text = product!.nombre!;
       controlComentario.text = product!.comentario!;
       controlCantidad.text = product!.cantidad!.toString();
+      controlStockMin.text = product!.stock_min!.toString();
       controlPrecio.text = product!.precio!.toString();
       barCode.text = product!.barcode!;
       imagen_url.text = product!.imagen_url!;
@@ -181,6 +182,15 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                     read: true,
                   ),
                   _txtDatosQuantityOrPrice(
+                    'Stock Min',
+                    Icons.format_list_numbered_rounded,
+                    9,
+                    TextInputType.number,
+                    controlStockMin,
+                    onlyNumbers: true,
+                    read: false,
+                  ),
+                  _txtDatosQuantityOrPrice(
                     'Precio',
                     Icons.monetization_on,
                     10,
@@ -193,12 +203,13 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                       builder: (context, appStateProvider, child) {
                     if (appStateProvider.categorias == null) {
                       return Container(
+                        width: 100,
                         color: Colors.amber[200],
                         child: const Text("Categorias Nulas"),
                       );
                     } else {
-                      dropDownMenuItems = getMenuItems(
-                          appStateProvider.categorias!.categorias!);
+                      dropDownMenuItems =
+                          getMenuItems(appStateProvider.categorias!);
 
                       if (product != null) {
                         //edit
@@ -447,7 +458,14 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
         ),
       );
     } else {
-      return Container(color: Colors.blue, child: const Text("NO TYPE"));
+      return Container(
+        width: 100,
+        color: Colors.amber[200],
+        child: const Text(
+          "Categorias desactivadas!",
+          textAlign: TextAlign.center,
+        ),
+      );
     }
   }
 
@@ -478,7 +496,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
       nombre: controlNombreProductText,
       comentario: controlComentarioText,
       barcode: barCode.text.trim(),
-      stock_min: int.parse(controlStrockMin.text),
+      stock_min: int.parse(controlStockMin.text),
       imagen_url: imagen_url.text.trim(),
       idCategoria: idCategoria,
       active: _value,

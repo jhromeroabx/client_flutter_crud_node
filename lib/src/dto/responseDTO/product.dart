@@ -15,8 +15,36 @@ class Products {
     }
 
     return Products(
-      products: products_temp.isNotEmpty ? products_temp : [],
+      products: products_temp,
     );
+  }
+}
+
+class FindProduct {
+  bool? status;
+  String? response;
+  Product? product;
+
+  FindProduct({
+    this.status,
+    this.response,
+    this.product,
+  });
+
+  factory FindProduct.fromJson(Map<String, dynamic> json) {
+    if (json["status"]) {
+      return FindProduct(
+        status: json["status"],
+        response: null,
+        product: Product.fromJson(json["response"]),
+      );
+    } else {
+      return FindProduct(
+        status: json["status"],
+        response: json["response"],
+        product: null,
+      );
+    }
   }
 }
 
@@ -47,19 +75,21 @@ class Product {
     this.categoria,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        nombre: json["nombre"],
-        comentario: json["comentario"],
-        cantidad: json["cantidad"],
-        precio: json["precio"].toDouble(),
-        idCategoria: json["id_categoria"],
-        active: json["active"] == 0 ? false : true,
-        barcode: json["barcode"],
-        stock_min: json["stock_min"],
-        imagen_url: json["imagen_url"],
-        categoria: json["categoria"],
-      );
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json["id"],
+      nombre: json["nombre"],
+      comentario: json["comentario"],
+      cantidad: json["cantidad"],
+      precio: json["precio"].toDouble(),
+      idCategoria: json["id_categoria"],
+      active: json["active"] == 0 ? false : true,
+      barcode: json["barcode"],
+      stock_min: json["stock_min"],
+      imagen_url: json["imagen_url"],
+      categoria: json["categoria"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id ?? 0,
@@ -91,7 +121,7 @@ class Categorias {
     }
 
     return Categorias(
-      categorias: categorias_temp.isNotEmpty ? categorias_temp : null,
+      categorias: categorias_temp,
     );
   }
 }

@@ -43,7 +43,7 @@ class ProductService {
     }
   }
 
-  Future<Product?> findProductBy(String? id, String? barcode) async {
+  Future<FindProduct?> findProductBy(String? id, String? barcode) async {
     try {
       var headers = {
         'accept': 'text/plain',
@@ -62,7 +62,7 @@ class ProductService {
 
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        return Product.fromJson(jsonDecode(response.body));
+        return FindProduct.fromJson(jsonDecode(response.body));
       }
     } catch (e) {
       print("ERROR $_routePath_findProductBy: $e");
@@ -70,7 +70,7 @@ class ProductService {
     }
   }
 
-  Future<Categorias?> getAllCategory() async {
+  Future<List<Categoria>?> getAllCategory() async {
     try {
       var headers = {
         'accept': 'text/plain',
@@ -83,7 +83,7 @@ class ProductService {
       );
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        return Categorias.fromMap(response.body);
+        return Categorias.fromMap(response.body).categorias;
       }
     } catch (e) {
       print("ERROR $_routePath_getAllCategory: $e");

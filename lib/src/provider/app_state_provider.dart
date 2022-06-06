@@ -17,7 +17,7 @@ class AppStateProvider extends ChangeNotifier {
   AppStateProvider();
 
   EmployeeTypeList? employeeTypeListService;
-  Categorias? categorias;
+  List<Categoria>? categorias;
 
   Future getAllEmployeeTypes() async {
     _isLoading = true;

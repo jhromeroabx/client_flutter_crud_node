@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
+//import '../../dto/requestDTO/product_selected.dart';
 import '../../dto/requestDTO/product_selected.dart';
 import '../../provider/entities_provider.dart';
 import '../../provider/products_in_out_provider.dart';
@@ -28,6 +29,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           Container(
@@ -91,28 +93,28 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             ),
           ),
           Positioned(
-            left: MediaQuery.of(context).size.width * 0.05,
-            top: 10,
+            right: MediaQuery.of(context).size.width * 0.1,
+            bottom: 14,
             child: Container(
-              height: 120,
-              width: MediaQuery.of(context).size.width * 0.6,
+              height: 55,
+              width: MediaQuery.of(context).size.width * 0.7,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.blue.withOpacity(0.3),
+                color: Colors.blue[900],
               ),
-              child: Center(
-                child: Text(
-                  "${productSelectedProvider.bucketProductSelected.length}" +
-                      "\n Productos Seleccionados",
-                  style: const TextStyle(fontSize: 30),
-                  textAlign: TextAlign.center,
-                ),
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                "${productSelectedProvider.bucketProductSelected.length}" +
+                    " Productos Seleccionados",
+                style: const TextStyle(fontSize: 17, color: Colors.white),
+                textAlign: TextAlign.left,
               ),
             ),
           ),
           Positioned(
-            right: 15,
-            top: 80,
+            right: 12,
+            bottom: 15,
             child: buttonIngresoAlmacen(productSelectedProvider),
           ),
           Positioned(
@@ -166,11 +168,11 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             rpta.then((value) async {
               if (value != null) {
                 //agregar producto en el MAP
-
+                var producto = value.product;
                 ProductSelected productSelected = ProductSelected(
-                  id: value.id,
-                  imagenUrl: value.imagen_url,
-                  nombre: value.nombre,
+                  id: producto!.id,
+                  imagenUrl: producto.imagen_url,
+                  nombre: producto.nombre,
                   cantidadSelected: 0,
                   precioCompra: 0,
                 );
@@ -208,23 +210,31 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
   }
 
   Widget buttonIngresoAlmacen(ProductsInOutProvider productsInOutProvider) {
-    return ElevatedButton(
-      onPressed: () {
-        var res = productsInOutProvider.sendCompraSerial();
-        res.then((value) {
-          if (value[0] == 1) {
-            Fluttertoast.showToast(msg: "${value[1]}");
-          } else {
-            Fluttertoast.showToast(
-                msg: "${value[1]}", backgroundColor: Colors.red);
-          }
-        });
-      },
-      child: Row(
-        children: const [
-          Text("Ingresar"),
-          Icon(Icons.add),
-        ],
+    return Tooltip(
+      message: "INGRESAR PRODUCTOS!!!",
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shadowColor: Colors.blue[900],
+          elevation: 13,
+          primary: Colors.blue,
+          shape: const CircleBorder(),
+          padding: const EdgeInsets.all(4),
+        ),
+        onPressed: () {
+          var res = productsInOutProvider.sendCompraSerial();
+          res.then((value) {
+            if (value[0] == 1) {
+              Fluttertoast.showToast(msg: "${value[1]}");
+            } else {
+              Fluttertoast.showToast(
+                  msg: "${value[1]}", backgroundColor: Colors.red);
+            }
+          });
+        },
+        child: const Icon(
+          Icons.add,
+          size: 45,
+        ),
       ),
     );
   }
