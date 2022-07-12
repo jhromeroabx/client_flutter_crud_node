@@ -1,9 +1,11 @@
 import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:client_flutter_crud_node/src/transitions/right_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../dto/responseDTO/user_data_dto.dart';
 import '../provider/user_provider.dart';
 import '../utils/my_colors.dart';
 import '../widgets/flush_bar.dart';
@@ -39,6 +41,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController controlContrasena = TextEditingController();
   TextEditingController controlContrasenaRepeat = TextEditingController();
 
+  UserData? userData;
+
   void _initDateTimes() {
     final dateNow = DateTime.now();
     _currentTime = DateTime(dateNow.year, dateNow.month, dateNow.day);
@@ -61,6 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     var entitiesProvider = Provider.of<UserProvider>(context);
     var appStateProvider = Provider.of<AppStateProvider>(context);
+    var employeeProvider = Provider.of<EmployeeProvider>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -108,7 +113,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     _fecha(),
                     _txtDatosPassword('Contraseña', Icons.password, 15,
                         TextInputType.visiblePassword, controlContrasena),
-                    _buttomRegistrar(entitiesProvider, appStateProvider)
+                    _buttomRegistrar(
+                        entitiesProvider, appStateProvider, employeeProvider)
                   ],
                 ),
               )
@@ -180,9 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _txtDatos(String label, IconData icon, int maxLength,
       TextInputType type, TextEditingController controller) {
     return Container(
-      // height: 50,
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-      // padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: MyColors.secondaryColorOpacity,
         borderRadius: BorderRadius.circular(25),
@@ -225,7 +229,6 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: type,
         decoration: InputDecoration(
           border: InputBorder.none,
-          // hintText: hintText,
           hintStyle: TextStyle(
             color: MyColors.primaryColor,
           ),
@@ -236,9 +239,9 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           suffixIcon: IconButton(
             onPressed: () {
-              setState(() {
-                obscureText = !obscureText;
-              });
+              setState(
+                () => obscureText = !obscureText,
+              );
             },
             icon: obscureText
                 ? Icon(
@@ -252,8 +255,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buttomRegistrar(
-      UserProvider userProvider, AppStateProvider appStateProvider) {
+  Widget _buttomRegistrar(UserProvider userProvider,
+      AppStateProvider appStateProvider, EmployeeProvider employeeProvider) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -279,7 +282,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   FlushBar()
                       .snackBarV2(value[1].toString(), Colors.green, context);
                   //AUTO LOGIN
-                  entitiesProvider.getAllEmployee();
+                  employeeProvider.getAllEmployee();
                   appStateProvider.getAllEmployeeTypes();
                   await Future.delayed(const Duration(seconds: 2));
                   Navigator.pushNamed(context, "home");
@@ -314,7 +317,6 @@ class _RegisterPageState extends State<RegisterPage> {
     String controlTelefonoText = controlTelefono.text.trim();
     String controlEmailText = controlEmail.text.trim();
     String controlContrasenaText = controlContrasena.text.trim();
-    // String controlContrasenaRepeatText = controlContrasenaRepeat.text.trim();
 
     if (controlNombreText.isEmpty) {
       return false;
@@ -334,20 +336,15 @@ class _RegisterPageState extends State<RegisterPage> {
     if (controlContrasenaText.isEmpty) {
       return false;
     }
-    // if (controlContrasenaRepeatText.isEmpty) {
-    //   return false;
-    // }
-
-    userReqAddEditBody = User(
+    userData = UserData(
         id: 0,
         nombre: controlNombreText,
         apellido: controlApellidoText,
         dni: controlDNIText,
         telefono: controlTelefonoText,
         email: controlEmailText,
-        fechaNacimiento: _startTextDate,
+        fechaNacimiento: DateTime.parse(_startTextDate),
         contrasenia: controlContrasenaText);
-
     return true;
   }
 }

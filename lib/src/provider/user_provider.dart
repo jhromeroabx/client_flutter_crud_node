@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../apis/user_service.dart';
 import '../dto/responseDTO/UiResponse.dart';
 import '../dto/responseDTO/login.dart';
+import '../dto/responseDTO/user_data_dto.dart';
 
 class UserProvider extends ChangeNotifier {
   bool _isLoading = false;

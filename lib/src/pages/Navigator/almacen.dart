@@ -1,4 +1,5 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_product.dart';
+import 'package:client_flutter_crud_node/src/provider/product_provider.dart';
 import 'package:client_flutter_crud_node/src/widgets/flush_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,22 +29,21 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
   int idCategoria = 0;
 
   bool _value = true;
-  EntitiesProvider? entitiesProviderField;
+  late ProductProvider productProvider;
 
-  void _getAllProducts(
-      EntitiesProvider entitiesProvider, String idCategoria, int active) async {
-    await entitiesProvider.getAllProducts(idCategoria, active);
+  Future<void> _getAllProducts(String idCategoria, int active) async {
+    await productProvider.getAllProducts(idCategoria, active);
 
-    if (entitiesProvider.lista_products == null ||
-        entitiesProvider.lista_products!.isEmpty) {
+    if (productProvider.lista_products == null ||
+        productProvider.lista_products!.isEmpty) {
       setState(() {
         itemsCount = 0;
         products = [];
       });
     } else {
       setState(() {
-        itemsCount = entitiesProvider.lista_products!.length;
-        products = entitiesProvider.lista_products!;
+        itemsCount = productProvider.lista_products!.length;
+        products = productProvider.lista_products!;
       });
     }
   }
@@ -75,13 +75,13 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
 
   @override
   Widget build(BuildContext context) {
-    var entitiesProvider = Provider.of<EntitiesProvider>(context);
-    entitiesProviderField = Provider.of<EntitiesProvider>(context);
+    productProvider = Provider.of<ProductProvider>(context);
+    // entitiesProviderField = Provider.of<EntitiesProvider>(context);
 
 //TIPICO ERROR DE REFRESCAR CADA RATO, SATURA APP
     // _getAllProducts(entitiesProvider);
-    itemsCount = entitiesProvider.lista_products!.length;
-    products = entitiesProvider.lista_products!;
+    itemsCount = productProvider.lista_products!.length;
+    products = productProvider.lista_products!;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -90,7 +90,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
           Flexible(
             child: RefreshIndicator(
               onRefresh: () async {
-                _getAllProducts(entitiesProvider, "", _value == true ? 1 : 0);
+                await _getAllProducts("", _value == true ? 1 : 0);
               },
               child: Container(
                 margin: const EdgeInsets.only(
@@ -143,12 +143,11 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                                     idCategoria == 0 ? 1 : idCategoria;
 
                                 print("COMBO: $idCategoria");
-                                return comboBox(
-                                    dropDownMenuItems, entitiesProvider);
+                                return comboBox(dropDownMenuItems);
                               }
                             },
                           ),
-                          _switchProduct(entitiesProvider)
+                          _switchProduct()
                         ],
                       ),
                     ),
@@ -180,7 +179,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                                       backgroundColor: Colors.indigo,
                                       toastLength: Toast.LENGTH_SHORT);
                                   var rpta =
-                                      entitiesProvider.getProductByIdOrBarCode(
+                                      productProvider.getProductByIdOrBarCode(
                                           id: "${pro.id}", barcode: "");
                                   rpta.then(
                                     (value) async {
@@ -247,19 +246,17 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
   }
 
   void changedDropDownItem(dynamic value) {
-    setState(() {
+    setState(() async {
       idCategoria = value;
 
       itemsCount = 0;
       products = [];
 
-      _getAllProducts(
-          entitiesProviderField!, "$idCategoria", _value == true ? 1 : 0);
+      await _getAllProducts("$idCategoria", _value == true ? 1 : 0);
     });
   }
 
-  Container comboBox(
-      List<DropdownMenuItem> items, EntitiesProvider entitiesProvider) {
+  Container comboBox(List<DropdownMenuItem> items) {
     if (items.isNotEmpty) {
       return Container(
         height: 80,
@@ -302,7 +299,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
     }
   }
 
-  Widget _switchProduct(EntitiesProvider entitiesProvider) {
+  Widget _switchProduct() {
     return Column(
       children: [
         const Text(
@@ -317,9 +314,9 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
           child: CupertinoSwitch(
             value: _value,
             onChanged: (newValue) {
-              setState(() {
+              setState(() async {
                 _value = newValue;
-                _getAllProducts(entitiesProvider, "", _value == true ? 1 : 0);
+                await _getAllProducts("", _value == true ? 1 : 0);
               });
             },
           ),

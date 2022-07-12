@@ -16,6 +16,7 @@ class _EditOrCreateEmployeePageState extends State<EditOrCreateEmployeePage> {
   late TextEditingController controlSalary;
   late TextEditingController controlIdTypeEmployee;
   late Employee _employee;
+  late EmployeeProvider employeeProvider;
 
   @override
   void initState() {
@@ -27,15 +28,15 @@ class _EditOrCreateEmployeePageState extends State<EditOrCreateEmployeePage> {
 
   @override
   Widget build(BuildContext context) {
-    final entitiesProvider = Provider.of<EntitiesProvider>(context);
+    employeeProvider = Provider.of<EmployeeProvider>(context);
 
-    controlName.text = entitiesProvider.employeeService?.name ?? '';
+    controlName.text = employeeProvider.employeeService?.name ?? '';
     controlSalary.text =
-        entitiesProvider.employeeService?.salary.toString() ?? '';
+        employeeProvider.employeeService?.salary.toString() ?? '';
     controlIdTypeEmployee.text =
-        entitiesProvider.employeeService?.id_employee_type.toString() ?? '0';
+        employeeProvider.employeeService?.id_employee_type.toString() ?? '0';
 
-    String _titlePage = entitiesProvider.employeeService != null
+    String _titlePage = employeeProvider.employeeService != null
         ? "Edicion del Empleado: ${controlName.text}"
         : "Creacion de un nuevo Empleado";
 
@@ -61,9 +62,9 @@ class _EditOrCreateEmployeePageState extends State<EditOrCreateEmployeePage> {
         ),
         ElevatedButton(
             onPressed: () {
-              if (entitiesProvider.employeeService != null) {
+              if (employeeProvider.employeeService != null) {
                 _employee = Employee(
-                  id: entitiesProvider.employeeService!.id,
+                  id: employeeProvider.employeeService!.id,
                   name: controlName.text,
                   salary: controlSalary.text,
                   id_employee_type: controlIdTypeEmployee.text,
@@ -77,7 +78,7 @@ class _EditOrCreateEmployeePageState extends State<EditOrCreateEmployeePage> {
                 );
               }
 
-              entitiesProvider.addEmployeeOrEdit(_employee);
+              employeeProvider.addEmployeeOrEdit(_employee);
               Navigator.pop(context);
             },
             child: const Text("Guardar cambios"))

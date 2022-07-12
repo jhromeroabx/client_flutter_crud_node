@@ -2,6 +2,7 @@ import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
 import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
-    var entitiesProvider = Provider.of<EntitiesProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
 
     Future<bool> showExitPopup() async {
       return await CupertinoAlertDialogCustom().showCupertinoAlertDialog(
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               },
               onPressedPositive: () {
                 productSelectedProvider.cleanShoppingCart();
-                entitiesProvider.userAccesoSet = null;
+                userProvider.userAcceso = null;
                 Navigator.pushReplacementNamed(context, "login");
               }) ??
           false;
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                       msg: "¿Estas seguro de Cerrar Sesion?",
                       onPressedPositive: () {
                         productSelectedProvider.cleanShoppingCart();
-                        entitiesProvider.userAccesoSet = null;
+                        userProvider.userAcceso = null;
                         Navigator.pushNamed(context, "login");
                       },
                       onPressedNegative: () {

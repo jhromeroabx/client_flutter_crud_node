@@ -1,3 +1,4 @@
+import 'package:client_flutter_crud_node/src/provider/product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +53,8 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
   late String _registerOrUpdate = "REGISTRAR";
   late String _labelAppBar = "Nuevo Produco";
 
+  late ProductProvider productProvider;
+
   @override
   void initState() {
     super.initState();
@@ -100,7 +103,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
 
   @override
   Widget build(BuildContext context) {
-    var entitiesProvider = Provider.of<EntitiesProvider>(context);
+    productProvider = Provider.of<ProductProvider>(context);
 
     // loadProductData(entitiesProvider);
 
@@ -224,7 +227,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                       return comboBox(dropDownMenuItems);
                     }
                   }),
-                  _switchProduct(entitiesProvider),
+                  _switchProduct(),
                   TextDataBasic(
                     size: 100,
                     label: 'Codigo de barras',
@@ -259,7 +262,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                       imagen_url.clear();
                     },
                   ),
-                  _buttomRegistrarOrUpdate(entitiesProvider),
+                  _buttomRegistrarOrUpdate(),
                 ],
               ),
             )
@@ -269,7 +272,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
     );
   }
 
-  Widget _buttomRegistrarOrUpdate(EntitiesProvider entitiesProvider) {
+  Widget _buttomRegistrarOrUpdate() {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -281,7 +284,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () async {
           if (validarCamposVacios()) {
-            var rpta = entitiesProvider.productAddOrEdit(productoCreateOrEdit!);
+            var rpta = productProvider.productAddOrEdit(productoCreateOrEdit!);
 
             final FocusScopeNode focus = FocusScope.of(context);
             if (!focus.hasPrimaryFocus && focus.hasFocus) {
@@ -295,7 +298,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                   FlushBar()
                       .snackBarV2(value[1].toString(), Colors.green, context);
                   //REGRESO A LA PAG ANTERIOR
-                  entitiesProvider.getAllProducts("", 1);
+                  productProvider.getAllProducts("", 1);
                   await Future.delayed(const Duration(seconds: 1));
                   Navigator.pushNamed(context, "home");
                   break;
@@ -322,7 +325,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
     );
   }
 
-  Widget _switchProduct(EntitiesProvider entitiesProvider) {
+  Widget _switchProduct() {
     if (product == null) {
       _value = _value ?? true;
     } else {

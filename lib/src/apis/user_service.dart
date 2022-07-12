@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import '../dto/responseDTO/login.dart';
 import '../dto/responseDTO/UiResponse.dart';
+import '../dto/responseDTO/user_data_dto.dart';
 import 'config_host.dart';
 
 class UserService {

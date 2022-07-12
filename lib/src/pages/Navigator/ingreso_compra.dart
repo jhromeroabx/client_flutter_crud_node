@@ -1,3 +1,4 @@
+import 'package:client_flutter_crud_node/src/provider/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -6,7 +7,6 @@ import 'package:qrscan/qrscan.dart' as scanner;
 
 //import '../../dto/requestDTO/product_selected.dart';
 import '../../dto/requestDTO/product_selected.dart';
-import '../../provider/employee_provider.dart';
 import '../../provider/products_in_out_provider.dart';
 import '../../widgets/card_modal_product.dart';
 import '../../widgets/card_products.dart';
@@ -21,11 +21,13 @@ class IngresoAlmacen extends StatefulWidget {
 
 class _IngresoAlmacenState extends State<IngresoAlmacen> {
   ProductSelected? productSelectedTempSet;
+  late ProductProvider productProvider;
+  late ProductsInOutProvider productSelectedProvider;
 
   @override
   Widget build(BuildContext context) {
-    var entitiesProvider = Provider.of<EntitiesProvider>(context);
-    var productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
+    productProvider = Provider.of<ProductProvider>(context);
+    productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -120,7 +122,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           Positioned(
             right: 15,
             bottom: 80,
-            child: buttomCamera(entitiesProvider, productSelectedProvider),
+            child: buttomCamera(),
           ),
           // Positioned(
           //   right: 10,
@@ -142,8 +144,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
     );
   }
 
-  Widget buttomCamera(EntitiesProvider entitiesProvider,
-      ProductsInOutProvider productSelectedProvider) {
+  Widget buttomCamera() {
     return FloatingActionButton(
       isExtended: true,
       onPressed: () async {
@@ -163,7 +164,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
           } else {
             // barcode;
 
-            var rpta = entitiesProvider.getProductByIdOrBarCode(
+            var rpta = productProvider.getProductByIdOrBarCode(
                 id: "", barcode: barcode);
             rpta.then((value) async {
               if (value != null) {
