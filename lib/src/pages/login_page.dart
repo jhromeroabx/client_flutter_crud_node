@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
           employeeProvider.getAllEmployee();
           productProvider.getAllProducts("", 1);
           appStateProvider.getAllEmployeeTypes();
-          appStateProvider.getAllCategories();
+          appStateProvider.getAllCategories(userProvider.userAcceso!.id!);
           await Future.delayed(const Duration(milliseconds: 2000));
           Navigator.pushNamed(context, "home");
           break;
@@ -125,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
     userProvider = Provider.of<UserProvider>(context);
     appStateProvider = Provider.of<AppStateProvider>(context);
     employeeProvider = Provider.of<EmployeeProvider>(context);
+    productProvider = Provider.of<ProductProvider>(context);
 
     return WillPopScope(
       onWillPop: showExitPopup,

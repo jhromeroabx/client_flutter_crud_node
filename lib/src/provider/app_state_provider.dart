@@ -33,10 +33,10 @@ class AppStateProvider extends ChangeNotifier {
     }
   }
 
-  Future getAllCategories() async {
+  Future getAllCategories(int id) async {
     _isLoading = true;
 
-    categorias = await ProductService().getAllCategory();
+    categorias = await ProductService().getAllCategories(id);
 
     if (categorias != null) {
       isLoading = false;

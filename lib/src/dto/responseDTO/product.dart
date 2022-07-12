@@ -112,7 +112,7 @@ class Categorias {
   Categorias({this.categorias});
 
   factory Categorias.fromMap(jsonArray) {
-    final List<dynamic> dataList = jsonDecode(jsonArray);
+    final List<dynamic> dataList = jsonArray["content"];
 
     final categorias_temp = <Categoria>[];
 

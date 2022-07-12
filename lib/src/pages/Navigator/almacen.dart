@@ -246,13 +246,13 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
   }
 
   void changedDropDownItem(dynamic value) {
-    setState(() async {
+    setState(() {
       idCategoria = value;
 
       itemsCount = 0;
       products = [];
 
-      await _getAllProducts("$idCategoria", _value == true ? 1 : 0);
+      _getAllProducts("$idCategoria", _value == true ? 1 : 0);
     });
   }
 
@@ -314,9 +314,9 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
           child: CupertinoSwitch(
             value: _value,
             onChanged: (newValue) {
-              setState(() async {
+              setState(() {
                 _value = newValue;
-                await _getAllProducts("", _value == true ? 1 : 0);
+                _getAllProducts("", _value == true ? 1 : 0);
               });
             },
           ),
