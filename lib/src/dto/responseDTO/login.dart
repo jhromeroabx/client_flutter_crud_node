@@ -50,6 +50,7 @@ class UserData {
   String? telefono;
   String? email;
   DateTime? fechaNacimiento;
+  String? contrasenia;
   int? estado;
   int? idUserType;
 

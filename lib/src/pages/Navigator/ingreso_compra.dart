@@ -6,7 +6,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 
 //import '../../dto/requestDTO/product_selected.dart';
 import '../../dto/requestDTO/product_selected.dart';
-import '../../provider/entities_provider.dart';
+import '../../provider/employee_provider.dart';
 import '../../provider/products_in_out_provider.dart';
 import '../../widgets/card_modal_product.dart';
 import '../../widgets/card_products.dart';

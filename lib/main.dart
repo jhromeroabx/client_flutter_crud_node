@@ -4,7 +4,7 @@ import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dar
 import 'package:client_flutter_crud_node/src/pages/login_page.dart';
 import 'package:client_flutter_crud_node/src/pages/register_page.dart';
 import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
-import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/products_in_out_provider.dart';
 import 'package:client_flutter_crud_node/test/bar_code.dart';
 import 'package:client_flutter_crud_node/test/incrementador.dart';

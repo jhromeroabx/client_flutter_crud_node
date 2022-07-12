@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../dto/responseDTO/login.dart';
-import '../dto/requestDTO/user_request_dto.dart';
 import '../dto/responseDTO/UiResponse.dart';
 import 'config_host.dart';
 
@@ -13,19 +12,21 @@ class UserService {
 
   UserService();
 
-  Future<Login?> login(String user, String contrasenia) async {
+  Future<Login?> login(
+    String user,
+    String contrasenia,
+  ) async {
     try {
       var headers = {
         'accept': 'text/plain',
         'Content-Type': 'application/json',
       };
-      UserLoginBody userLoginBody =
-          UserLoginBody(user: user, contrasenia: contrasenia);
-      // final body = jsonEncode({
-      //   "user": user,
-      //   "contrasenia": contrasenia,
-      // });
-      final body = jsonEncode(userLoginBody);
+      final body = jsonEncode(
+        {
+          "user": user,
+          "contrasenia": contrasenia,
+        },
+      );
 
       final response = await http.post(
         Uri.http(_apiHost, _routePath_login),
@@ -42,8 +43,7 @@ class UserService {
     }
   }
 
-  Future<UiResponse?> registerOrEditUser(
-      UserReqAddEditBody userReqAddEditBody) async {
+  Future<UiResponse?> registerOrEditUser(UserData userReqAddEditBody) async {
     try {
       var headers = {
         'accept': 'text/plain',

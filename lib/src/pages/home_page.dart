@@ -1,7 +1,7 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
 import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
-import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';

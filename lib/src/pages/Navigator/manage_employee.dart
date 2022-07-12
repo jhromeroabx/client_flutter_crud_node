@@ -1,5 +1,5 @@
 import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
-import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,10 +47,10 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
   @override
   Widget build(BuildContext context) {
     // var appStateProvider = Provider.of<AppStateProvider>(context);
-    var entitiesProvider = Provider.of<EntitiesProvider>(context);
+    var employeeProvider = Provider.of<EmployeeProvider>(context);
 
     Widget _buildBody() {
-      if (entitiesProvider.isLoading) {
+      if (employeeProvider.isLoading) {
         return ListView(
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
@@ -61,16 +61,16 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
             )
           ],
         );
-      } else if (entitiesProvider.employeeListService == null) {
+      } else if (employeeProvider.employeeListService == null) {
         return ListView(
           children: const [Text("NO DATA, THERES NO CONECTION WITH SERVER")],
         );
-      } else if (entitiesProvider.employeeListService!.listaEmployee == null) {
+      } else if (employeeProvider.employeeListService!.listaEmployee == null) {
         return ListView(
           children: const [Center(child: Text("NO DATA"))],
         );
       } else {
-        EmployeeList? employeeList = entitiesProvider.employeeListService;
+        EmployeeList? employeeList = employeeProvider.employeeListService;
 
         return ListView.builder(
           itemCount: employeeList!.listaEmployee!.length,
@@ -81,8 +81,8 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
 
             return ListTile(
               onTap: () async {
-                await entitiesProvider.getEmployeeById(id).then((value) {
-                  if (entitiesProvider.employeeService != null) {
+                await employeeProvider.getEmployeeById(id).then((value) {
+                  if (employeeProvider.employeeService != null) {
                     Navigator.pushNamed(context, "edit/create");
                   }
                 });
@@ -98,7 +98,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                entitiesProvider.deleteEmployeeById(id);
+                                employeeProvider.deleteEmployeeById(id);
                                 Navigator.pop(context);
                               },
                               child: const Text(
@@ -204,7 +204,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
               displacement: 150,
               color: Colors.blueGrey[900],
               backgroundColor: Colors.lightBlueAccent[70],
-              onRefresh: entitiesProvider.getAllEmployee,
+              onRefresh: employeeProvider.getAllEmployee,
               child: _buildBody(),
             ),
           ),
@@ -212,7 +212,7 @@ class _ManageEmployeePageState extends State<ManageEmployeePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          entitiesProvider.employeeService = null;
+          employeeProvider.employeeService = null;
           Navigator.pushNamed(context, "edit/create");
         },
         tooltip: "Agregar Empleado",

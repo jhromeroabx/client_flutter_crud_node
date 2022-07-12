@@ -1,8 +1,8 @@
 import 'package:client_flutter_crud_node/src/pages/register_page.dart';
-import 'package:client_flutter_crud_node/src/provider/entities_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
 import 'package:client_flutter_crud_node/src/transitions/left_route.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/app_state_provider.dart';
+import '../provider/product_provider.dart';
 import '../utils/my_colors.dart';
 import '../widgets/flush_bar.dart';
 
@@ -25,6 +26,11 @@ class _LoginPageState extends State<LoginPage> {
   bool obscureText = true;
   TextEditingController controlUser = TextEditingController();
   TextEditingController controlContrasenia = TextEditingController();
+
+  late UserProvider userProvider;
+  late AppStateProvider appStateProvider;
+  late EmployeeProvider employeeProvider;
+  late ProductProvider productProvider;
 
   @override
   void initState() {
@@ -62,10 +68,63 @@ class _LoginPageState extends State<LoginPage> {
         false;
   }
 
+  void acederProcess() async {
+    FocusScope.of(context).unfocus();
+    String controlUserText = controlUser.text.trim();
+    String controlContraseniaText = controlContrasenia.text.trim();
+    if (controlUserText.isNotEmpty && controlContraseniaText.isNotEmpty) {
+      var rpta = await userProvider.accessLogin(
+          controlUserText, controlContraseniaText);
+
+      final FocusScopeNode focus = FocusScope.of(context);
+      if (!focus.hasPrimaryFocus && focus.hasFocus) {
+        //SI EL TECLADO ESTA ACTIVO LO QUITAMOS
+        FocusManager.instance.primaryFocus!.unfocus();
+      }
+
+      switch (rpta[0]) {
+        case 1: //ACCESOS CONCEDIDOS
+          if (mounted) {
+            FlushBar().snackBarV2(rpta[1].toString(), Colors.green, context);
+          }
+
+          final prefs = await SharedPreferences.getInstance();
+
+          await prefs.setString('user', controlUserText);
+          await prefs.setString('contrasenia', controlContraseniaText);
+
+          employeeProvider.getAllEmployee();
+          productProvider.getAllProducts("", 1);
+          appStateProvider.getAllEmployeeTypes();
+          appStateProvider.getAllCategories();
+          await Future.delayed(const Duration(milliseconds: 2000));
+          Navigator.pushNamed(context, "home");
+          break;
+        case 2: //ACCESOS DENEGADOS
+          if (mounted) {
+            FlushBar().snackBarV2(rpta[1].toString(), Colors.red, context);
+          }
+          break;
+        case 3: //NO TUVO INFO DEL LOGIN
+          if (mounted) {
+            FlushBar().snackBarV2(rpta[1].toString(), Colors.red, context);
+          }
+          break;
+        default:
+      }
+    } else {
+      if (mounted) {
+        FlushBar()
+            .snackBarV2("Usuario y/o contraseña vacias", Colors.red, context);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var userLogin = Provider.of<EntitiesProvider>(context);
-    final employeeProviderMain = Provider.of<AppStateProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
+    appStateProvider = Provider.of<AppStateProvider>(context);
+    employeeProvider = Provider.of<EmployeeProvider>(context);
 
     return WillPopScope(
       onWillPop: showExitPopup,
@@ -88,12 +147,12 @@ class _LoginPageState extends State<LoginPage> {
                   _lottieDeliverMan(),
                   _txtCorreo(),
                   _txtContrasena(),
-                  _buttomAcceder(userLogin, employeeProviderMain),
+                  _buttomAcceder(),
                   _txtDontHaveAccount(),
                 ],
               ),
               Visibility(
-                visible: userLogin.isLoading,
+                visible: userProvider.isLoading,
                 child: Positioned(
                   top: 1,
                   left: 1,
@@ -122,22 +181,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buttomAcceder(
-      EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
-    print("EJECUCIONNN");
-    bool proceso_login = true;
-    //ESTA CONSULTANDO AL SERVIDOR
-    if (entitiesProvider.isLoading) {
-      setState(() {
-        proceso_login = false; //DESACTIVAMOS EL PROCESO LOGIN
-      });
-    }
-
-    print("PROCESO: $proceso_login");
-
+  Widget _buttomAcceder() {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 50,
+        vertical: 10,
+      ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 15),
@@ -146,77 +196,13 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(25),
           ),
         ),
-        onPressed: () async {
-          if (proceso_login && entitiesProvider.userAcceso == null) {
-            print("LOGIN : $proceso_login");
-
-            String controlUserText = controlUser.text.trim();
-            String controlContraseniaText = controlContrasenia.text.trim();
-            if (controlUserText.isNotEmpty &&
-                controlContraseniaText.isNotEmpty) {
-              var rpta = entitiesProvider.accessLogin(
-                  controlUserText, controlContraseniaText);
-
-              final FocusScopeNode focus = FocusScope.of(context);
-              if (!focus.hasPrimaryFocus && focus.hasFocus) {
-                //SI EL TECLADO ESTA ACTIVO LO QUITAMOS
-                FocusManager.instance.primaryFocus!.unfocus();
-              }
-
-              rpta.then((value) async {
-                switch (value[0]) {
-                  case 1: //ACCESOS CONCEDIDOS
-                    if (mounted) {
-                      FlushBar().snackBarV2(
-                          value[1].toString(), Colors.green, context);
-                    }
-
-                    final prefs = await SharedPreferences.getInstance();
-
-                    await prefs.setString('user', controlUserText);
-                    await prefs.setString(
-                        'contrasenia', controlContraseniaText);
-
-                    entitiesProvider.getAllEmployee();
-                    entitiesProvider.getAllProducts("", 1);
-                    appStateProvider.getAllEmployeeTypes();
-                    appStateProvider.getAllCategories();
-                    await Future.delayed(const Duration(milliseconds: 2000));
-                    Navigator.pushNamed(context, "home");
-                    break;
-                  case 2: //ACCESOS DENEGADOS
-                    if (mounted) {
-                      FlushBar()
-                          .snackBarV2(value[1].toString(), Colors.red, context);
-                    }
-                    break;
-                  case 3: //NO TUVO INFO DEL LOGIN
-                    proceso_login = false;
-                    if (mounted) {
-                      FlushBar()
-                          .snackBarV2(value[1].toString(), Colors.red, context);
-                    }
-                    break;
-                  default:
-                }
-              });
-            } else {
-              if (mounted) {
-                FlushBar().snackBarV2(
-                    "Usuario y/o contraseña vacias", Colors.red, context);
-              }
-            }
-          } else if (entitiesProvider.userAcceso == null) {
-            print("CARGANDO...");
-            if (mounted) {
-              FlushBar().snackBarV2("Cargando", Colors.purple[700]!, context);
-            }
-          }
-        },
-        child: const Text(
-          "ACCEDER",
-          // entitiesProvider.isLoading ? "CARGANDO ..." : "ACCEDER",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        onPressed: userProvider.userAcceso == null ? acederProcess : () {},
+        child: Text(
+          userProvider.userAcceso == null ? "ACCEDER" : "LOGUEADO",
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

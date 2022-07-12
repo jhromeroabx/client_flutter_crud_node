@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../dto/responseDTO/product.dart';
 import '../../provider/app_state_provider.dart';
-import '../../provider/entities_provider.dart';
+import '../../provider/employee_provider.dart';
 import '../../utils/my_colors.dart';
 import '../../widgets/flush_bar.dart';
 import '../../widgets/input_data_text_field.dart';

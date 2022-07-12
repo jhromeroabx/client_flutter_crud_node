@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../dto/responseDTO/product.dart';
-import '../../provider/entities_provider.dart';
+import '../../provider/employee_provider.dart';
 import '../../utils/my_colors.dart';
 import '../../widgets/card_products.dart';
 

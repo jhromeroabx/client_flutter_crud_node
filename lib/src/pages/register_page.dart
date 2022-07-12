@@ -1,11 +1,10 @@
-import 'package:client_flutter_crud_node/src/dto/requestDTO/user_request_dto.dart';
-import 'package:client_flutter_crud_node/src/transitions/left_route.dart';
+import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
 import 'package:client_flutter_crud_node/src/transitions/right_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../provider/app_state_provider.dart';
-import '../provider/entities_provider.dart';
+
+import '../provider/user_provider.dart';
 import '../utils/my_colors.dart';
 import '../widgets/flush_bar.dart';
 import '../widgets/simple_date_picker.dart';
@@ -39,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController controlEmail = TextEditingController();
   TextEditingController controlContrasena = TextEditingController();
   TextEditingController controlContrasenaRepeat = TextEditingController();
-  UserReqAddEditBody? userReqAddEditBody;
+
   void _initDateTimes() {
     final dateNow = DateTime.now();
     _currentTime = DateTime(dateNow.year, dateNow.month, dateNow.day);
@@ -60,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    var entitiesProvider = Provider.of<EntitiesProvider>(context);
+    var entitiesProvider = Provider.of<UserProvider>(context);
     var appStateProvider = Provider.of<AppStateProvider>(context);
 
     return Scaffold(
@@ -109,12 +108,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     _fecha(),
                     _txtDatosPassword('Contraseña', Icons.password, 15,
                         TextInputType.visiblePassword, controlContrasena),
-                    // _txtDatosPassword(
-                    //     'Confirmar Contraseña',
-                    //     Icons.password,
-                    //     15,
-                    //     TextInputType.visiblePassword,
-                    //     controlContrasenaRepeat),
                     _buttomRegistrar(entitiesProvider, appStateProvider)
                   ],
                 ),
@@ -201,7 +194,6 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: type,
         decoration: InputDecoration(
           border: InputBorder.none,
-          // hintText: hintText,
           hintStyle: TextStyle(
             color: MyColors.primaryColor,
           ),
@@ -261,7 +253,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buttomRegistrar(
-      EntitiesProvider entitiesProvider, AppStateProvider appStateProvider) {
+      UserProvider userProvider, AppStateProvider appStateProvider) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -273,7 +265,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 borderRadius: BorderRadius.circular(25))),
         onPressed: () {
           if (_validateFormNullSafety()) {
-            var rpta = entitiesProvider.registerUser(userReqAddEditBody!);
+            var rpta = userProvider.registerUser(userData!);
 
             final FocusScopeNode focus = FocusScope.of(context);
             if (!focus.hasPrimaryFocus && focus.hasFocus) {
@@ -346,7 +338,7 @@ class _RegisterPageState extends State<RegisterPage> {
     //   return false;
     // }
 
-    userReqAddEditBody = UserReqAddEditBody(
+    userReqAddEditBody = User(
         id: 0,
         nombre: controlNombreText,
         apellido: controlApellidoText,
