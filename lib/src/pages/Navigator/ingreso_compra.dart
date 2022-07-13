@@ -8,6 +8,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 //import '../../dto/requestDTO/product_selected.dart';
 import '../../dto/requestDTO/product_selected.dart';
 import '../../provider/products_in_out_provider.dart';
+import '../../provider/user_provider.dart';
 import '../../widgets/card_modal_product.dart';
 import '../../widgets/card_products.dart';
 import '../../widgets/flush_bar.dart';
@@ -23,11 +24,13 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
   ProductSelected? productSelectedTempSet;
   late ProductProvider productProvider;
   late ProductsInOutProvider productSelectedProvider;
+  late UserProvider userProvider;
 
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of<ProductProvider>(context);
     productSelectedProvider = Provider.of<ProductsInOutProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -163,37 +166,36 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
             }
           } else {
             // barcode;
-
-            var rpta = productProvider.getProductByIdOrBarCode(
-                id: "", barcode: barcode);
-            rpta.then((value) async {
-              if (value != null) {
-                //agregar producto en el MAP
-                var producto = value.product;
-                ProductSelected productSelected = ProductSelected(
-                  id: producto!.id,
-                  imagenUrl: producto.imagen_url,
-                  nombre: producto.nombre,
-                  cantidadSelected: 0,
-                  precioCompra: 0,
-                );
-
-                int rpta =
-                    productSelectedProvider.putProductInBucket(productSelected);
-                switch (rpta) {
-                  case 2:
-                    FlushBar().snackBarV2("El producto ya esta seleccionado",
-                        Colors.purple[900]!, context);
-                    break;
-                  default:
-                }
-              } else {
-                if (mounted) {
-                  FlushBar()
-                      .snackBarV2("No cargo el producto!", Colors.red, context);
-                }
+            var value = await productProvider.getProductByIdOrBarCode(
+              id: "",
+              barcode: barcode,
+              id_user: "${userProvider.userAcceso!.id!}",
+            );
+            if (value != null && value.product != null) {
+              //agregar producto en el MAP
+              var producto = value.product;
+              ProductSelected productSelected = ProductSelected(
+                id: producto!.id,
+                imagenUrl: producto.imagen_url,
+                nombre: producto.nombre,
+                cantidadSelected: 0,
+                precioCompra: 0,
+              );
+              int rpta =
+                  productSelectedProvider.putProductInBucket(productSelected);
+              switch (rpta) {
+                case 2:
+                  FlushBar().snackBarV2("El producto ya esta seleccionado",
+                      Colors.purple[900]!, context);
+                  break;
+                default:
               }
-            });
+            } else {
+              if (mounted) {
+                FlushBar()
+                    .snackBarV2("No cargo el producto!", Colors.red, context);
+              }
+            }
           }
         } catch (e) {
           if (mounted) {

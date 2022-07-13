@@ -43,7 +43,8 @@ class ProductService {
     }
   }
 
-  Future<FindProduct?> findProductBy(String? id, String? barcode) async {
+  Future<FindProduct?> findProductBy(
+      String? id, String? barcode, String? id_user) async {
     try {
       var headers = {
         'accept': 'text/plain',
@@ -53,6 +54,7 @@ class ProductService {
       final body = jsonEncode({
         'id': id,
         'barcode': barcode,
+        'id_user': id_user,
       });
 
       final response = await http.post(
@@ -95,7 +97,7 @@ class ProductService {
     return null;
   }
 
-  Future<UiResponse?> registerOrEditProduct(Product product) async {
+  Future<UiResponseSimple?> registerOrEditProduct(Product product) async {
     try {
       var headers = {
         'accept': 'text/plain',
@@ -111,7 +113,7 @@ class ProductService {
       );
       print("API" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        return UiResponse.fromMap(jsonDecode(response.body));
+        return UiResponseSimple.fromMap(jsonDecode(response.body));
       }
     } catch (e) {
       print("ERROR $_routePath_productoAddOrEdit: $e");

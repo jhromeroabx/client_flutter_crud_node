@@ -24,16 +24,20 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<FindProduct?> getProductByIdOrBarCode(
-      {String? id, String? barcode}) async {
-    FindProduct? rpta = await ProductService().findProductBy(id, barcode);
+  Future<FindProduct?> getProductByIdOrBarCode({
+    required String? id,
+    required String? barcode,
+    required String? id_user,
+  }) async {
+    FindProduct? rpta =
+        await ProductService().findProductBy(id, barcode, id_user);
     return rpta;
   }
 
   Future<List<Object>> productAddOrEdit(Product product) async {
     isLoading = true;
 
-    UiResponse? response =
+    UiResponseSimple? response =
         await ProductService().registerOrEditProduct(product);
 
     if (response != null) {
@@ -41,7 +45,7 @@ class ProductProvider extends ChangeNotifier {
       if (response.state == true) {
         return [1, "Registrado"];
       } else {
-        return [2, response.response!.error!];
+        return [2, response.response!];
       }
     } else {
       isLoading = false;

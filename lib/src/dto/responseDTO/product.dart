@@ -21,26 +21,26 @@ class Products {
 }
 
 class FindProduct {
-  bool? status;
+  bool? state;
   String? response;
   Product? product;
 
   FindProduct({
-    this.status,
+    this.state,
     this.response,
     this.product,
   });
 
   factory FindProduct.fromJson(Map<String, dynamic> json) {
-    if (json["status"]) {
+    if (json["state"]) {
       return FindProduct(
-        status: json["status"],
+        state: json["state"],
         response: null,
         product: Product.fromJson(json["response"]),
       );
     } else {
       return FindProduct(
-        status: json["status"],
+        state: json["state"],
         response: json["response"],
         product: null,
       );
@@ -60,6 +60,7 @@ class Product {
   int? stock_min;
   String? imagen_url;
   String? categoria;
+  int? id_user;
 
   Product({
     this.id,
@@ -73,6 +74,7 @@ class Product {
     this.stock_min,
     this.imagen_url,
     this.categoria,
+    this.id_user,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -88,6 +90,7 @@ class Product {
       stock_min: json["stock_min"],
       imagen_url: json["imagen_url"],
       categoria: json["categoria"],
+      id_user: json["id_user"],
     );
   }
 
@@ -103,6 +106,7 @@ class Product {
         "stock_min": stock_min,
         "imagen_url": imagen_url,
         "categoria": categoria,
+        "id_user": id_user,
       };
 }
 

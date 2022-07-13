@@ -1,5 +1,6 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_product.dart';
 import 'package:client_flutter_crud_node/src/provider/product_provider.dart';
+import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
 import 'package:client_flutter_crud_node/src/widgets/flush_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../../dto/responseDTO/product.dart';
 import '../../provider/app_state_provider.dart';
-import '../../provider/employee_provider.dart';
 import '../../transitions/right_route.dart';
 import '../../utils/my_colors.dart';
 import '../../widgets/card_products.dart';
@@ -30,6 +30,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
 
   bool _value = true;
   late ProductProvider productProvider;
+  late UserProvider userProvider;
 
   Future<void> _getAllProducts(String idCategoria, int active) async {
     await productProvider.getAllProducts(idCategoria, active);
@@ -59,7 +60,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
             minHeight: 48,
             minWidth: 170,
           ),
-          color: Colors.blue,
+          // color: Colors.blue,
           child: Text(
             item.nombre!,
             style: const TextStyle(
@@ -76,9 +77,11 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of<ProductProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
+
     // entitiesProviderField = Provider.of<EntitiesProvider>(context);
 
-//TIPICO ERROR DE REFRESCAR CADA RATO, SATURA APP
+    //TIPICO ERROR DE REFRESCAR CADA RATO, SATURA APP
     // _getAllProducts(entitiesProvider);
     itemsCount = productProvider.lista_products!.length;
     products = productProvider.lista_products!;
@@ -172,39 +175,34 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                           children: [
                             for (var pro in products)
                               GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   Fluttertoast.showToast(
                                       msg: "Cargando",
                                       gravity: ToastGravity.CENTER_RIGHT,
                                       backgroundColor: Colors.indigo,
                                       toastLength: Toast.LENGTH_SHORT);
-                                  var rpta =
-                                      productProvider.getProductByIdOrBarCode(
-                                          id: "${pro.id}", barcode: "");
-                                  rpta.then(
-                                    (value) async {
-                                      if (value == null) {
-                                        FlushBar().snackBarV2(
-                                            "No cargo el objeto",
-                                            Colors.red,
-                                            context);
-                                      } else if (!value.status!) {
-                                        //false
-                                        FlushBar().snackBarV2(value.response!,
-                                            Colors.red, context);
-                                      } else if (value.status!) {
-                                        //true
-                                        Navigator.push(
-                                          context,
-                                          RightRoute(
-                                            page: EditOrCreateProduct(
-                                              product: value.product,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    },
+                                  var rpta = await productProvider
+                                      .getProductByIdOrBarCode(
+                                    id: "${pro.id}",
+                                    barcode: "",
+                                    id_user: "${userProvider.userAcceso!.id!}",
                                   );
+                                  if (rpta == null) {
+                                    FlushBar().snackBarV2("No cargo el objeto",
+                                        Colors.red, context);
+                                  } else if (!rpta.state!) {
+                                    FlushBar().snackBarV2(
+                                        rpta.response!, Colors.red, context);
+                                  } else if (rpta.state!) {
+                                    Navigator.push(
+                                      context,
+                                      RightRoute(
+                                        page: EditOrCreateProduct(
+                                          product: rpta.product,
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 },
                                 child: ProductItems(
                                   imageURL: pro.imagen_url,
@@ -264,6 +262,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
         padding: const EdgeInsets.all(3),
         // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: MyColors.primaryColor,
@@ -273,10 +272,10 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
           children: [
             const Text(
               "Categoria",
-              style: TextStyle(color: Colors.white),
             ),
             DropdownButtonHideUnderline(
               child: DropdownButton(
+                  dropdownColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   iconSize: 50,
                   // isExpanded: true,

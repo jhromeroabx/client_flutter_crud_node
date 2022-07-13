@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../dto/responseDTO/product.dart';
 import '../../provider/app_state_provider.dart';
-import '../../provider/employee_provider.dart';
+import '../../provider/user_provider.dart';
 import '../../utils/my_colors.dart';
 import '../../widgets/flush_bar.dart';
 import '../../widgets/input_data_text_field.dart';
@@ -54,6 +54,8 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
   late String _labelAppBar = "Nuevo Produco";
 
   late ProductProvider productProvider;
+  // late AppStateProvider appStateProvider;
+  late UserProvider userProvider;
 
   @override
   void initState() {
@@ -104,6 +106,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of<ProductProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
 
     // loadProductData(entitiesProvider);
 
@@ -300,7 +303,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
                   //REGRESO A LA PAG ANTERIOR
                   productProvider.getAllProducts("", 1);
                   await Future.delayed(const Duration(seconds: 1));
-                  Navigator.pushNamed(context, "home");
+                  Navigator.pop(context);
                   break;
                 case 2:
                   FlushBar()
@@ -503,6 +506,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
       imagen_url: imagen_url.text.trim(),
       idCategoria: idCategoria,
       active: _value,
+      id_user: userProvider.userAcceso!.id,
     );
 
     return true;
