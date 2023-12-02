@@ -162,7 +162,7 @@ class _BarCodePageState extends State<BarCodePage> {
                               if (success['isSuccess']) {
                                 snackBar = const SnackBar(
                                     content: Text('Successful Preservation!'));
-                                Scaffold.of(context).showSnackBar(snackBar);
+                                // Scaffold.of(context).showSnackBar(snackBar);
                               } else {
                                 snackBar = const SnackBar(
                                     content: Text('Save failed!'));
