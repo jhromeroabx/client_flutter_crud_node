@@ -30,7 +30,7 @@ class ProductService {
       });
 
       final response = await http.post(
-          Uri.http(_apiHost, _routePath_getAllProducts),
+          Uri.https(_apiHost, _routePath_getAllProducts),
           headers: headers,
           body: body);
       print("API" + response.statusCode.toString());
@@ -58,7 +58,7 @@ class ProductService {
       });
 
       final response = await http.post(
-          Uri.http(_apiHost, _routePath_findProductBy),
+          Uri.https(_apiHost, _routePath_findProductBy),
           headers: headers,
           body: body);
 
@@ -83,7 +83,7 @@ class ProductService {
         'id_user_responsable': id,
       });
       final response = await http.post(
-          Uri.http(_apiHost, _routePath_getAllCategory),
+          Uri.https(_apiHost, _routePath_getAllCategory),
           headers: headers,
           body: body);
       print("API" + response.statusCode.toString());
@@ -107,7 +107,7 @@ class ProductService {
       final body = jsonEncode(product);
 
       final response = await http.post(
-        Uri.http(_apiHost, _routePath_productoAddOrEdit),
+        Uri.https(_apiHost, _routePath_productoAddOrEdit),
         headers: headers,
         body: body,
       );
@@ -132,7 +132,7 @@ class ProductService {
       final body = jsonEncode(compra);
 
       final response = await http.post(
-        Uri.http(_apiHost, _routePath_compraAdd),
+        Uri.https(_apiHost, _routePath_compraAdd),
         headers: headers,
         body: body,
       );
