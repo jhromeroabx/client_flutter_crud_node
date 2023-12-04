@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 
 import '../utils/my_colors.dart';
@@ -41,34 +43,35 @@ class TextDataBasic extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextFormField(
-        maxLines: maxLines,
-        readOnly: readOnly,
-        style: const TextStyle(fontSize: 20),
-        controller: controller,
-        maxLength: maxLength,
-        keyboardType: type,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintStyle: TextStyle(
-            color: MyColors.primaryColor,
-          ),
-          labelText: label,
-          prefixIcon: Icon(
-            icon,
-            color: MyColors.primaryColor,
-          ),
-          suffix: onTapSuffix == null
-              ? null
-              : GestureDetector(
-                  child: Icon(
-                    iconSuffix,
-                    color: colorIconSuffix ?? MyColors.primaryColor,
-                    size: 30,
-                  ),
-                  onTap: onTapSuffix,
-                ),
+      maxLines: maxLines,
+      readOnly: readOnly,
+      style: const TextStyle(fontSize: 20),
+      controller: controller,
+      maxLength: maxLength,
+      keyboardType: type,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintStyle: TextStyle(
+          color: MyColors.primaryColor,
         ),
+        labelText: label,
+        counterText: "", 
+        prefixIcon: Icon(
+          icon,
+          color: MyColors.primaryColor,
+        ),
+        suffix: onTapSuffix == null
+            ? null
+            : GestureDetector(
+                child: Icon(
+                  iconSuffix,
+                  color: colorIconSuffix ?? MyColors.primaryColor,
+                  size: 30,
+                ),
+                onTap: onTapSuffix,
+              ),
       ),
+    ),
     );
   }
 }

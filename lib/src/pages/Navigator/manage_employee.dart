@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unused_element
+
 import 'package:client_flutter_crud_node/src/provider/app_state_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:flutter/cupertino.dart';

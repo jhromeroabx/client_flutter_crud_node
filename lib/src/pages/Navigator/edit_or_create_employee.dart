@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, empty_statements
+
 import 'package:client_flutter_crud_node/src/dto/responseDTO/employee.dart';
 import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +41,6 @@ class _EditOrCreateEmployeePageState extends State<EditOrCreateEmployeePage> {
     String _titlePage = employeeProvider.employeeService != null
         ? "Edicion del Empleado: ${controlName.text}"
         : "Creacion de un nuevo Empleado";
-
     ;
 
     return Scaffold(

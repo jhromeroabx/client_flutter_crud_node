@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, sort_child_properties_last, deprecated_member_use
+
 import 'package:client_flutter_crud_node/src/provider/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

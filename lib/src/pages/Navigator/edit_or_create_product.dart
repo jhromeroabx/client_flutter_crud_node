@@ -393,7 +393,7 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
       TextInputType type, TextEditingController controller,
       {bool onlyNumbers = false, bool twoDecimals = false, bool read = false}) {
     return Container(
-      height: 80,
+      height: 90,
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
@@ -401,35 +401,36 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextFormField(
-        readOnly: read,
-        style: const TextStyle(fontSize: 20),
-        controller: controller,
-        maxLength: maxLength,
-        keyboardType: type,
-        inputFormatters: [
-          if (twoDecimals && onlyNumbers == false)
-            //FUNCIONA  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
-            //https://www.debuggex.com/r/4OwPfvp8lhwV_GZC
-            //https://regex101.com/
-            //FUNCIONA con 2 decimales
-            FilteringTextInputFormatter.allow(
-                RegExp(r'^\d+((.)|(.\d{0,2})?)$')),
-          if (onlyNumbers && twoDecimals == false)
-            FilteringTextInputFormatter.digitsOnly
-        ],
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          // hintText: hintText,
-          hintStyle: TextStyle(
-            color: MyColors.primaryColor,
-          ),
-          labelText: label,
-          prefixIcon: Icon(
-            icon,
-            color: MyColors.primaryColor,
-          ),
+      readOnly: read,
+      style: const TextStyle(fontSize: 20),
+      controller: controller,
+      maxLength: maxLength,
+      keyboardType: type,
+      inputFormatters: [
+        if (twoDecimals && onlyNumbers == false)
+          //FUNCIONA  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+          //https://www.debuggex.com/r/4OwPfvp8lhwV_GZC
+          //https://regex101.com/
+          //FUNCIONA con 2 decimales
+          FilteringTextInputFormatter.allow(
+              RegExp(r'^\d+((.)|(.\d{0,2})?)$')),
+        if (onlyNumbers && twoDecimals == false)
+          FilteringTextInputFormatter.digitsOnly
+      ],
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        // hintText: hintText,
+        hintStyle: TextStyle(
+          color: MyColors.primaryColor,
+        ),
+        labelText: label,
+        counterText: "", // Agrega esta línea para eliminar el contador de caracteres
+        prefixIcon: Icon(
+          icon,
+          color: MyColors.primaryColor,
         ),
       ),
+    ),
     );
   }
 
@@ -449,19 +450,23 @@ class _EditOrCreateProductState extends State<EditOrCreateProduct>
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: MyColors.primaryColor, width: 4)),
+        child: SingleChildScrollView(
         child: Column(
           children: [
             const Text("Categoria"),
             DropdownButtonHideUnderline(
               child: DropdownButton(
-                  iconSize: 50,
-                  isExpanded: true,
-                  value: idCategoria,
-                  items: items,
-                  onChanged: changedDropDownItem),
+                iconSize: 50,
+                isExpanded: true,
+                value: idCategoria,
+                items: items,
+                onChanged: changedDropDownItem,
+              ),
             ),
           ],
         ),
+      ),
+
       );
     } else {
       return Container(

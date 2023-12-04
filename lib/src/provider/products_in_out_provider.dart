@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_adjacent_string_concatenation
+
 import 'package:client_flutter_crud_node/src/apis/product_service.dart';
 import 'package:client_flutter_crud_node/src/dto/requestDTO/Compra.dart';
 import 'package:client_flutter_crud_node/src/dto/requestDTO/product_selected.dart';

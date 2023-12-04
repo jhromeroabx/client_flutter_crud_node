@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, sort_child_properties_last, avoid_print
+
 import 'package:client_flutter_crud_node/src/pages/Navigator/edit_or_create_product.dart';
 import 'package:client_flutter_crud_node/src/provider/product_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
@@ -154,6 +156,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 8.0),
                     if (products.isEmpty)
                       Center(
                         child: ProductItems(
@@ -165,6 +168,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
                         ),
                       ),
                     if (itemsCount != 0)
+                    const SizedBox(height: 5.0),
                       SizedBox(
                         width: double.infinity,
                         child: Wrap(
@@ -256,32 +260,30 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
 
   Container comboBox(List<DropdownMenuItem> items) {
     if (items.isNotEmpty) {
-      return Container(
-        height: 80,
+     return Container(
+        height: 100,  // Increase the height
         margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
         padding: const EdgeInsets.all(3),
-        // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: MyColors.primaryColor,
-              width: 4,
-            )),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: MyColors.primaryColor,
+            width: 4,
+          ),
+        ),
         child: Column(
           children: [
-            const Text(
-              "Categoria",
-            ),
+            const Text("Categoria"),
             DropdownButtonHideUnderline(
               child: DropdownButton(
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  iconSize: 50,
-                  // isExpanded: true,
-                  value: idCategoria,
-                  items: items,
-                  onChanged: changedDropDownItem),
+                dropdownColor: Colors.white,
+                style: const TextStyle(color: Colors.white),
+                iconSize: 50,
+                value: idCategoria,
+                items: items,
+                onChanged: changedDropDownItem,
+              ),
             ),
           ],
         ),
