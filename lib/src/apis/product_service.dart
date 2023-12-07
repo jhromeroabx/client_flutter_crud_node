@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, avoid_print, constant_identifier_names, unused_field, non_constant_identifier_names, body_might_complete_normally_nullable
+
 import 'dart:convert';
 import 'package:client_flutter_crud_node/src/dto/requestDTO/Compra.dart';
 import 'package:http/http.dart' as http;

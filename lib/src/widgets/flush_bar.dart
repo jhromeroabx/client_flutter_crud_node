@@ -10,6 +10,9 @@ class FlushBar {
       duration: Duration(milliseconds: milliseconds ?? 3000),
       message: msg,
       messageSize: 25,
+       margin: const EdgeInsets.all(8),
+        borderRadius: BorderRadius.circular(8),
+        // duration: const Duration(seconds: 1),
       backgroundGradient: LinearGradient(colors: [
         Colors.black,
         colorState,

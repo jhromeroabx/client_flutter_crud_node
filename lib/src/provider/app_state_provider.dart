@@ -23,7 +23,7 @@ class AppStateProvider extends ChangeNotifier {
     _isLoading = true;
 
     employeeTypeListService = await EmployeeService().getAllEmployeeTypes();
-    //notifyListeners();
+    
 
     if (employeeTypeListService != null) {
       isLoading = false;

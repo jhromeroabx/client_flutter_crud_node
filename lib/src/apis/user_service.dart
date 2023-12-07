@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, body_might_complete_normally_nullable, avoid_print, prefer_interpolation_to_compose_strings
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -30,9 +32,9 @@ class UserService {
       );
 
       final response = await http.post(
-        Uri.https(_apiHost, _routePath_login),
+        Uri.https(_apiHost, _routePath_login),    
         headers: headers,
-        body: body,
+        body: body, 
       );
       print("API login ${response.statusCode}");
       if (response.statusCode == 200) {

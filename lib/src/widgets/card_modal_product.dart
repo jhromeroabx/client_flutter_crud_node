@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, deprecated_member_use
+
 import 'package:animate_do/animate_do.dart';
 import 'package:client_flutter_crud_node/src/widgets/flush_bar.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +26,7 @@ class _CardModalProductState extends State<CardModalProduct> {
   late ProductSelected productSelectedTempSet;
 
   @override
-  void initState() {
+  void initState() {  
     super.initState();
     if (widget.productSelectedTempSet != null) {
       productSelectedTempSet = widget.productSelectedTempSet!;
