@@ -194,12 +194,14 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         style: const TextStyle(fontSize: 20),
         controller: controller,
-        maxLength: maxLength,
+        autovalidateMode: AutovalidateMode.disabled,
         keyboardType: type,
+        inputFormatters: const [],
         decoration: InputDecoration(
           border: InputBorder.none,
           hintStyle: TextStyle(
             color: MyColors.primaryColor,
+            fontSize: 16,
           ),
           labelText: label,
           prefixIcon: Icon(
@@ -213,7 +215,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _txtDatosPassword(String label, IconData icon, int maxLength,
       TextInputType type, TextEditingController controller) {
-    return Container(
+     return Container(
       height: 80,
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
       padding: const EdgeInsets.all(3),
@@ -225,7 +227,7 @@ class _RegisterPageState extends State<RegisterPage> {
         style: const TextStyle(fontSize: 20),
         controller: controller,
         obscureText: obscureText,
-        maxLength: maxLength,
+        autovalidateMode: AutovalidateMode.disabled,
         keyboardType: type,
         decoration: InputDecoration(
           border: InputBorder.none,
