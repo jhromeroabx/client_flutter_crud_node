@@ -214,6 +214,7 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
+          margin: const EdgeInsets.only(right: 15),
           child: const Text(
             "¿No tienes cuenta?",
             style: TextStyle(
@@ -221,7 +222,6 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.white,
             ),
           ),
-          margin: const EdgeInsets.only(right: 15),
         ),
         GestureDetector(
           child: Container(

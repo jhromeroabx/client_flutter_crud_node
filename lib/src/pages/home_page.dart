@@ -7,7 +7,7 @@ import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart'
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
-
+import 'package:custom_line_indicator_bottom_navbar/custom_line_indicator_bottom_navbar.dart';
 import '../../test/bar_code.dart';
 import '../../test/incrementador.dart';
 import '../provider/products_in_out_provider.dart';
@@ -99,112 +99,47 @@ class _HomePageState extends State<HomePage> {
         ),
         resizeToAvoidBottomInset: false,
         body: screens[index_page],
-        bottomNavigationBar: GNav(
-          backgroundColor: Colors.black,
-          rippleColor: Colors.grey[200]!,
-          hoverColor: Colors.grey[200]!,
-          // haptic: true,
-          tabBorderRadius: 15,
-          tabActiveBorder:
-              Border.all(color: Colors.black, width: 1), // tab button border
-          tabBorder:
-              Border.all(color: Colors.grey, width: 1), // tab button border
-          tabShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 8)
-          ], // tab button shadow
-          curve: Curves.easeOutExpo, // tab animation curves
-          duration: const Duration(milliseconds: 200), // tab animation duration
-          gap: 2, // the tab button gap between icon and text
-          color: Colors.black, // unselected icon color
-          activeColor: Colors.blue[900], // selected icon and text color
-          iconSize: 40, // tab button icon size
-          textSize: 100,
-          // style: GnavStyle.google,
-          tabBackgroundColor:
-              Colors.lightBlueAccent[200]!, // selected tab background color
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-          tabs: [
-            GButton(
-              icon: Icons.home_filled,
-              text: screensTitle[index_page],
-              iconColor: index_page != 0 ? Colors.orange : Colors.black,
-            ),
-            GButton(
-              icon: Icons.check_box,
-              text: screensTitle[index_page],
-              iconColor: index_page != 1 ? Colors.green : Colors.black,
-            ),
-            GButton(
-              icon: Icons.precision_manufacturing_outlined,
-              text: screensTitle[index_page],
-              iconColor: index_page != 2 ? Colors.grey[700] : Colors.black,
-            ),
-            GButton(
-              icon: Icons.file_upload,
-              text: screensTitle[index_page],
-              iconColor: index_page != 3 ? Colors.blue : Colors.black,
-            ),
-            GButton(
-              icon: Icons.download,
-              text: screensTitle[index_page],
-              iconColor: index_page != 4 ? Colors.red : Colors.black,
-            ),
-          ],
-          // selectedIndex: index_page,
-          onTabChange: (index) {
+        bottomNavigationBar: CustomLineIndicatorBottomNavbar(
+          selectedColor: Colors.blueAccent,
+          unSelectedColor: Colors.black54,
+          backgroundColor: Colors.white,
+          currentIndex: index_page,
+          unselectedIconSize: 20,
+          selectedIconSize: 25,
+          onTap: (index) {
             setState(() {
               index_page = index;
             });
           },
+          enableLineIndicator: true,
+          lineIndicatorWidth: 3,
+          indicatorType: IndicatorType.Top,
+          // gradient: LinearGradient(
+          //   colors: [Colors.grey, Colors.grey[300]!],
+          // ),
+          customBottomBarItems: [
+            CustomBottomBarItems(
+              icon: Icons.home,
+              label: 'Dashboard',
+            ),
+            CustomBottomBarItems(
+              icon: Icons.check_box,
+              label: 'Almacen',
+            ),
+            CustomBottomBarItems(
+              icon: Icons.precision_manufacturing_outlined,
+              label: 'Gestión',
+            ),
+            CustomBottomBarItems(
+              icon: Icons.file_upload,
+              label: 'Ingreso',
+            ),
+            CustomBottomBarItems(
+              icon: Icons.download,
+              label: 'Salida',
+            ),
+          ],
         ),
-        // bottomNavigationBar: BottomNavigationBar(
-        //   type: BottomNavigationBarType.fixed,
-        //   elevation: 5,
-        //   items: <BottomNavigationBarItem>[
-        //     BottomNavigationBarItem(
-        //       icon: Icon(
-        //         Icons.home_filled,
-        //         color: index == 0 ? Colors.orange : Colors.black,
-        //       ),
-        //       label: 'Dashboard',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(
-        //         Icons.check_box,
-        //         color: index == 1 ? Colors.green : Colors.black,
-        //       ),
-        //       label: 'Inventario',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(
-        //         Icons.precision_manufacturing_outlined,
-        //         color: index == 2 ? Colors.green : Colors.black,
-        //       ),
-        //       label: 'Gestion Almacen',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(
-        //         Icons.file_upload,
-        //         color: index == 3 ? Colors.blue : Colors.black,
-        //       ),
-        //       label: 'Ingreso',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(
-        //         Icons.download,
-        //         color: index == 4 ? Colors.orange : Colors.black,
-        //       ),
-        //       label: 'Retiro',
-        //     ),
-        //   ],
-        //   iconSize: 25,
-        //   backgroundColor: Colors.lightBlueAccent[500],
-        //   currentIndex: index,
-        //   unselectedItemColor: Colors.black,
-        //   selectedFontSize: 15,
-        //   selectedItemColor: Colors.blue,
-        //   onTap: (index) => setState(() => this.index = index),
-        // ),
       ),
     );
   }
