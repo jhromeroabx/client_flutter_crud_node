@@ -214,7 +214,10 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          margin: const EdgeInsets.only(right: 15),
+          margin: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 20,
+          ),
           child: const Text(
             "¿No tienes cuenta?",
             style: TextStyle(
@@ -248,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Container _txtContrasena() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
       // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: MyColors.secondaryColor,
@@ -293,7 +296,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Container _txtCorreo() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
       // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: MyColors.secondaryColor,

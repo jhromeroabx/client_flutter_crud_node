@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:client_flutter_crud_node/src/utils/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -83,6 +84,7 @@ class _BarCodePageState extends State<BarCodePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: MyColors.primaryColor,
         onPressed: () => _scanBytes(),
         tooltip: 'Take a Photo',
         child: const Icon(Icons.camera_alt),

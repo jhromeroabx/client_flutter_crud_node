@@ -8,12 +8,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import '../../dto/responseDTO/product.dart';
 import '../../provider/app_state_provider.dart';
 import '../../transitions/right_route.dart';
 import '../../utils/my_colors.dart';
 import '../../widgets/card_products.dart';
+
 
 class AlmacenGestion extends StatefulWidget {
   const AlmacenGestion({Key? key}) : super(key: key);
@@ -51,31 +52,32 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
     }
   }
 
-  List<DropdownMenuItem> getMenuItems(List<Categoria> lista) {
-    List<DropdownMenuItem> items = [];
-    for (var item in lista) {
-      items.add(DropdownMenuItem(
+List<DropdownMenuItem<int>> getMenuItems(List<Categoria> lista) {
+    const TextStyle itemTextStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 15,
+    );
+
+    return lista.map((item) {
+      return DropdownMenuItem<int>(
         value: item.id,
         child: Container(
           alignment: Alignment.center,
           constraints: const BoxConstraints(
-            minHeight: 48,
+            maxHeight: 20,
+            minHeight: 20,
             minWidth: 170,
           ),
-          // color: Colors.blue,
           child: Text(
-            item.nombre!,
-            style: const TextStyle(
-              color: Colors.black,
-            ),
+            item.nombre ?? 'Nombre no disponible',
+            style: itemTextStyle,
           ),
         ),
-        // onTap: () {},
-      ));
-    }
-    return items;
+      );
+    }).toList();
   }
 
+  
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of<ProductProvider>(context);
@@ -234,7 +236,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
         onPressed: () {
           Navigator.pushReplacement(
               context, RightRoute(page: EditOrCreateProduct()));
-          // Navigator.pushNamed(context, "edit/create_product");
+          
         },
         child: const Icon(
           Icons.add_circle_outline_sharp,
@@ -257,12 +259,12 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
       _getAllProducts("$idCategoria", _value == true ? 1 : 0);
     });
   }
-
-  Container comboBox(List<DropdownMenuItem> items) {
+Container comboBox(List<DropdownMenuItem> items) {
     if (items.isNotEmpty) {
-     return Container(
-        height: 100,  // Increase the height
-        margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+      return Container(
+        // Ajusta la altura del contenedor principal según tus necesidades
+        height: 80,
+        margin: const EdgeInsets.symmetric(horizontal: 2),
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -273,16 +275,25 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
           ),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Categoria"),
+            const Text("Categoría"),
             DropdownButtonHideUnderline(
-              child: DropdownButton(
-                dropdownColor: Colors.white,
-                style: const TextStyle(color: Colors.white),
-                iconSize: 50,
-                value: idCategoria,
-                items: items,
-                onChanged: changedDropDownItem,
+              child: SizedBox(
+                // Ajusta la altura del contenedor del DropdownButton según tus necesidades
+                height: 30,
+                child: DropdownButton(
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  value: idCategoria,
+                  items: items,
+                  onChanged: changedDropDownItem,
+                  // icon: Icon(
+                  //   Icons.arrow_downward,
+                  //   color: MyColors.primaryColor,
+                  //   size: 24,
+                  // ),
+                ),
               ),
             ),
           ],
@@ -293,30 +304,53 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
         width: 100,
         color: Colors.amber[200],
         child: const Text(
-          "Categorias desactivadas!",
+          "¡Categorías desactivadas!",
           textAlign: TextAlign.center,
         ),
       );
     }
   }
 
+
+
+
   Widget _switchProduct() {
     return Column(
       children: [
         const Text(
           "Ver Activos:",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 14),
         ),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: _value == true ? Colors.green : Colors.grey,
+            color: _value == true
+                ? Colors.green[100]
+                : Colors.red[300],
           ),
-          child: CupertinoSwitch(
+          child: LiteRollingSwitch(
             value: _value,
-            onChanged: (newValue) {
+            textOn: 'On',
+            textOff: 'Off',
+            textOffColor: Colors.white,
+            textOnColor: Colors.white,
+            colorOn: Colors.green,
+            colorOff: Colors.red[300]!,
+            iconOn: Icons.done,
+            iconOff: Icons.remove_circle_outline,
+            textSize: 16.0,
+            onTap: () {
+              // Handle tap
+            },
+            onDoubleTap: () {
+              // Handle double tap
+            },
+            onSwipe: () {
+              // Handle swipe
+            },
+            onChanged: (bool state) {
               setState(() {
-                _value = newValue;
+                _value = state;
                 _getAllProducts("", _value == true ? 1 : 0);
               });
             },
@@ -325,4 +359,5 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
       ],
     );
   }
+
 }

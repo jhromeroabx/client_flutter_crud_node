@@ -1,11 +1,8 @@
 import 'package:client_flutter_crud_node/src/pages/Navigator/almacen.dart';
-import 'package:client_flutter_crud_node/src/pages/Navigator/inicio_page.dart';
-import 'package:client_flutter_crud_node/src/pages/Navigator/manage_employee.dart';
-import 'package:client_flutter_crud_node/src/provider/employee_provider.dart';
 import 'package:client_flutter_crud_node/src/provider/user_provider.dart';
+import 'package:client_flutter_crud_node/src/utils/my_colors.dart';
 import 'package:client_flutter_crud_node/src/widgets/CupertinoDialogCustom.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:custom_line_indicator_bottom_navbar/custom_line_indicator_bottom_navbar.dart';
 import '../../test/bar_code.dart';
@@ -25,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final screens = [
     const IncrementadorPage(),
     const AlmacenGestion(),
-    const ManageEmployeePage(),
+    // const ManageEmployeePage(),
     const IngresoAlmacen(),
     const BarCodePage(),
   ];
@@ -33,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   final screensTitle = [
     'DashBoard',
     'Almacen',
-    'Gestion',
+    // 'Gestion',
     'Ingreso Productos',
     'Salida Productos',
   ];
@@ -65,6 +62,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text("${screensTitle[index_page]} - LOAsi"),
+          backgroundColor: MyColors.primaryColor,
           actions: [
             Container(
               padding: const EdgeInsets.only(right: 10),
@@ -100,7 +98,7 @@ class _HomePageState extends State<HomePage> {
         resizeToAvoidBottomInset: false,
         body: screens[index_page],
         bottomNavigationBar: CustomLineIndicatorBottomNavbar(
-          selectedColor: Colors.blueAccent,
+          selectedColor: MyColors.primaryColor,
           unSelectedColor: Colors.black54,
           backgroundColor: Colors.white,
           currentIndex: index_page,
@@ -126,10 +124,10 @@ class _HomePageState extends State<HomePage> {
               icon: Icons.check_box,
               label: 'Almacen',
             ),
-            CustomBottomBarItems(
-              icon: Icons.precision_manufacturing_outlined,
-              label: 'Gestión',
-            ),
+            // CustomBottomBarItems(
+            //   icon: Icons.precision_manufacturing_outlined,
+            //   label: 'Gestión',
+            // ),
             CustomBottomBarItems(
               icon: Icons.file_upload,
               label: 'Ingreso',

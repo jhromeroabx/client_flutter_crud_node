@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, sort_child_properties_last, deprecated_member_use
 
 import 'package:client_flutter_crud_node/src/provider/product_provider.dart';
+import 'package:client_flutter_crud_node/src/utils/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -219,6 +220,7 @@ class _IngresoAlmacenState extends State<IngresoAlmacen> {
       message: "INGRESAR PRODUCTOS!!!",
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          backgroundColor: MyColors.primaryColor,
           shadowColor: Colors.blue[900],
           elevation: 13,
           primary: Colors.blue,

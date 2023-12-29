@@ -54,6 +54,8 @@ dependencies:
   qrscan: ^0.3.2
   intl: ^0.18.1
   custom_line_indicator_bottom_navbar: ^0.0.8
+  dropdown_button2: ^2.1.4
+  lite_rolling_switch: ^1.0.1
 
 dev_dependencies:
   flutter_test:
