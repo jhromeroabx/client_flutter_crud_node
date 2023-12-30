@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import '../utils/my_colors.dart';
 import 'package:marquee_widget/marquee_widget.dart';
-
+import 'package:text_marquee/text_marquee.dart';
 class ProductItems extends StatelessWidget {
   final String? imageURL;
   final String? name;
@@ -93,17 +93,15 @@ class ProductItems extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Marquee(
-                       child: Text(
-                          name!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue
-                          ),
-                        ),
+                     TextMarquee(
+                      name!,
+                      spaceSize: 72,
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
                       ),
+                    ),
                       const SizedBox(height: 5),
                       if (precio != null)
                         Row(

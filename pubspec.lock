@@ -702,6 +702,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  text_marquee:
+    dependency: "direct main"
+    description:
+      name: text_marquee
+      sha256: "49f062f9536b47927208a7b2614bd07ded376244deed6954f9df2b6c48c1c590"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   typed_data:
     dependency: transitive
     description:

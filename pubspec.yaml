@@ -59,6 +59,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   marquee: ^2.2.3
   marquee_widget: ^1.2.0
+  text_marquee: ^0.0.1
 
 dev_dependencies:
   flutter_test:
