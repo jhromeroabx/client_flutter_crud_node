@@ -97,12 +97,12 @@ List<DropdownMenuItem<int>> getMenuItems(List<Categoria> lista) {
                 await _getAllProducts("", _value == true ? 1 : 0);
               },
               child: Container(
-                margin: const EdgeInsets.only(
-                  // bottom: 50,
-                  top: 10,
-                  left: 2,
-                  right: 2,
-                ),
+                // margin: const EdgeInsets.only(
+                //   // bottom: 50,
+                //   top: 10,
+                //   left: 2,
+                //   right: 2,
+                // ),
                 // padding: const EdgeInsets.all(25),
                 height: double.infinity,
                 child: ListView(

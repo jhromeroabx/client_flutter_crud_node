@@ -93,7 +93,7 @@ class ProductItems extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                     TextMarquee(
+                    TextMarquee(
                       name!,
                       spaceSize: 72,
                       style: const TextStyle(
