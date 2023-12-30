@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:marquee/marquee.dart';
 import '../utils/my_colors.dart';
+import 'package:marquee_widget/marquee_widget.dart';
 
 class ProductItems extends StatelessWidget {
   final String? imageURL;
@@ -93,15 +93,16 @@ class ProductItems extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      TyperAnimatedTextKit(
-                        text: [name!],
-                        textStyle: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 17,
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
+                      Marquee(
+                       child: Text(
+                          name!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue
+                          ),
                         ),
-                        speed: const Duration(milliseconds: 100),
                       ),
                       const SizedBox(height: 5),
                       if (precio != null)
