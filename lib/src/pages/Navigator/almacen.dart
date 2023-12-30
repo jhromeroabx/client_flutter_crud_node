@@ -13,7 +13,7 @@ import '../../dto/responseDTO/product.dart';
 import '../../provider/app_state_provider.dart';
 import '../../transitions/right_route.dart';
 import '../../utils/my_colors.dart';
-import '../../widgets/card_products.dart';
+import '../../widgets/card_products.dart'; 
 
 
 class AlmacenGestion extends StatefulWidget {
@@ -51,13 +51,7 @@ class _AlmacenGestionState extends State<AlmacenGestion> {
       });
     }
   }
-
 List<DropdownMenuItem<int>> getMenuItems(List<Categoria> lista) {
-    const TextStyle itemTextStyle = TextStyle(
-      color: Colors.black,
-      fontSize: 15,
-    );
-
     return lista.map((item) {
       return DropdownMenuItem<int>(
         value: item.id,
@@ -70,12 +64,15 @@ List<DropdownMenuItem<int>> getMenuItems(List<Categoria> lista) {
           ),
           child: Text(
             item.nombre ?? 'Nombre no disponible',
-            style: itemTextStyle,
+            style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
       );
     }).toList();
   }
+
+
+
 
   
   @override
@@ -158,7 +155,7 @@ List<DropdownMenuItem<int>> getMenuItems(List<Categoria> lista) {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 4.0),
                     if (products.isEmpty)
                       Center(
                         child: ProductItems(
@@ -259,74 +256,79 @@ List<DropdownMenuItem<int>> getMenuItems(List<Categoria> lista) {
       _getAllProducts("$idCategoria", _value == true ? 1 : 0);
     });
   }
+
 Container comboBox(List<DropdownMenuItem> items) {
     if (items.isNotEmpty) {
       return Container(
-        // Ajusta la altura del contenedor principal según tus necesidades
-        height: 80,
-        margin: const EdgeInsets.symmetric(horizontal: 2),
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: MyColors.primaryColor,
-            width: 4,
-          ),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Categoría"),
+            const Text(
+              "Categorias",
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            ),
+            const SizedBox(height: 8),
             DropdownButtonHideUnderline(
-              child: SizedBox(
-                // Ajusta la altura del contenedor del DropdownButton según tus necesidades
-                height: 30,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: MyColors.primaryColor,
+                    width: 2,
+                  ),
+                ),
                 child: DropdownButton(
                   dropdownColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                   value: idCategoria,
                   items: items,
                   onChanged: changedDropDownItem,
-                  // icon: Icon(
-                  //   Icons.arrow_downward,
-                  //   color: MyColors.primaryColor,
-                  //   size: 24,
-                  // ),
                 ),
               ),
-            ),
+            ), 
           ],
         ),
       );
     } else {
       return Container(
-        width: 100,
-        color: Colors.amber[200],
-        child: const Text(
-          "¡Categorías desactivadas!",
-          textAlign: TextAlign.center,
+        width: 120,
+        height: 60,
+        
+        decoration: BoxDecoration(
+          color: Colors.amber[200],
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: const Center(
+          child: Text(
+            "¡Categorías desactivadas!",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       );
     }
   }
 
-
-
-
-  Widget _switchProduct() {
+Widget _switchProduct() {
     return Column(
       children: [
         const Text(
-          "Ver Activos:",
+          "Ver activos:",
           style: TextStyle(color: Colors.white, fontSize: 14),
         ),
+        const SizedBox(height: 8),
+        
         Container(
+          // width: 120, // Ajusta según sea necesario
+          // height: 50, // Ajusta según sea necesario
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: _value == true
-                ? Colors.green[100]
-                : Colors.red[300],
+            color: _value == true ? Colors.green[100] : Colors.red[300],
           ),
           child: LiteRollingSwitch(
             value: _value,
@@ -338,7 +340,8 @@ Container comboBox(List<DropdownMenuItem> items) {
             colorOff: Colors.red[300]!,
             iconOn: Icons.done,
             iconOff: Icons.remove_circle_outline,
-            textSize: 16.0,
+            textSize: 12.0, // Ajusta según sea necesario
+            // buttonSize: 15.0, // Ajusta según sea necesario
             onTap: () {
               // Handle tap
             },
@@ -359,5 +362,7 @@ Container comboBox(List<DropdownMenuItem> items) {
       ],
     );
   }
+
+
 
 }

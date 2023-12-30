@@ -56,6 +56,8 @@ dependencies:
   custom_line_indicator_bottom_navbar: ^0.0.8
   dropdown_button2: ^2.1.4
   lite_rolling_switch: ^1.0.1
+  animated_text_kit: ^4.2.2
+  marquee: ^2.2.3
 
 dev_dependencies:
   flutter_test:

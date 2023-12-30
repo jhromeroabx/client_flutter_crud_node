@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> {
         body: screens[index_page],
         bottomNavigationBar: CustomLineIndicatorBottomNavbar(
           selectedColor: MyColors.primaryColor,
-          unSelectedColor: Colors.black54,
-          backgroundColor: Colors.white,
+          unSelectedColor: Colors.white,
+          backgroundColor: Colors.black,
           currentIndex: index_page,
           unselectedIconSize: 20,
           selectedIconSize: 25,
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
               index_page = index;
             });
           },
-          enableLineIndicator: true,
+          enableLineIndicator: true, 
           lineIndicatorWidth: 3,
           indicatorType: IndicatorType.Top,
           // gradient: LinearGradient(
